@@ -201,10 +201,10 @@ RustboroCity_Gym_Text_ReceivedStoneBadge:
 	.string "from ROXANNE.$"
 
 RustboroCity_Gym_Text_StoneBadgeInfoTakeThis:
-	.string "The STONE BADGE heightens the ATTACK\n"
-	.string "power of your POKéMON.\p"
-	.string "It also enables them to use the HM move\n"
-	.string "CUT outside of battle.\p"
+	.string "The STONE BADGE causes you to attract\n"
+	.string "more powerful wild POKéMON.\p"
+	.string "It also enables your POKéMON to use the\n"
+	.string "HM move CUT outside of battle.\p"
 	.string "Please take this with you, too.$"
 
 RustboroCity_Gym_Text_ExplainRockTomb:
@@ -214,8 +214,8 @@ RustboroCity_Gym_Text_ExplainRockTomb:
 	.string "rocks, it also lowers SPEED.\p"
 	.string "If you use a TM, it instantly teaches\n"
 	.string "the move to a POKéMON.\p"
-	.string "Remember, a TM can be used only once,\n"
-	.string "so think before you use it.$"
+	.string "A TM can be used as many times as you'd\n"
+	.string "like, so please enjoy it.$"
 
 RustboroCity_Gym_Text_RoxannePostBattle:
 	.string "Since you are so strong, you should\n"

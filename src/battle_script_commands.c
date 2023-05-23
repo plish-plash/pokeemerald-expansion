@@ -4226,6 +4226,42 @@ static void Cmd_jumpbasedontype(void)
     }
 }
 
+static u8 GetTrainerMonOriginalLevel(u8 battlerId)
+{
+    // TODO handle secret base? see how Cmd_getmoneyreward works
+    u16 trainerNum = gTrainerBattleOpponent_A;
+    u16 partyId = gBattlerPartyIndexes[battlerId];
+    if ((gBattleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS) && (partyId >= PARTY_SIZE / 2)) {
+        trainerNum = gTrainerBattleOpponent_B;
+        partyId -= PARTY_SIZE / 2;
+    }
+
+    switch (gTrainers[trainerNum].partyFlags)
+    {
+    case 0:
+    {
+        const struct TrainerMonNoItemDefaultMoves *partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
+        return partyData[partyId].lvl;
+    }
+    case F_TRAINER_PARTY_CUSTOM_MOVESET:
+    {
+        const struct TrainerMonNoItemCustomMoves *partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
+        return partyData[partyId].lvl;
+    }
+    case F_TRAINER_PARTY_HELD_ITEM:
+    {
+        const struct TrainerMonItemDefaultMoves *partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
+        return partyData[partyId].lvl;
+    }
+    case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
+    {
+        const struct TrainerMonItemCustomMoves *partyData = gTrainers[trainerNum].party.ItemCustomMoves;
+        return partyData[partyId].lvl;
+    }
+    }
+    return 1;
+}
+
 static void Cmd_getexp(void)
 {
     CMD_ARGS(u8 battler);
@@ -4236,6 +4272,7 @@ static void Cmd_getexp(void)
     s32 sentIn;
     s32 viaExpShare = 0;
     u32 *exp = &gBattleStruct->expValue;
+    u8 faintedMonLevel;
 
     gBattlerFainted = GetBattlerForBattleScript(cmd->battler);
     sentIn = gSentPokesToOpponent[(gBattlerFainted & 2) >> 1];
@@ -4284,10 +4321,20 @@ static void Cmd_getexp(void)
                 if (holdEffect == HOLD_EFFECT_EXP_SHARE)
                     viaExpShare++;
             }
+            #if CH_TRAINER_LEVEL_DYNAMIC == TRUE
+            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+            {
+                faintedMonLevel = GetTrainerMonOriginalLevel(gBattlerFainted);
+            }
+            else
+            #endif
+            {
+                faintedMonLevel = gBattleMons[gBattlerFainted].level;
+            }
             #if (B_SCALED_EXP >= GEN_5) && (B_SCALED_EXP != GEN_6)
-                calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 5;
+                calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * faintedMonLevel / 5;
             #else
-                calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * gBattleMons[gBattlerFainted].level / 7;
+                calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * faintedMonLevel / 7;
             #endif
 
             #if B_SPLIT_EXP < GEN_6

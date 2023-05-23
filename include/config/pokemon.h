@@ -25,7 +25,7 @@
 #define P_SHUCKLE_BERRY_JUICE       TRUE        // In Gen 2, Shuckle had a 1/16 chance of converting Berry that it's holding into Berry Juice. Setting this to TRUE will allow to do this with an Oran Berry, which is the spiritual succesor of the Berry item.
 
 // Other settings
-#define P_LEGENDARY_PERFECT_IVS     GEN_LATEST  // Since Gen 6, Legendaries, Mythicals and Ultra Beasts found in the wild or given through gifts have at least 3 perfect IVs.
+#define P_LEGENDARY_PERFECT_IVS     GEN_3       // Since Gen 6, Legendaries, Mythicals and Ultra Beasts found in the wild or given through gifts have at least 3 perfect IVs.
 #define P_EV_CAP                    GEN_LATEST  // Since Gen 6, the max EVs per stat is 252 instead of 255.
 
 // Flag settings

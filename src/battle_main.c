@@ -1966,12 +1966,26 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
     s32 i, j;
     u8 monsCount;
     s32 ball = -1;
+    u8 playerLevel = 1;
+    u8 fixedLevel;
+
     if (battleTypeFlags & BATTLE_TYPE_TRAINER && !(battleTypeFlags & (BATTLE_TYPE_FRONTIER
                                                                         | BATTLE_TYPE_EREADER_TRAINER
                                                                         | BATTLE_TYPE_TRAINER_HILL)))
     {
         if (firstTrainer == TRUE)
             ZeroEnemyPartyMons();
+
+        for (i = 0; i < PARTY_SIZE; i++)
+        {
+            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_NONE
+             && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES2) != SPECIES_EGG)
+            {
+                fixedLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+                if (fixedLevel > playerLevel)
+                    playerLevel = fixedLevel;
+            }
+        }
 
         if (battleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
         {
@@ -2002,14 +2016,18 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             {
                 const struct TrainerMonNoItemDefaultMoves *partyData = trainer->party.NoItemDefaultMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedLevel = partyData[i].lvl;
+                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
             {
                 const struct TrainerMonNoItemCustomMoves *partyData = trainer->party.NoItemCustomMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedLevel = partyData[i].lvl;
+                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 for (j = 0; j < MAX_MON_MOVES; j++)
                 {
@@ -2022,7 +2040,9 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             {
                 const struct TrainerMonItemDefaultMoves *partyData = trainer->party.ItemDefaultMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedLevel = partyData[i].lvl;
+                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
                 break;
@@ -2031,7 +2051,9 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             {
                 const struct TrainerMonItemCustomMoves *partyData = trainer->party.ItemCustomMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                fixedLevel = partyData[i].lvl;
+                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
@@ -2058,7 +2080,9 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                     otIdType = OT_ID_PRESET;
                     fixedOtId = HIHALF(personalityValue) ^ LOHALF(personalityValue);
                 }
-                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, 0, TRUE, personalityValue, otIdType, fixedOtId);
+                fixedLevel = partyData[i].lvl;
+                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                CreateMon(&party[i], partyData[i].species, fixedLevel, 0, TRUE, personalityValue, otIdType, fixedOtId);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 
                 CustomTrainerPartyAssignMoves(&party[i], &partyData[i]);

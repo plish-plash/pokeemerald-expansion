@@ -11,9 +11,9 @@
 
 // Exp and stat settings
 #define B_EXP_CATCH                 GEN_LATEST // In Gen6+, Pokémon get experience from catching.
-#define B_TRAINER_EXP_MULTIPLIER    GEN_LATEST // In Gen7+, trainer battles no longer give a 1.5 multiplier to EXP gain.
-#define B_SPLIT_EXP                 GEN_LATEST // In Gen6+, all participating mon get full experience.
-#define B_SCALED_EXP                GEN_LATEST // In Gen5 and Gen7+, experience is weighted by level difference.
+#define B_TRAINER_EXP_MULTIPLIER    GEN_3      // In Gen7+, trainer battles no longer give a 1.5 multiplier to EXP gain.
+#define B_SPLIT_EXP                 GEN_3      // In Gen6+, all participating mon get full experience.
+#define B_SCALED_EXP                GEN_3      // In Gen5 and Gen7+, experience is weighted by level difference.
 #define B_BADGE_BOOST               GEN_LATEST // In Gen4+, Gym Badges no longer boost a Pokémon's stats.
 #define B_MAX_LEVEL_EV_GAINS        GEN_LATEST // In Gen5+, Lv100 Pokémon can obtain Effort Values normally.
 #define B_RECALCULATE_STATS         GEN_LATEST // In Gen5+, the stats of the Pokémon who participate in battle are recalculated at the end of each battle.
@@ -190,8 +190,8 @@
 #define B_LAST_USED_BALL_BUTTON     R_BUTTON   // If last used ball is implemented, this button (or button combo) will trigger throwing the last used ball.
 
 // Other settings
-#define B_DOUBLE_WILD_CHANCE            0          // % chance of encountering two Pokémon in a Wild Encounter.
-#define B_DOUBLE_WILD_REQUIRE_2_MONS    FALSE      // If set to TRUE, Wild Double Battles will default to Single Battles when the player only has 1 usable Pokémon, ignoring B_DOUBLE_WILD_CHANCE and B_FLAG_FORCE_DOUBLE_WILD.
+#define B_DOUBLE_WILD_CHANCE            10         // % chance of encountering two Pokémon in a Wild Encounter.
+#define B_DOUBLE_WILD_REQUIRE_2_MONS    TRUE       // If set to TRUE, Wild Double Battles will default to Single Battles when the player only has 1 usable Pokémon, ignoring B_DOUBLE_WILD_CHANCE and B_FLAG_FORCE_DOUBLE_WILD.
 #define B_MULTI_BATTLE_WHITEOUT         GEN_LATEST // In Gen4+, multi battles end when the Player and also their Partner don't have any more Pokémon to fight.
 #define B_EVOLUTION_AFTER_WHITEOUT      GEN_LATEST // In Gen6+, Pokemon that qualify for evolution after battle will evolve even if the player loses.
 #define B_WILD_NATURAL_ENEMIES          TRUE       // If set to TRUE, certain wild mon species will attack other species when partnered in double wild battles (eg. Zangoose vs Seviper)
