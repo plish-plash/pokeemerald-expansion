@@ -25,6 +25,8 @@
 #include "trainer_hill.h"
 #include "constants/rgb.h"
 
+#undef BUGFIX // Disable seeding rng with RTC
+
 static void VBlankIntr(void);
 static void HBlankIntr(void);
 static void VCountIntr(void);
@@ -352,6 +354,8 @@ static void VBlankIntr(void)
     else if (gLinkVSyncDisabled == FALSE)
         LinkVSync();
 
+    LocalTimeAdvance();
+
     gMain.vblankCounter1++;
 
     if (gTrainerHillVBlankCounter && *gTrainerHillVBlankCounter < 0xFFFFFFFF)
@@ -439,7 +443,7 @@ void DoSoftReset(void)
     DmaStop(1);
     DmaStop(2);
     DmaStop(3);
-    SiiRtcProtect();
+    // SiiRtcProtect();
     SoftReset(RESET_ALL);
 }
 

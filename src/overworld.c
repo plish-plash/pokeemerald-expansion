@@ -41,6 +41,7 @@
 #include "play_time.h"
 #include "random.h"
 #include "roamer.h"
+#include "rtc.h"
 #include "rotating_gate.h"
 #include "safari_zone.h"
 #include "save.h"
@@ -1738,6 +1739,8 @@ void CB2_ContinueSavedGame(void)
     ResetSafariZoneFlag_();
     if (gSaveFileStatus == SAVE_STATUS_ERROR)
         ResetWinStreaks();
+
+    gLocalTime = gSaveBlock2Ptr->lastBerryTreeUpdate;
 
     LoadSaveblockMapHeader();
     ClearDiveAndHoleWarps();

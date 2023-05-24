@@ -1886,7 +1886,7 @@ static bool32 ShouldTrainerRequestBattle(int matchCallId)
     if (GetNumOwnedBadges() < 5)
         return FALSE;
 
-    dayCount = RtcGetLocalDayCount();
+    dayCount = gLocalTime.days;
     otId = GetTrainerId(gSaveBlock2Ptr->playerTrainerId) & 0xFFFF;
 
     dewfordRand = gSaveBlock1Ptr->dewfordTrends[0].rand;

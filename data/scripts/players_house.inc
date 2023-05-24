@@ -58,9 +58,9 @@ LittlerootTown_MaysHouse_2F_EventScript_WallClock::
 	end
 
 PlayersHouse_2F_EventScript_WallClock::
-	goto_if_set FLAG_SET_WALL_CLOCK, PlayersHouse_2F_EventScript_CheckWallClock
-	msgbox PlayersHouse_2F_Text_ClockIsStopped, MSGBOX_DEFAULT
-	call PlayersHouse_2F_EventScript_SetWallClock
+	msgbox PlayersHouse_2F_Text_ClockAlreadyRunning, MSGBOX_DEFAULT
+	closemessage
+	special InitTimeBasedEvents
 	delay 30
 	setvar VAR_LITTLEROOT_INTRO_STATE, 6
 	setflag FLAG_SET_WALL_CLOCK
@@ -98,20 +98,6 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
 	closemessage
 	applymovement VAR_0x8008, PlayersHouse_2F_Movement_MomExitsFemale
 	waitmovement 0
-	return
-
-PlayersHouse_2F_EventScript_CheckWallClock::
-	incrementgamestat GAME_STAT_CHECKED_CLOCK
-	fadescreen FADE_TO_BLACK
-	special Special_ViewWallClock
-	waitstate
-	releaseall
-	end
-
-PlayersHouse_2F_EventScript_SetWallClock::
-	fadescreen FADE_TO_BLACK
-	special StartWallClock
-	waitstate
 	return
 
 PlayersHouse_2F_Movement_MomEntersMale:

@@ -149,7 +149,7 @@ void ResetMenuAndMonGlobals(void)
 void NewGameInitData(void)
 {
     if (gSaveFileStatus == SAVE_STATUS_EMPTY || gSaveFileStatus == SAVE_STATUS_CORRUPT)
-        RtcReset();
+        RtcInit();
 
     gDifferentSaveFile = TRUE;
     gSaveBlock2Ptr->encryptionKey = 0;
