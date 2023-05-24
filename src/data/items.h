@@ -10350,4 +10350,20 @@ const struct Item gItems[] =
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
         .flingPower = 10,
     },
+
+// New Key Items
+
+    [ITEM_THROWING_ROCK] =
+    {
+        .name = _("Old Rod"),
+        .itemId = ITEM_THROWING_ROCK,
+        .price = 0,
+        .description = sThrowingRockDesc,
+        .importance = 1,
+        .registrability = TRUE,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_HabitatEncounter,
+        .secondaryId = WILD_AREA_SKY,
+    },
 };

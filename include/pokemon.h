@@ -392,6 +392,34 @@ struct FormChange
 
 #define GET_SHINY_VALUE(otId, personality) (HIHALF(otId) ^ LOHALF(otId) ^ HIHALF(personality) ^ LOHALF(personality))
 
+#define HABITAT_LAND    0x01
+#define HABITAT_WATER   0x02
+#define HABITAT_CAVE    0x04
+#define HABITAT_DAY     0x08
+#define HABITAT_NIGHT   0x10
+
+#define BIOME_ANY       0
+#define BIOME_URBAN     1
+#define BIOME_CAVE      2
+#define BIOME_TEMPERATE 3
+#define BIOME_SWAMP     4
+#define BIOME_FOREST    5
+#define BIOME_MOUNTAIN  6
+#define BIOME_TUNDRA    7
+
+#define HABITAT_ENCOUNTER_ROCK_SMASH    1
+#define HABITAT_ENCOUNTER_FISHING       2
+#define HABITAT_ENCOUNTER_FLYING        3
+#define HABITAT_ENCOUNTER_FIGHTING      4
+#define HABITAT_ENCOUNTER_STEEL         5
+#define HABITAT_ENCOUNTER_PSYCHIC       6
+
+struct SpeciesHabitat {
+    u8 flags;
+    u8 biome;
+    u8 encounter;
+};
+
 extern u8 gPlayerPartyCount;
 extern struct Pokemon gPlayerParty[PARTY_SIZE];
 extern u8 gEnemyPartyCount;
@@ -402,6 +430,8 @@ extern const struct BattleMove gBattleMoves[];
 extern const u8 gFacilityClassToPicIndex[];
 extern const u8 gFacilityClassToTrainerClass[];
 extern const struct SpeciesInfo gSpeciesInfo[];
+extern const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES];
+extern const u8 gSpeciesLevelRange[NUM_WILD_SPECIES][2];
 extern const u8 *const gItemEffectTable[ITEMS_COUNT];
 extern const u32 gExperienceTables[][MAX_LEVEL + 1];
 extern const struct LevelUpMove *const gLevelUpLearnsets[];

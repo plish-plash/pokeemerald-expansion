@@ -1705,6 +1705,7 @@ static void Task_WaitStopSurfing(u8 taskId)
 #define tFrameCounter      data[1]
 #define tNumDots           data[2]
 #define tDotsRequired      data[3]
+#define tHabitat           data[4]
 #define tRoundsPlayed      data[12]
 #define tMinRoundsRequired data[13]
 #define tPlayerGfxId       data[14]
@@ -1738,10 +1739,11 @@ static bool8 (*const sFishingStateFuncs[])(struct Task *) =
     Fishing_EndNoMon,
 };
 
-void StartFishing(u8 rod)
+void StartFishing(u8 area, u8 rod)
 {
     u8 taskId = CreateTask(Task_Fishing, 0xFF);
 
+    gTasks[taskId].tHabitat = area;
     gTasks[taskId].tFishingRod = rod;
     Task_Fishing(taskId);
 }
@@ -1857,11 +1859,8 @@ static bool8 Fishing_CheckForBite(struct Task *task)
     task->tStep++;
     bite = FALSE;
 
-    if (!DoesCurrentMapHaveFishingMons())
-    {
-        task->tStep = FISHING_NO_BITE;
-    }
-    else
+    // TODO ability boosts for other habitats?
+    if (task->tHabitat == WILD_AREA_FISHING)
     {
         if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
         {
@@ -1872,25 +1871,37 @@ static bool8 Fishing_CheckForBite(struct Task *task)
                     bite = TRUE;
             }
         }
-
-        if (!bite)
-        {
-            if (Random() & 1)
-                task->tStep = FISHING_NO_BITE;
-            else
-                bite = TRUE;
-        }
-
-        if (bite == TRUE)
-            StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingBiteDirectionAnimNum(GetPlayerFacingDirection()));
     }
+
+    if (!bite)
+    {
+        if (Random() & 1)
+            task->tStep = FISHING_NO_BITE;
+        else
+            bite = TRUE;
+    }
+
+    if (bite == TRUE)
+        StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingBiteDirectionAnimNum(GetPlayerFacingDirection()));
     return TRUE;
 }
 
 static bool8 Fishing_GotBite(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = gText_SomethingOverhead;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = gText_OhABite;
+        break;
+    }
+
     AlignFishingAnimationFrames();
-    AddTextPrinterParameterized(0, FONT_NORMAL, gText_OhABite, 0, 17, 0, NULL);
+    AddTextPrinterParameterized(0, FONT_NORMAL, str, 0, 17, 0, NULL);
     task->tStep++;
     task->tFrameCounter = 0;
     return FALSE;
@@ -1943,9 +1954,21 @@ static bool8 Fishing_CheckMoreDots(struct Task *task)
 
 static bool8 Fishing_MonOnHook(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = gText_DirectHit;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = gText_PokemonOnHook;
+        break;
+    }
+
     AlignFishingAnimationFrames();
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, gText_PokemonOnHook, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep++;
     task->tFrameCounter = 0;
     return FALSE;
@@ -1980,8 +2003,16 @@ static bool8 Fishing_StartEncounter(struct Task *task)
     {
         gPlayerAvatar.preventStep = FALSE;
         UnlockPlayerFieldControls();
-        FishingWildEncounter(task->tFishingRod);
-        RecordFishingAttemptForTV(TRUE);
+        // TODO generating the encounter can still fail here. Maybe show a message box in that case?
+        if (task->tHabitat == WILD_AREA_FISHING)
+        {
+            FishingWildEncounter(task->tFishingRod);
+            RecordFishingAttemptForTV(TRUE);
+        }
+        else
+        {
+            HabitatWildEncounter(task->tHabitat, 0);
+        }
         DestroyTask(FindTaskIdByFunc(Task_Fishing));
     }
     return FALSE;
@@ -1989,20 +2020,44 @@ static bool8 Fishing_StartEncounter(struct Task *task)
 
 static bool8 Fishing_NotEvenNibble(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = gText_NothingInTheSky;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = gText_NotEvenANibble;
+        break;
+    }
+
     AlignFishingAnimationFrames();
     StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, gText_NotEvenANibble, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep = FISHING_SHOW_RESULT;
     return TRUE;
 }
 
 static bool8 Fishing_GotAway(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = gText_ItFlewAway;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = gText_ItGotAway;
+        break;
+    }
+
     AlignFishingAnimationFrames();
     StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, gText_ItGotAway, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep++;
     return TRUE;
 }
@@ -2041,7 +2096,10 @@ static bool8 Fishing_EndNoMon(struct Task *task)
         UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         ClearDialogWindowAndFrame(0, TRUE);
-        RecordFishingAttemptForTV(FALSE);
+        if (task->tHabitat == WILD_AREA_FISHING)
+        {
+            RecordFishingAttemptForTV(FALSE);
+        }
         DestroyTask(FindTaskIdByFunc(Task_Fishing));
     }
     return FALSE;
@@ -2049,6 +2107,7 @@ static bool8 Fishing_EndNoMon(struct Task *task)
 
 #undef tStep
 #undef tFrameCounter
+#undef tHabitat
 #undef tFishingRod
 
 static void AlignFishingAnimationFrames(void)

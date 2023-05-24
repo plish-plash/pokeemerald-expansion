@@ -1747,41 +1747,42 @@ static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
     u8 slot;
     int i = 0;
 
-    if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED)) // ??? This check is nonsense.
-    {
-        while (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
-        {
-            if (gWildMonHeaders[i].mapGroup == gRematchTable[matchCallId].mapGroup
-             && gWildMonHeaders[i].mapNum == gRematchTable[matchCallId].mapNum)
-                break;
+    // TODO
+    // if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED)) // ??? This check is nonsense.
+    // {
+    //     while (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
+    //     {
+    //         if (gWildMonHeaders[i].mapGroup == gRematchTable[matchCallId].mapGroup
+    //          && gWildMonHeaders[i].mapNum == gRematchTable[matchCallId].mapNum)
+    //             break;
 
-            i++;
-        }
+    //         i++;
+    //     }
 
-        if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
-        {
-            numSpecies = 0;
-            if (gWildMonHeaders[i].landMonsInfo)
-            {
-                slot = GetLandEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].landMonsInfo->wildPokemon[slot].species;
-                numSpecies++;
-            }
+    //     if (gWildMonHeaders[i].mapGroup != MAP_GROUP(UNDEFINED))
+    //     {
+    //         numSpecies = 0;
+    //         if (gWildMonHeaders[i].landMonsInfo)
+    //         {
+    //             slot = GetLandEncounterSlot();
+    //             species[numSpecies] = gWildMonHeaders[i].landMonsInfo->wildPokemon[slot].species;
+    //             numSpecies++;
+    //         }
 
-            if (gWildMonHeaders[i].waterMonsInfo)
-            {
-                slot = GetWaterEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].waterMonsInfo->wildPokemon[slot].species;
-                numSpecies++;
-            }
+    //         if (gWildMonHeaders[i].waterMonsInfo)
+    //         {
+    //             slot = GetWaterEncounterSlot();
+    //             species[numSpecies] = gWildMonHeaders[i].waterMonsInfo->wildPokemon[slot].species;
+    //             numSpecies++;
+    //         }
 
-            if (numSpecies)
-            {
-                StringCopy(destStr, gSpeciesNames[species[Random() % numSpecies]]);
-                return;
-            }
-        }
-    }
+    //         if (numSpecies)
+    //         {
+    //             StringCopy(destStr, gSpeciesNames[species[Random() % numSpecies]]);
+    //             return;
+    //         }
+    //     }
+    // }
 
     destStr[0] = EOS;
 }

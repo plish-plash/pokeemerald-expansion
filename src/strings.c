@@ -1562,6 +1562,11 @@ const u8 gText_ByeByeVar1[] = _("Bye-bye, {STR_VAR_2}!");
 const u8 gText_XSentOverY[] = _("{STR_VAR_1} sent over {STR_VAR_3}.");
 const u8 gText_TakeGoodCareOfX[] = _("Take good care of {STR_VAR_3}!");
 
+const u8 gText_SomethingOverhead[] = _("You see something overhead!");
+const u8 gText_DirectHit[] = _("A direct hit! Looks like it's mad…{PAUSE_UNTIL_PRESS}");
+const u8 gText_NothingInTheSky[] = _("You don't see any POKéMON in the sky.{PAUSE_UNTIL_PRESS}");
+const u8 gText_ItFlewAway[] = _("It flew away…{PAUSE_UNTIL_PRESS}");
+
 // Easy chat group names
 const u8 gEasyChatGroupName_Pokemon[] = _("POKéMON");
 const u8 gEasyChatGroupName_Trainer[] = _("TRAINER");

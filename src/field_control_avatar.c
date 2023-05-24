@@ -699,7 +699,7 @@ static bool8 CheckStandardWildEncounter(u16 metatileBehavior)
         return FALSE;
     }
 
-    if (StandardWildEncounter(metatileBehavior, sPrevMetatileBehavior) == TRUE)
+    if (StandardWildEncounter(metatileBehavior, sPrevMetatileBehavior, TRUE) == TRUE)
     {
         sWildEncounterImmunitySteps = 0;
         sPrevMetatileBehavior = metatileBehavior;

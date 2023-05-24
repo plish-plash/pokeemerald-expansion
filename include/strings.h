@@ -1034,6 +1034,11 @@ extern const u8 gText_PokemonOnHook[];
 extern const u8 gText_NotEvenANibble[];
 extern const u8 gText_ItGotAway[];
 
+extern const u8 gText_SomethingOverhead[];
+extern const u8 gText_DirectHit[];
+extern const u8 gText_NothingInTheSky[];
+extern const u8 gText_ItFlewAway[];
+
 extern const u8 gText_HallOfFame[];
 extern const u8 gText_LogOff[];
 extern const u8 gText_LanettesPC[];

@@ -974,7 +974,10 @@
 #define ITEM_PEAT_BLOCK 797
 #define ITEM_BERSERK_GENE 798
 
-#define ITEMS_COUNT 799
+// New Key Items
+#define ITEM_THROWING_ROCK 799
+
+#define ITEMS_COUNT 800
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
@@ -1018,6 +1021,12 @@
 #define OLD_ROD   0
 #define GOOD_ROD  1
 #define SUPER_ROD 2
+
+#define WILD_AREA_LAND      0
+#define WILD_AREA_WATER     1
+#define WILD_AREA_ROCKS     2
+#define WILD_AREA_FISHING   3
+#define WILD_AREA_SKY       4
 
 // Secondary IDs for bikes
 #define MACH_BIKE 0

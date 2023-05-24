@@ -263,6 +263,12 @@ static bool32 CanFish(void)
     return FALSE;
 }
 
+static void ItemUseOnFieldCB_Rod(u8 taskId)
+{
+    StartFishing(WILD_AREA_FISHING, ItemId_GetSecondaryId(gSpecialVar_ItemId));
+    DestroyTask(taskId);
+}
+
 void ItemUseOutOfBattle_Rod(u8 taskId)
 {
     if (CanFish() == TRUE)
@@ -274,10 +280,21 @@ void ItemUseOutOfBattle_Rod(u8 taskId)
         DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
 }
 
-static void ItemUseOnFieldCB_Rod(u8 taskId)
+static void ItemUseOnFieldCB_HabitatEncounter(u8 taskId)
 {
-    StartFishing(ItemId_GetSecondaryId(gSpecialVar_ItemId));
+    StartFishing(ItemId_GetSecondaryId(gSpecialVar_ItemId), 0);
     DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_HabitatEncounter(u8 taskId)
+{
+    if (IsMapTypeOutdoors(gMapHeader.mapType))
+    {
+        sItemUseOnFieldCB = ItemUseOnFieldCB_HabitatEncounter;
+        SetUpItemUseOnFieldCallback(taskId);
+    }
+    else
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
 }
 
 void ItemUseOutOfBattle_Itemfinder(u8 var)

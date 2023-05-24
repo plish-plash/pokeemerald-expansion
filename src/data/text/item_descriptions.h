@@ -3912,3 +3912,7 @@ static const u8 sBerserkGene[] = _(
     "Sharply boosts\n"
     "Attack, but causes\n"
     "lasting confusion.");
+
+static const u8 sThrowingRockDesc[] = _(
+    "Use to start fights with\n"
+    "wild Pokémon flying overhead.");
