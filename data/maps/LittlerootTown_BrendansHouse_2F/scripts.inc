@@ -272,9 +272,10 @@ PlayersHouse_2F_EventScript_GameCube::
 	msgbox PlayersHouse_2F_Text_ItsAGameCube, MSGBOX_SIGN
 	end
 
-PlayersHouse_2F_Text_ClockIsStopped:
-	.string "The clock is stopped…\p"
-	.string "Better set it and start it!$"
+PlayersHouse_2F_Text_ClockAlreadyRunning:
+	.string "The clock in this game does not use\n"
+	.string "the GBA's real-time clock.\p"
+	.string "The clock is already running!$"
 
 PlayersHouse_2F_Text_HowDoYouLikeYourRoom:
 	.string "MOM: {PLAYER}, how do you like your\n"

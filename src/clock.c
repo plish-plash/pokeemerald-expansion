@@ -13,9 +13,8 @@
 #include "wallclock.h"
 
 static void UpdatePerDay(struct Time *localTime);
-static void UpdatePerMinute(struct Time *localTime);
 
-static void InitTimeBasedEvents(void)
+void InitTimeBasedEvents(void)
 {
     FlagSet(FLAG_SYS_CLOCK_SET);
     RtcCalcLocalTime();
@@ -29,7 +28,7 @@ void DoTimeBasedEvents(void)
     {
         RtcCalcLocalTime();
         UpdatePerDay(&gLocalTime);
-        UpdatePerMinute(&gLocalTime);
+        gSaveBlock2Ptr->lastBerryTreeUpdate = gLocalTime;
     }
 }
 
@@ -52,35 +51,7 @@ static void UpdatePerDay(struct Time *localTime)
         UpdateFrontierGambler(daysSince);
         SetShoalItemFlag(daysSince);
         SetRandomLotteryNumber(daysSince);
+        BerryTreeTimeUpdate(daysSince);
         *days = localTime->days;
     }
-}
-
-static void UpdatePerMinute(struct Time *localTime)
-{
-    struct Time difference;
-    int minutes;
-
-    CalcTimeDifference(&difference, &gSaveBlock2Ptr->lastBerryTreeUpdate, localTime);
-    minutes = 24 * 60 * difference.days + 60 * difference.hours + difference.minutes;
-    if (minutes != 0)
-    {
-        if (minutes >= 0)
-        {
-            BerryTreeTimeUpdate(minutes);
-            gSaveBlock2Ptr->lastBerryTreeUpdate = *localTime;
-        }
-    }
-}
-
-static void ReturnFromStartWallClock(void)
-{
-    InitTimeBasedEvents();
-    SetMainCallback2(CB2_ReturnToFieldContinueScriptPlayMapMusic);
-}
-
-void StartWallClock(void)
-{
-    SetMainCallback2(CB2_StartWallClock);
-    gMain.savedCallback = ReturnFromStartWallClock;
 }

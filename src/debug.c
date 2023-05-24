@@ -291,8 +291,6 @@ extern u8 Debug_Script_8[];
 
 extern u8 Debug_ShowFieldMessageStringVar4[];
 extern u8 Debug_CheatStart[];
-extern u8 PlayersHouse_2F_EventScript_SetWallClock[];
-extern u8 PlayersHouse_2F_EventScript_CheckWallClock[];
 extern u8 Debug_CheckSaveBlock[];
 
 #include "data/map_group_count.h"
@@ -1304,14 +1302,14 @@ static void DebugAction_Util_Weather_SelectId(u8 taskId)
 static void DebugAction_Util_CheckWallClock(u8 taskId)
 {
     Debug_DestroyMenu_Full(taskId);
-    LockPlayerFieldControls();
-    ScriptContext_SetupScript(PlayersHouse_2F_EventScript_CheckWallClock);
+    // LockPlayerFieldControls();
+    // ScriptContext_SetupScript(PlayersHouse_2F_EventScript_CheckWallClock);
 }
 static void DebugAction_Util_SetWallClock(u8 taskId)
 {
     Debug_DestroyMenu_Full(taskId);
-    LockPlayerFieldControls();
-    ScriptContext_SetupScript(PlayersHouse_2F_EventScript_SetWallClock);
+    // LockPlayerFieldControls();
+    // ScriptContext_SetupScript(PlayersHouse_2F_EventScript_SetWallClock);
 }
 static void DebugAction_Util_WatchCredits(u8 taskId)
 {

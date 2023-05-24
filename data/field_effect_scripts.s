@@ -255,7 +255,7 @@ gFieldEffectScript_UseDive::
 	field_eff_end
 
 gFieldEffectScript_PokeballTrail::
-	field_eff_loadpal gSpritePalette_Pokeball
+	field_eff_loadpalnotint gSpritePalette_Pokeball
 	field_eff_callnative FldEff_PokeballTrail
 	field_eff_end
 

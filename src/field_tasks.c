@@ -1,6 +1,7 @@
 #include "global.h"
 #include "bike.h"
 #include "clock.h"
+#include "day_night.h"
 #include "event_data.h"
 #include "field_camera.h"
 #include "field_effect_helpers.h"
@@ -142,33 +143,15 @@ static void Task_RunPerStepCallback(u8 taskId)
 #define tAmbientCryState data[1]
 #define tAmbientCryDelay data[2]
 
-#define TIME_UPDATE_INTERVAL (1 << 12)
-
-static void RunTimeBasedEvents(s16 *data)
-{
-    switch (tState)
-    {
-    case 0:
-        if (gMain.vblankCounter1 & TIME_UPDATE_INTERVAL)
-        {
-            DoTimeBasedEvents();
-            tState++;
-        }
-        break;
-    case 1:
-        if (!(gMain.vblankCounter1 & TIME_UPDATE_INTERVAL))
-            tState--;
-        break;
-    }
-}
-
 static void Task_RunTimeBasedEvents(u8 taskId)
 {
     s16 *data = gTasks[taskId].data;
 
+    DoTimeBasedEvents();
+    ProcessDayNight();
+
     if (!ArePlayerFieldControlsLocked())
     {
-        RunTimeBasedEvents(data);
         UpdateAmbientCry(&tAmbientCryState, &tAmbientCryDelay);
     }
 }
