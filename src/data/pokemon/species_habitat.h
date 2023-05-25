@@ -642,12 +642,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_MAGIKARP] = {
         .flags = HABITAT_WATER,
-        .biome = BIOME_SWAMP,
+        .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_GYARADOS] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
-        .biome = BIOME_SWAMP,
+        .flags = HABITAT_WATER,
+        .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_LAPRAS] = {
@@ -2087,12 +2087,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_BUIZEL] = {
         .flags = HABITAT_LAND | HABITAT_WATER,
-        .biome = BIOME_ANY,
+        .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_FLOATZEL] = {
         .flags = HABITAT_LAND | HABITAT_WATER,
-        .biome = BIOME_ANY,
+        .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_CHERUBI] = {

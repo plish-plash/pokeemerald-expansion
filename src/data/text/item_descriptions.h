@@ -3914,5 +3914,6 @@ static const u8 sBerserkGene[] = _(
     "lasting confusion.");
 
 static const u8 sThrowingRockDesc[] = _(
-    "Use to start fights with\n"
-    "wild Pokémon flying overhead.");
+    "Use to start fights\n"
+    "with wild Pokémon\n"
+    "flying overhead.");

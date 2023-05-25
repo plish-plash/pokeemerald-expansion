@@ -657,13 +657,15 @@ bool8 SweetScentWildEncounter(void)
     return StandardWildEncounter(metatileBehavior, metatileBehavior, FALSE);
 }
 
-void FishingWildEncounter(u8 rod)
+bool8 FishingWildEncounter(u8 rod)
 {
     if (TryGenerateFishingWildMon(rod))
     {
         gEncounterArea = WILD_AREA_FISHING;
         BattleSetup_StartWildBattle();
+        return TRUE;
     }
+    return FALSE;
 }
 
 // TODO these two functions are used to determine what ambient cries to play

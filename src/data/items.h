@@ -10355,7 +10355,7 @@ const struct Item gItems[] =
 
     [ITEM_THROWING_ROCK] =
     {
-        .name = _("Old Rod"),
+        .name = _("Throwing Rock"),
         .itemId = ITEM_THROWING_ROCK,
         .price = 0,
         .description = sThrowingRockDesc,

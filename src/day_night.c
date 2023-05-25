@@ -50,6 +50,11 @@ static const u16 sTimeOfDayTints[][3] = {
     [23] =  {TINT_NIGHT},
 };
 
+static bool8 ShouldOverridePrimaryPalette(void)
+{
+    return !(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(PETALBURG_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(PETALBURG_CITY));
+}
+
 static void LoadPaletteOverrides(void)
 {
     u8 i, j;
@@ -57,13 +62,13 @@ static void LoadPaletteOverrides(void)
     u16* dest;
 
     s8 currentOverride = OVERRIDE_PALETTE_DAY;
-    if (gLocalTime.hours <= 5 || gLocalTime.hours >= 20)
+    if (gLocalTime.hours <= 3 || gLocalTime.hours >= 20)
         currentOverride = OVERRIDE_PALETTE_NIGHT;
 
     for (i = 0; i < ARRAY_COUNT(gPaletteOverrides); i++)
     {
         const struct PaletteOverride *curr = gPaletteOverrides[i];
-        if (curr != NULL)
+        if (curr != NULL && (i != 0 || ShouldOverridePrimaryPalette()))
         {
             while (curr->slot != PALOVER_LIST_TERM && curr->palette != NULL)
             {
