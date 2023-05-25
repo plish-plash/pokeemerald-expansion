@@ -1564,8 +1564,16 @@ const u8 gText_TakeGoodCareOfX[] = _("Take good care of {STR_VAR_3}!");
 
 const u8 gText_SomethingOverhead[] = _("You see something overhead!");
 const u8 gText_DirectHit[] = _("A direct hit! Looks like it's mad…{PAUSE_UNTIL_PRESS}");
-const u8 gText_NothingInTheSky[] = _("You don't see any POKéMON in the sky.{PAUSE_UNTIL_PRESS}");
+const u8 gText_NothingInTheSky[] = _("You don't see any\nPOKéMON in the sky.{PAUSE_UNTIL_PRESS}");
 const u8 gText_ItFlewAway[] = _("It flew away…{PAUSE_UNTIL_PRESS}");
+const u8 gText_YouAreChallenged[] = _("You are challenged by a POKéMON!{PAUSE_UNTIL_PRESS}");
+const u8 gText_YouFeelATug[] = _("You feel a tug!");
+const u8 gText_MagnetPulledInPokemon[] = _("The magnet pulled in a POKéMON!{PAUSE_UNTIL_PRESS}");
+const u8 gText_NoMagneticPokemon[] = _("There don't seem to be any\nmagnetic POKéMON around.{PAUSE_UNTIL_PRESS}");
+const u8 gText_YouFeelAPresence[] = _("You feel a presence…");
+const u8 gText_PokemonAppeared[] = _("A POKéMON appeared!{PAUSE_UNTIL_PRESS}");
+const u8 gText_YouDoNotSense[] = _("You do not sense any POKéMON.{PAUSE_UNTIL_PRESS}");
+const u8 gText_ThePresenceIsGone[] = _("The presence is gone.{PAUSE_UNTIL_PRESS}");
 
 // Easy chat group names
 const u8 gEasyChatGroupName_Pokemon[] = _("POKéMON");

@@ -846,6 +846,9 @@ const u32 *const gItemIconTable[ITEMS_COUNT + 1][2] =
     [ITEM_BERSERK_GENE] = {gItemIcon_BerserkGene, gItemIconPalette_BerserkGene},
     // New Key Items
     [ITEM_THROWING_ROCK] = {gItemIcon_HardStone, gItemIconPalette_HardStone},
+    [ITEM_CHALLENGE_BELT] = {gItemIcon_ExpertBelt, gItemIconPalette_ExpertBelt},
+    [ITEM_BIG_MAGNET] = {gItemIcon_Magnet, gItemIconPalette_Magnet},
+    [ITEM_PSYCHIC_BELL] = {gItemIcon_SootheBell, gItemIconPalette_SootheBell},
     // Return to field arrow
     [ITEMS_COUNT] = {gItemIcon_ReturnToFieldArrow, gItemIconPalette_ReturnToFieldArrow},
 };

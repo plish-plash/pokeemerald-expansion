@@ -42,6 +42,7 @@
 #include "constants/event_objects.h"
 #include "constants/item_effects.h"
 #include "constants/items.h"
+#include "constants/map_types.h"
 #include "constants/songs.h"
 
 static void SetUpItemUseCallback(u8);
@@ -288,7 +289,8 @@ static void ItemUseOnFieldCB_HabitatEncounter(u8 taskId)
 
 void ItemUseOutOfBattle_HabitatEncounter(u8 taskId)
 {
-    if (IsMapTypeOutdoors(gMapHeader.mapType))
+    if (gMapHeader.mapType != MAP_TYPE_INDOOR
+     && (ItemId_GetSecondaryId(gSpecialVar_ItemId) != WILD_AREA_SKY || IsMapTypeOutdoors(gMapHeader.mapType)))
     {
         sItemUseOnFieldCB = ItemUseOnFieldCB_HabitatEncounter;
         SetUpItemUseOnFieldCallback(taskId);

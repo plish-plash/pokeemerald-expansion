@@ -136,7 +136,7 @@ DewfordTown_Gym_EventScript_Brawly::
 	trainerbattle_single TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyIntro, DewfordTown_Gym_Text_BrawlyDefeat, DewfordTown_Gym_EventScript_BrawlyDefeated, NO_MUSIC
 	specialvar VAR_RESULT, ShouldTryRematchBattle
 	goto_if_eq VAR_RESULT, TRUE, DewfordTown_Gym_EventScript_BrawlyRematch
-	goto_if_unset FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_GiveBulkUp2
+	goto_if_unset FLAG_RECEIVED_TM08, DewfordTown_Gym_EventScript_GiveChallengeBelt2
 	msgbox DewfordTown_Gym_Text_BrawlyPostBattle, MSGBOX_DEFAULT
 	release
 	end
@@ -153,7 +153,7 @@ DewfordTown_Gym_EventScript_BrawlyDefeated::
 	call_if_eq VAR_PETALBURG_GYM_STATE, 6, Common_EventScript_ReadyPetalburgGymForBattle
 	setvar VAR_0x8008, 2
 	call Common_EventScript_SetGymTrainers
-	call DewfordTown_Gym_EventScript_GiveBulkUp
+	call DewfordTown_Gym_EventScript_GiveChallengeBelt
 	closemessage
 	delay 30
 	playfanfare MUS_REGISTER_MATCH_CALL
@@ -167,23 +167,31 @@ DewfordTown_Gym_EventScript_BrawlyDefeated::
 	release
 	end
 
-DewfordTown_Gym_EventScript_GiveBulkUp::
-	giveitem ITEM_TM08
+DewfordTown_Gym_EventScript_GiveChallengeBelt::
+	giveitem ITEM_CHALLENGE_BELT
 	goto_if_eq VAR_RESULT, 0, Common_EventScript_BagIsFull
-	msgbox DewfordTown_Gym_Text_ExplainBulkUp, MSGBOX_DEFAULT
 	setflag FLAG_RECEIVED_TM08
+	msgbox DewfordTown_Gym_Text_ExplainChallengeBelt, MSGBOX_DEFAULT
 	return
 
-DewfordTown_Gym_EventScript_GiveBulkUp2:
+DewfordTown_Gym_EventScript_GiveChallengeBelt2::
+	giveitem ITEM_CHALLENGE_BELT
+	goto_if_eq VAR_RESULT, 0, Common_EventScript_BagIsFull
+	setflag FLAG_RECEIVED_TM08
+	msgbox DewfordTown_Gym_Text_ExplainChallengeBelt, MSGBOX_DEFAULT
+	release
+	return
+
+DewfordTown_Gym_EventScript_GiveBulkUp:
 	giveitem ITEM_TM08
 	goto_if_eq VAR_RESULT, 0, Common_EventScript_ShowBagIsFull
 	msgbox DewfordTown_Gym_Text_ExplainBulkUp, MSGBOX_DEFAULT
-	setflag FLAG_RECEIVED_TM08
-	release
 	end
 
 DewfordTown_Gym_EventScript_BrawlyRematch::
 	trainerbattle_rematch_double TRAINER_BRAWLY_1, DewfordTown_Gym_Text_BrawlyPreRematch, DewfordTown_Gym_Text_BrawlyRematchDefeat, DewfordTown_Gym_Text_BrawlyRematchNeedTwoMons
+	checkitem ITEM_TM08
+	goto_if_eq VAR_RESULT, FALSE, DewfordTown_Gym_EventScript_GiveBulkUp
 	msgbox DewfordTown_Gym_Text_BrawlyPostRematch, MSGBOX_AUTOCLOSE
 	end
 
@@ -405,14 +413,20 @@ DewfordTown_Gym_Text_KnuckleBadgeInfoTakeThis:
 	.string "trades, obey without question.\p"
 	.string "And, you'll be able to use the HM move\n"
 	.string "FLASH outside of battle.\p"
-	.string "If you'd like, use this TECHNICAL\n"
-	.string "MACHINE, too.$"
+	.string "Take this, too!$"
+
+DewfordTown_Gym_Text_ExplainChallengeBelt:
+	.string "That EXPERT BELT shows off\n"
+	.string "your strength.\p"
+	.string "Wear it and you'll be irresistible to\n"
+	.string "FIGHTING POKéMON looking for a challenge!\p"
+	.string "… … … … … …$"
 
 DewfordTown_Gym_Text_ExplainBulkUp:
-	.string "That TM08 contains BULK UP.\p"
+	.string "That TM08 contains BULK UP,\n"
+	.string "my signature move.\p"
 	.string "It's a move that raises both ATTACK\n"
-	.string "and DEFENSE stats.\p"
-	.string "… … … … … …$"
+	.string "and DEFENSE stats.$"
 
 DewfordTown_Gym_Text_RegisteredBrawly:
 	.string "Registered GYM LEADER BRAWLY\n"

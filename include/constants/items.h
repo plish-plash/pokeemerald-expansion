@@ -976,8 +976,11 @@
 
 // New Key Items
 #define ITEM_THROWING_ROCK 799
+#define ITEM_CHALLENGE_BELT 800
+#define ITEM_BIG_MAGNET 801
+#define ITEM_PSYCHIC_BELL 802
 
-#define ITEMS_COUNT 800
+#define ITEMS_COUNT 803
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations
@@ -1027,6 +1030,9 @@
 #define WILD_AREA_ROCKS     2
 #define WILD_AREA_FISHING   3
 #define WILD_AREA_SKY       4
+#define WILD_AREA_CHALLENGE 5
+#define WILD_AREA_MAGNET    6
+#define WILD_AREA_PSYCHIC   7
 
 // Secondary IDs for bikes
 #define MACH_BIKE 0

@@ -101,9 +101,10 @@ PlayersHouse_2F_EventScript_MomComesUpstairsFemale::
 	waitmovement 0
 	return
 
+@ TODO print the current time
 PlayersHouse_2F_EventScript_CheckWallClock::
 	incrementgamestat GAME_STAT_CHECKED_CLOCK
-	msgbox PlayersHouse_2F_Text_ClockAlreadyRunning, MSGBOX_DEFAULT
+	msgbox PlayersHouse_2F_Text_CheckWallClock, MSGBOX_DEFAULT
 	closemessage
 	releaseall
 	end

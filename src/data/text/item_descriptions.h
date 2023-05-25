@@ -3917,3 +3917,17 @@ static const u8 sThrowingRockDesc[] = _(
     "Use to start fights\n"
     "with wild Pokémon\n"
     "flying overhead.");
+
+static const u8 sChallengeBeltDesc[] = _(
+    "A belt that provokes\n"
+    "nearby Fighting\n"
+    "Pokémon when worn.");
+
+static const u8 sBigMagnetDesc[] = _(
+    "Use to pull nearby\n"
+    "wild Pokémon to you.");
+
+static const u8 sPsychicBellDesc[] = _(
+    "Use to meditate and\n"
+    "connect with nearby\n"
+    "Psychic Pokémon.");

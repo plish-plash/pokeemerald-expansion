@@ -6116,7 +6116,7 @@ const struct Item gItems[] =
 
     [ITEM_SOOTHE_BELL] =
     {
-        .name = _("Soothe Bell"),
+        .name = _("Charm Bell"),
         .itemId = ITEM_SOOTHE_BELL,
         .price = 4000,
         .holdEffect = HOLD_EFFECT_FRIENDSHIP_UP,
@@ -6306,7 +6306,7 @@ const struct Item gItems[] =
 
     [ITEM_EXPERT_BELT] =
     {
-        .name = _("Expert Belt"),
+        .name = _("Super Belt"),
         .itemId = ITEM_EXPERT_BELT,
         .price = 4000,
         .holdEffect = HOLD_EFFECT_EXPERT_BELT,
@@ -10365,5 +10365,47 @@ const struct Item gItems[] =
         .type = ITEM_USE_FIELD,
         .fieldUseFunc = ItemUseOutOfBattle_HabitatEncounter,
         .secondaryId = WILD_AREA_SKY,
+    },
+
+    [ITEM_CHALLENGE_BELT] =
+    {
+        .name = _("Expert Belt"),
+        .itemId = ITEM_CHALLENGE_BELT,
+        .price = 0,
+        .description = sChallengeBeltDesc,
+        .importance = 1,
+        .registrability = TRUE,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_HabitatEncounter,
+        .secondaryId = WILD_AREA_CHALLENGE,
+    },
+
+    [ITEM_BIG_MAGNET] =
+    {
+        .name = _("Big Magnet"),
+        .itemId = ITEM_BIG_MAGNET,
+        .price = 0,
+        .description = sBigMagnetDesc,
+        .importance = 1,
+        .registrability = TRUE,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_HabitatEncounter,
+        .secondaryId = WILD_AREA_MAGNET,
+    },
+
+    [ITEM_PSYCHIC_BELL] =
+    {
+        .name = _("Soothe Bell"),
+        .itemId = ITEM_PSYCHIC_BELL,
+        .price = 0,
+        .description = sPsychicBellDesc,
+        .importance = 1,
+        .registrability = TRUE,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_HabitatEncounter,
+        .secondaryId = WILD_AREA_PSYCHIC,
     },
 };

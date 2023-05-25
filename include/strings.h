@@ -1033,11 +1033,18 @@ extern const u8 gText_OhABite[];
 extern const u8 gText_PokemonOnHook[];
 extern const u8 gText_NotEvenANibble[];
 extern const u8 gText_ItGotAway[];
-
 extern const u8 gText_SomethingOverhead[];
 extern const u8 gText_DirectHit[];
 extern const u8 gText_NothingInTheSky[];
 extern const u8 gText_ItFlewAway[];
+extern const u8 gText_YouAreChallenged[];
+extern const u8 gText_YouFeelATug[];
+extern const u8 gText_MagnetPulledInPokemon[];
+extern const u8 gText_NoMagneticPokemon[];
+extern const u8 gText_YouFeelAPresence[];
+extern const u8 gText_PokemonAppeared[];
+extern const u8 gText_YouDoNotSense[];
+extern const u8 gText_ThePresenceIsGone[];
 
 extern const u8 gText_HallOfFame[];
 extern const u8 gText_LogOff[];

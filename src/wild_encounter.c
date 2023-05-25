@@ -247,21 +247,19 @@ static bool8 CheckWildMonSpecies(u16 species, u8 area, u8 levelMin, u8 levelMax,
         }
         break;
     case WILD_AREA_WATER:
-        if (gSpeciesHabitat[species].flags & HABITAT_WATER)
-            return TRUE;
-        break;
+        return (gSpeciesHabitat[species].flags & HABITAT_WATER);
     case WILD_AREA_ROCKS:
-        if (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_ROCK_SMASH)
-            return TRUE;
-        break;
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_ROCK_SMASH);
     case WILD_AREA_FISHING:
-        if (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_FISHING)
-            return TRUE;
-        break;
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_FISHING);
     case WILD_AREA_SKY:
-        if (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_FLYING)
-            return TRUE;
-        break;
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_FLYING);
+    case WILD_AREA_CHALLENGE:
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_FIGHTING);
+    case WILD_AREA_MAGNET:
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_STEEL);
+    case WILD_AREA_PSYCHIC:
+        return (gSpeciesHabitat[species].encounter == HABITAT_ENCOUNTER_PSYCHIC);
     }
     return FALSE;
 }

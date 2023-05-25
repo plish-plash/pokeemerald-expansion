@@ -277,6 +277,9 @@ PlayersHouse_2F_Text_ClockAlreadyRunning:
 	.string "the GBA's real-time clock.\p"
 	.string "The clock is already running!$"
 
+PlayersHouse_2F_Text_CheckWallClock:
+	.string "Time marches ever onward.$"
+
 PlayersHouse_2F_Text_HowDoYouLikeYourRoom:
 	.string "MOM: {PLAYER}, how do you like your\n"
 	.string "new room?\p"

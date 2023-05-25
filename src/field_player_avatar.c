@@ -1872,6 +1872,11 @@ static bool8 Fishing_CheckForBite(struct Task *task)
             }
         }
     }
+    else if (task->tHabitat == WILD_AREA_CHALLENGE)
+    {
+        bite = TRUE;
+        task->tStep = FISHING_ON_HOOK;
+    }
 
     if (!bite)
     {
@@ -1893,6 +1898,12 @@ static bool8 Fishing_GotBite(struct Task *task)
     {
     case WILD_AREA_SKY:
         str = gText_SomethingOverhead;
+        break;
+    case WILD_AREA_MAGNET:
+        str = gText_YouFeelATug;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = gText_YouFeelAPresence;
         break;
     case WILD_AREA_FISHING:
     default:
@@ -1960,6 +1971,15 @@ static bool8 Fishing_MonOnHook(struct Task *task)
     case WILD_AREA_SKY:
         str = gText_DirectHit;
         break;
+    case WILD_AREA_CHALLENGE:
+        str = gText_YouAreChallenged;
+        break;
+    case WILD_AREA_MAGNET:
+        str = gText_MagnetPulledInPokemon;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = gText_PokemonAppeared;
+        break;
     case WILD_AREA_FISHING:
     default:
         str = gText_PokemonOnHook;
@@ -2015,7 +2035,7 @@ static bool8 Fishing_StartEncounter(struct Task *task)
         }
         else
         {
-            task->tStep += 3;
+            task->tStep = FISHING_SHOW_RESULT;
             task->tFrameCounter = 0;
         }
     }
@@ -2029,6 +2049,12 @@ static bool8 Fishing_NotEvenNibble(struct Task *task)
     {
     case WILD_AREA_SKY:
         str = gText_NothingInTheSky;
+        break;
+    case WILD_AREA_MAGNET:
+        str = gText_NoMagneticPokemon;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = gText_YouDoNotSense;
         break;
     case WILD_AREA_FISHING:
     default:
@@ -2051,6 +2077,9 @@ static bool8 Fishing_GotAway(struct Task *task)
     {
     case WILD_AREA_SKY:
         str = gText_ItFlewAway;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = gText_ThePresenceIsGone;
         break;
     case WILD_AREA_FISHING:
     default:

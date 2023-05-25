@@ -456,18 +456,18 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_GASTLY] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_CAVE,
+        .flags = HABITAT_LAND | HABITAT_CAVE | HABITAT_NIGHT,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_HAUNTER] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_CAVE,
+        .flags = HABITAT_LAND | HABITAT_CAVE | HABITAT_NIGHT,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_GENGAR] = {
-        .flags = HABITAT_LAND | HABITAT_NIGHT,
-        .biome = BIOME_CAVE,
+        .flags = HABITAT_LAND | HABITAT_CAVE | HABITAT_NIGHT,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_ONIX] = {
@@ -811,24 +811,24 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_HOOTHOOT] = {
-        .flags = 0,
+        .flags = HABITAT_NIGHT,
         .biome = BIOME_FOREST,
         .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_NOCTOWL] = {
-        .flags = 0,
+        .flags = HABITAT_NIGHT,
         .biome = BIOME_FOREST,
         .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_LEDYBA] = {
-        .flags = 0,
+        .flags = HABITAT_LAND,
         .biome = BIOME_FOREST,
-        .encounter = HABITAT_ENCOUNTER_FLYING,
+        .encounter = 0,
     },
     [SPECIES_LEDIAN] = {
-        .flags = 0,
+        .flags = HABITAT_LAND,
         .biome = BIOME_FOREST,
-        .encounter = HABITAT_ENCOUNTER_FLYING,
+        .encounter = 0,
     },
     [SPECIES_SPINARAK] = {
         .flags = HABITAT_LAND,
@@ -846,12 +846,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_CHINCHOU] = {
-        .flags = HABITAT_LAND,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_LANTURN] = {
-        .flags = 0,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -891,7 +891,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_MAREEP] = {
-        .flags = HABITAT_CAVE,
+        .flags = HABITAT_LAND,
         .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
@@ -906,12 +906,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_BELLOSSOM] = {
-        .flags = 0,
+        .flags = HABITAT_LAND | HABITAT_DAY,
         .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_MARILL] = {
-        .flags = HABITAT_WATER | HABITAT_CAVE | HABITAT_DAY,
+        .flags = HABITAT_LAND | HABITAT_WATER | HABITAT_CAVE | HABITAT_DAY,
         .biome = BIOME_SWAMP,
         .encounter = 0,
     },
@@ -931,17 +931,17 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_HOPPIP] = {
-        .flags = HABITAT_WATER,
+        .flags = HABITAT_LAND,
         .biome = BIOME_TEMPERATE,
-        .encounter = HABITAT_ENCOUNTER_FLYING,
+        .encounter = 0,
     },
     [SPECIES_SKIPLOOM] = {
-        .flags = 0,
+        .flags = HABITAT_LAND,
         .biome = BIOME_TEMPERATE,
-        .encounter = HABITAT_ENCOUNTER_FLYING,
+        .encounter = 0,
     },
     [SPECIES_JUMPLUFF] = {
-        .flags = 0,
+        .flags = HABITAT_LAND,
         .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
@@ -997,13 +997,13 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_MISDREAVUS] = {
         .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_CAVE,
+        .biome = BIOME_ANY,
         .encounter = 0,
     },
     [SPECIES_UNOWN] = {
         .flags = 0,
         .biome = BIOME_ANY,
-        .encounter = HABITAT_ENCOUNTER_PSYCHIC,
+        .encounter = 0,
     },
     [SPECIES_WOBBUFFET] = {
         .flags = HABITAT_CAVE,
@@ -1016,7 +1016,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_PINECO] = {
-        .flags = HABITAT_CAVE,
+        .flags = HABITAT_LAND | HABITAT_CAVE,
         .biome = BIOME_FOREST,
         .encounter = 0,
     },
@@ -1071,7 +1071,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FIGHTING,
     },
     [SPECIES_SNEASEL] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
+        .flags = HABITAT_LAND | HABITAT_NIGHT,
         .biome = BIOME_FOREST,
         .encounter = 0,
     },
@@ -1096,17 +1096,17 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_ROCK_SMASH,
     },
     [SPECIES_SWINUB] = {
-        .flags = HABITAT_CAVE,
-        .biome = BIOME_CAVE,
+        .flags = HABITAT_LAND,
+        .biome = BIOME_TUNDRA,
         .encounter = 0,
     },
     [SPECIES_PILOSWINE] = {
-        .flags = HABITAT_CAVE,
-        .biome = BIOME_CAVE,
+        .flags = HABITAT_LAND,
+        .biome = BIOME_TUNDRA,
         .encounter = 0,
     },
     [SPECIES_CORSOLA] = {
-        .flags = HABITAT_LAND,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -1122,21 +1122,21 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_DELIBIRD] = {
         .flags = HABITAT_CAVE,
-        .biome = BIOME_MOUNTAIN,
+        .biome = BIOME_TUNDRA,
         .encounter = 0,
     },
     [SPECIES_MANTINE] = {
         .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
-        .encounter = HABITAT_ENCOUNTER_FLYING,
+        .encounter = 0,
     },
     [SPECIES_SKARMORY] = {
         .flags = 0,
         .biome = BIOME_MOUNTAIN,
-        .encounter = HABITAT_ENCOUNTER_STEEL,
+        .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_HOUNDOUR] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
+        .flags = HABITAT_LAND | HABITAT_NIGHT,
         .biome = BIOME_MOUNTAIN,
         .encounter = 0,
     },
@@ -1166,8 +1166,8 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_STANTLER] = {
-        .flags = HABITAT_CAVE,
-        .biome = BIOME_FOREST,
+        .flags = HABITAT_LAND,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_SMEARGLE] = {
@@ -1507,7 +1507,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_SABLEYE] = {
         .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_CAVE,
+        .biome = BIOME_ANY,
         .encounter = 0,
     },
     [SPECIES_MAWILE] = {
@@ -1596,12 +1596,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_WAILMER] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_WAILORD] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -1648,7 +1648,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     [SPECIES_FLYGON] = {
         .flags = 0,
         .biome = BIOME_MOUNTAIN,
-        .encounter = 0,
+        .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_CACNEA] = {
         .flags = HABITAT_LAND,
@@ -1681,12 +1681,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_LUNATONE] = {
-        .flags = HABITAT_WATER | HABITAT_CAVE,
+        .flags = HABITAT_CAVE,
         .biome = BIOME_CAVE,
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_SOLROCK] = {
-        .flags = HABITAT_WATER | HABITAT_CAVE,
+        .flags = HABITAT_CAVE,
         .biome = BIOME_CAVE,
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
@@ -1741,7 +1741,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_FEEBAS] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_SWAMP,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -1751,7 +1751,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_CASTFORM] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
@@ -1771,13 +1771,13 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_DUSKULL] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_FOREST,
+        .flags = HABITAT_LAND | HABITAT_CAVE | HABITAT_NIGHT,
+        .biome = BIOME_ANY,
         .encounter = 0,
     },
     [SPECIES_DUSCLOPS] = {
-        .flags = HABITAT_CAVE | HABITAT_NIGHT,
-        .biome = BIOME_FOREST,
+        .flags = HABITAT_LAND | HABITAT_CAVE | HABITAT_NIGHT,
+        .biome = BIOME_ANY,
         .encounter = 0,
     },
     [SPECIES_TROPIUS] = {
@@ -1802,7 +1802,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_SNORUNT] = {
         .flags = HABITAT_CAVE,
-        .biome = BIOME_CAVE,
+        .biome = BIOME_TUNDRA,
         .encounter = 0,
     },
     [SPECIES_GLALIE] = {
@@ -1811,7 +1811,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_SPHEAL] = {
-        .flags = HABITAT_WATER | HABITAT_CAVE,
+        .flags = HABITAT_LAND | HABITAT_WATER,
         .biome = BIOME_TUNDRA,
         .encounter = 0,
     },
@@ -1826,7 +1826,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_CLAMPERL] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_WATER,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -1841,7 +1841,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_RELICANTH] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -1871,12 +1871,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_METANG] = {
-        .flags = HABITAT_CAVE,
+        .flags = 0,
         .biome = BIOME_MOUNTAIN,
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_METAGROSS] = {
-        .flags = HABITAT_CAVE,
+        .flags = 0,
         .biome = BIOME_MOUNTAIN,
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
