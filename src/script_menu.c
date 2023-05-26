@@ -426,10 +426,19 @@ static void CreatePCMultichoice(void)
     // Include Hall of Fame option if player is champion
     if (FlagGet(FLAG_SYS_GAME_CLEAR))
     {
+        numChoices = 5;
+        windowId = CreateWindowFromRect(0, 0, width, 10);
+        SetStandardWindowBorderStyle(windowId, FALSE);
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_PokedexReward, x, 33, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_HallOfFame, x, 49, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LogOff, x, 57, TEXT_SKIP_DRAW, NULL);
+    }
+    else if (FlagGet(FLAG_SYS_POKEDEX_GET))
+    {
         numChoices = 4;
         windowId = CreateWindowFromRect(0, 0, width, 8);
         SetStandardWindowBorderStyle(windowId, FALSE);
-        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_HallOfFame, x, 33, TEXT_SKIP_DRAW, NULL);
+        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_PokedexReward, x, 33, TEXT_SKIP_DRAW, NULL);
         AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LogOff, x, 49, TEXT_SKIP_DRAW, NULL);
     }
     else
@@ -440,11 +449,8 @@ static void CreatePCMultichoice(void)
         AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LogOff, x, 33, TEXT_SKIP_DRAW, NULL);
     }
 
-    // Change PC name if player has met Lanette
-    if (FlagGet(FLAG_SYS_PC_LANETTE))
-        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LanettesPC, x, 1, TEXT_SKIP_DRAW, NULL);
-    else
-        AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_SomeonesPC, x, 1, TEXT_SKIP_DRAW, NULL);
+    // if (FlagGet(FLAG_SYS_PC_LANETTE))
+    AddTextPrinterParameterized(windowId, FONT_NORMAL, gText_LanettesPC, x, 1, TEXT_SKIP_DRAW, NULL);
 
     StringExpandPlaceholders(gStringVar4, gText_PlayersPC);
     PrintPlayerNameOnWindow(windowId, gStringVar4, x, 17);

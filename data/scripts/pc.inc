@@ -19,8 +19,9 @@ EventScript_AccessPC::
 	switch VAR_RESULT
 	case 0, EventScript_AccessPokemonStorage
 	case 1, EventScript_AccessPlayersPC
-	case 2, EventScript_AccessHallOfFame
-	case 3, EventScript_TurnOffPC
+	case 3, EventScript_AccessPokedexReward
+	case 4, EventScript_AccessHallOfFame
+	case 5, EventScript_TurnOffPC
 	case MULTI_B_PRESSED, EventScript_TurnOffPC
 	end
 
@@ -32,10 +33,36 @@ EventScript_AccessPlayersPC::
 	goto EventScript_PCMainMenu
 	end
 
+EventScript_AccessPokedexReward::
+	goto_if_unset FLAG_SYS_POKEDEX_GET, EventScript_TurnOffPC
+	playse SE_PC_LOGIN
+	msgbox gText_AccessedPokedexReward, MSGBOX_DEFAULT
+	specialvar VAR_RESULT, CheckHasPokedexReward
+	goto_if_eq VAR_RESULT, TRUE, EventScript_GivePokedexReward
+	goto_if_eq VAR_RESULT, FALSE, EventScript_NoPokedexReward
+	end
+
+EventScript_GivePokedexReward::
+	special ChoosePokedexReward
+	giveitem VAR_RESULT
+	call_if_eq VAR_RESULT, TRUE, EventScript_PokedexRewardReceived
+	call_if_eq VAR_RESULT, FALSE, Common_EventScript_BagIsFull
+	goto EventScript_PCMainMenu
+	end
+
+EventScript_PokedexRewardReceived::
+	addvar VAR_POKEDEX_REWARD, 1
+	specialvar VAR_RESULT, CheckHasPokedexReward
+	goto_if_eq VAR_RESULT, TRUE, EventScript_GivePokedexReward
+	return
+
+EventScript_NoPokedexReward::
+	msgbox gText_NoPokedexReward, MSGBOX_DEFAULT
+	goto EventScript_PCMainMenu
+	end
+
 EventScript_AccessPokemonStorage::
 	playse SE_PC_LOGIN
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_AccessSomeonesPC
-	call_if_set FLAG_SYS_PC_LANETTE, EventScript_AccessLanettesPC
 	msgbox gText_StorageSystemOpened, MSGBOX_DEFAULT
 	special ShowPokemonStorageSystemPC
 	waitstate

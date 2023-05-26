@@ -15,3 +15,9 @@ gText_AccessedPlayersPC::
 
 gText_AccessedLanettesPC::
 	.string "Accessed LANETTE's PC.$"
+
+gText_AccessedPokedexReward::
+	.string "Scanning POKéDEX…$"
+
+gText_NoPokedexReward::
+	.string "No rewards to claim.\nCatch more POKéMON!$"
