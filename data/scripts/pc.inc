@@ -19,9 +19,9 @@ EventScript_AccessPC::
 	switch VAR_RESULT
 	case 0, EventScript_AccessPokemonStorage
 	case 1, EventScript_AccessPlayersPC
-	case 3, EventScript_AccessPokedexReward
-	case 4, EventScript_AccessHallOfFame
-	case 5, EventScript_TurnOffPC
+	case 2, EventScript_AccessPokedexReward
+	case 3, EventScript_AccessHallOfFame
+	case 4, EventScript_TurnOffPC
 	case MULTI_B_PRESSED, EventScript_TurnOffPC
 	end
 
@@ -46,8 +46,8 @@ EventScript_AccessPokedexReward::
 EventScript_GivePokedexReward::
 	special ChoosePokedexReward
 	giveitem VAR_RESULT
-	call_if_eq VAR_RESULT, TRUE, EventScript_PokedexRewardReceived
 	call_if_eq VAR_RESULT, FALSE, Common_EventScript_BagIsFull
+	call_if_eq VAR_RESULT, TRUE, EventScript_PokedexRewardReceived
 	goto EventScript_PCMainMenu
 	end
 
