@@ -102,7 +102,7 @@ void RtcInit(void)
 {
     gLocalTime.seconds = 0;
     gLocalTime.minutes = 0;
-    gLocalTime.hours = 10;
+    gLocalTime.hours = 5;
     gLocalTime.days = 0;
 }
 

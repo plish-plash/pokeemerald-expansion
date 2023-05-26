@@ -352,9 +352,9 @@ static bool8 TryGenerateWildMon(u8 area, u8 flags)
     habitatIndex = GetMapHabitatIndex();
     if (gMapHabitat[habitatIndex].levelMin == 0) return FALSE;
 
-    numBadges = GetNumOwnedBadges();
-    levelMin = gMapHabitat[habitatIndex].levelMin + (numBadges * 2);
-    levelMax = gMapHabitat[habitatIndex].levelMax + (numBadges * 3);
+    // numBadges = GetNumOwnedBadges();
+    levelMin = gMapHabitat[habitatIndex].levelMin; // + (numBadges * 2);
+    levelMax = gMapHabitat[habitatIndex].levelMax; // + (numBadges * 3);
 
     if (area == WILD_AREA_LAND || area == WILD_AREA_WATER)
     {
@@ -410,9 +410,9 @@ static bool8 TryGenerateFishingWildMon(u8 rod)
         break;
     }
 
-    numBadges = GetNumOwnedBadges();
-    levelMin += numBadges * 2;
-    levelMax += numBadges * 4;
+    // numBadges = GetNumOwnedBadges();
+    // levelMin += numBadges * 2;
+    // levelMax += numBadges * 4;
     return TryGenerateWildMonInternal(WILD_AREA_FISHING, 0, TYPE_NONE, levelMin, levelMax, BIOME_ANY);
 }
 

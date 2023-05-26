@@ -16,7 +16,6 @@
 #define TINT_NIGHT Q_8_8(0.6), Q_8_8(0.6), Q_8_8(0.92)
 
 EWRAM_DATA u16 gPlttBufferPreDN[PLTT_BUFFER_SIZE] = {0};
-EWRAM_DATA const struct PaletteOverride *gPaletteOverrides[4] = {NULL};
 
 static EWRAM_DATA struct {
     u8 hours;
@@ -50,51 +49,6 @@ static const u16 sTimeOfDayTints[][3] = {
     [23] =  {TINT_NIGHT},
 };
 
-static bool8 ShouldOverridePrimaryPalette(void)
-{
-    return !(gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(PETALBURG_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(PETALBURG_CITY));
-}
-
-static void LoadPaletteOverrides(void)
-{
-    u8 i, j;
-    const u16* src;
-    u16* dest;
-
-    s8 currentOverride = OVERRIDE_PALETTE_DAY;
-    if (gLocalTime.hours <= 3 || gLocalTime.hours >= 20)
-        currentOverride = OVERRIDE_PALETTE_NIGHT;
-
-    for (i = 0; i < ARRAY_COUNT(gPaletteOverrides); i++)
-    {
-        const struct PaletteOverride *curr = gPaletteOverrides[i];
-        if (curr != NULL && (i != 0 || ShouldOverridePrimaryPalette()))
-        {
-            while (curr->slot != PALOVER_LIST_TERM && curr->palette != NULL)
-            {
-                if (curr->dnOverride == currentOverride)
-                {
-                    for (j = 0, src = curr->palette, dest = gPlttBufferUnfaded + (curr->slot * 16); j < 16; j++, src++, dest++)
-                    {
-                        if (*src != RGB_BLACK)
-                            *dest = *src;
-                    }
-                }
-                curr++;
-            }
-        }
-    }
-}
-
-static bool8 ShouldTintOverworld(void)
-{
-    if (IsMapTypeOutdoors(gMapHeader.mapType))
-        return TRUE;
-
-    // more conditions?
-    return FALSE;
-}
-
 static bool8 CheckTime(void)
 {
     const u16 *tint;
@@ -112,11 +66,10 @@ static bool8 CheckTime(void)
 
 static void TintPaletteForDayNight(u16 offset, u16 size)
 {
-    if (ShouldTintOverworld())
+    if (IsMapTypeOutdoors(gMapHeader.mapType))
     {
         CheckTime();
         TintPalette_CustomToneWithCopy(gPlttBufferPreDN + offset, gPlttBufferUnfaded + offset, size / 2, sDayNight.tint[0], sDayNight.tint[1], sDayNight.tint[2], FALSE);
-        LoadPaletteOverrides();
     }
     else
     {
@@ -141,14 +94,13 @@ void LoadPaletteDayNight(const void *src, u16 offset, u16 size)
 
 void ProcessDayNight(void)
 {
-    if (!ShouldTintOverworld())
+    if (!IsMapTypeOutdoors(gMapHeader.mapType))
         return;
     
     if (CheckTime())
     {
         TintPalette_CustomToneWithCopy(gPlttBufferPreDN, gPlttBufferUnfaded, BG_PLTT_SIZE / 2, sDayNight.tint[0], sDayNight.tint[1], sDayNight.tint[2], TRUE);
         TintPalette_CustomToneWithCopy(gPlttBufferPreDN + (BG_PLTT_SIZE / 2), gPlttBufferUnfaded + (BG_PLTT_SIZE / 2), OBJ_PLTT_SIZE / 2, sDayNight.tint[0], sDayNight.tint[1], sDayNight.tint[2], TRUE);
-        LoadPaletteOverrides();
         if (gWeatherPtr->palProcessingState != WEATHER_PAL_STATE_SCREEN_FADING_IN &&
             gWeatherPtr->palProcessingState != WEATHER_PAL_STATE_SCREEN_FADING_OUT)
             CpuCopy16(gPlttBufferUnfaded, gPlttBufferFaded, PLTT_SIZE);

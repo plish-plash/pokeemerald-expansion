@@ -1976,16 +1976,16 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
         if (firstTrainer == TRUE)
             ZeroEnemyPartyMons();
 
-        for (i = 0; i < PARTY_SIZE; i++)
-        {
-            if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
-             && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
-            {
-                fixedLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
-                if (fixedLevel > playerLevel)
-                    playerLevel = fixedLevel;
-            }
-        }
+        // for (i = 0; i < PARTY_SIZE; i++)
+        // {
+        //     if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_NONE
+        //      && GetMonData(&gPlayerParty[i], MON_DATA_SPECIES_OR_EGG) != SPECIES_EGG)
+        //     {
+        //         fixedLevel = GetMonData(&gPlayerParty[i], MON_DATA_LEVEL);
+        //         if (fixedLevel > playerLevel)
+        //             playerLevel = fixedLevel;
+        //     }
+        // }
 
         if (battleTypeFlags & BATTLE_TYPE_TWO_OPPONENTS)
         {
@@ -2017,7 +2017,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 const struct TrainerMonNoItemDefaultMoves *partyData = trainer->party.NoItemDefaultMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 fixedLevel = partyData[i].lvl;
-                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                // if (fixedLevel < playerLevel) fixedLevel = playerLevel;
                 CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
                 break;
             }
@@ -2026,7 +2026,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 const struct TrainerMonNoItemCustomMoves *partyData = trainer->party.NoItemCustomMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 fixedLevel = partyData[i].lvl;
-                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                // if (fixedLevel < playerLevel) fixedLevel = playerLevel;
                 CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 for (j = 0; j < MAX_MON_MOVES; j++)
@@ -2041,7 +2041,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 const struct TrainerMonItemDefaultMoves *partyData = trainer->party.ItemDefaultMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 fixedLevel = partyData[i].lvl;
-                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                // if (fixedLevel < playerLevel) fixedLevel = playerLevel;
                 CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
@@ -2052,7 +2052,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                 const struct TrainerMonItemCustomMoves *partyData = trainer->party.ItemCustomMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 fixedLevel = partyData[i].lvl;
-                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                // if (fixedLevel < playerLevel) fixedLevel = playerLevel;
                 CreateMon(&party[i], partyData[i].species, fixedLevel, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
@@ -2081,7 +2081,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
                     fixedOtId = HIHALF(personalityValue) ^ LOHALF(personalityValue);
                 }
                 fixedLevel = partyData[i].lvl;
-                if (fixedLevel < playerLevel) fixedLevel = playerLevel;
+                // if (fixedLevel < playerLevel) fixedLevel = playerLevel;
                 CreateMon(&party[i], partyData[i].species, fixedLevel, 0, TRUE, personalityValue, otIdType, fixedOtId);
                 SetMonData(&party[i], MON_DATA_HELD_ITEM, &partyData[i].heldItem);
 

@@ -4322,16 +4322,10 @@ static void Cmd_getexp(void)
                 if (holdEffect == HOLD_EFFECT_EXP_SHARE)
                     viaExpShare++;
             }
-            #if CH_TRAINER_LEVEL_DYNAMIC == TRUE
-            if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
-            {
-                faintedMonLevel = GetTrainerMonOriginalLevel(gBattlerFainted);
-            }
-            else
-            #endif
-            {
+            // if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+            //     faintedMonLevel = GetTrainerMonOriginalLevel(gBattlerFainted);
+            // else
                 faintedMonLevel = gBattleMons[gBattlerFainted].level;
-            }
             #if (B_SCALED_EXP >= GEN_5) && (B_SCALED_EXP != GEN_6)
                 calculatedExp = gSpeciesInfo[gBattleMons[gBattlerFainted].species].expYield * faintedMonLevel / 5;
             #else
