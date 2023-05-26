@@ -37,6 +37,7 @@ EventScript_AccessPokedexReward::
 	goto_if_unset FLAG_SYS_POKEDEX_GET, EventScript_TurnOffPC
 	playse SE_PC_LOGIN
 	msgbox gText_AccessedPokedexReward, MSGBOX_DEFAULT
+	delay 10
 	specialvar VAR_RESULT, CheckHasPokedexReward
 	goto_if_eq VAR_RESULT, TRUE, EventScript_GivePokedexReward
 	goto_if_eq VAR_RESULT, FALSE, EventScript_NoPokedexReward

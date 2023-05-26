@@ -502,6 +502,9 @@ struct RankingHall2P
     //u8 padding;
 };
 
+#define ITEM_FLAGS_ITEMS_COUNT 672 // Less than ITEMS_COUNT because save space is limited
+#define ITEM_FLAGS_COUNT ((ITEM_FLAGS_ITEMS_COUNT / 8) + 1)
+
 struct SaveBlock2
 {
     /*0x00*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
@@ -522,7 +525,6 @@ struct SaveBlock2
              //u16 padding1:4;
              //u16 padding2;
     /*0x18*/ struct Pokedex pokedex;
-    /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokemon Colosseum/XD
@@ -536,7 +538,8 @@ struct SaveBlock2
     /*0x57C*/ struct RankingHall2P hallRecords2P[FRONTIER_LVL_MODE_COUNT][HALL_RECORDS_COUNT]; // From record mixing.
     /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
     /*0x64C*/ struct BattleFrontier frontier;
-}; // sizeof=0xF2C
+    /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
+}; // sizeof=0x???
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
 

@@ -90,10 +90,13 @@ BerryTree_EventScript_PickBerry::
 	special IncrementDailyPickedBerries
 	special ObjectEventInteractionRemoveBerryTree
 	message BerryTree_Text_PickedTheBerry
+	delay 10
+	showberrydesc
 	playfanfare MUS_OBTAIN_BERRY
 	waitmessage
 	waitfanfare
 	waitbuttonpress
+	hideitemdesc
 	release
 	end
 
