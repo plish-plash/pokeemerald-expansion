@@ -5,12 +5,11 @@
 #include "pokedex_reward.h"
 #include "constants/items.h"
 
-static const u16 sMajorRewardItems[] = {
-    ITEM_ABILITY_CAPSULE,
-    ITEM_ABILITY_PATCH,
-};
+static const u16 sFirstRewardItem = ITEM_ABILITY_PATCH;
 
-static const u16 sRewardItems[] = {
+static const u16 sMilestoneRewardItem = ITEM_ABILITY_PATCH;
+
+static const u16 sMajorRewardItems[] = {
     ITEM_LONELY_MINT,
     ITEM_ADAMANT_MINT,
     ITEM_NAUGHTY_MINT,
@@ -32,6 +31,16 @@ static const u16 sRewardItems[] = {
     ITEM_JOLLY_MINT,
     ITEM_NAIVE_MINT,
     ITEM_SERIOUS_MINT,
+    ITEM_ABILITY_CAPSULE,
+};
+
+static const u16 sMinorRewardItems[] = {
+    ITEM_HEALTH_FEATHER,
+    ITEM_MUSCLE_FEATHER,
+    ITEM_RESIST_FEATHER,
+    ITEM_GENIUS_FEATHER,
+    ITEM_CLEVER_FEATHER,
+    ITEM_SWIFT_FEATHER,
 };
 
 static u16 GetCaughtMonsCount(void)
@@ -44,20 +53,28 @@ static u16 GetCaughtMonsCount(void)
 
 bool8 CheckHasPokedexReward(void)
 {
-    return GetCaughtMonsCount() > VarGet(VAR_POKEDEX_REWARD);
+    return GetCaughtMonsCount() >= VarGet(VAR_POKEDEX_REWARD);
 }
 
 void ChoosePokedexReward(void)
 {
     u8 i;
-    if (VarGet(VAR_POKEDEX_REWARD) % 10 == 0)
+    if (VarGet(VAR_POKEDEX_REWARD) == 0)
+    {
+        gSpecialVar_Result = sFirstRewardItem;
+    }
+    else if (VarGet(VAR_POKEDEX_REWARD) % 100 == 0)
+    {
+        gSpecialVar_Result = sMilestoneRewardItem;
+    }
+    else if (VarGet(VAR_POKEDEX_REWARD) % 20 == 0)
     {
         i = Random() % ARRAY_COUNT(sMajorRewardItems);
         gSpecialVar_Result = sMajorRewardItems[i];
     }
     else
     {
-        i = Random() % ARRAY_COUNT(sRewardItems);
-        gSpecialVar_Result = sRewardItems[i];
+        i = Random() % ARRAY_COUNT(sMinorRewardItems);
+        gSpecialVar_Result = sMinorRewardItems[i];
     }
 }

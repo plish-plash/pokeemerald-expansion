@@ -52,7 +52,7 @@ EventScript_GivePokedexReward::
 	end
 
 EventScript_PokedexRewardReceived::
-	addvar VAR_POKEDEX_REWARD, 1
+	addvar VAR_POKEDEX_REWARD, 5
 	specialvar VAR_RESULT, CheckHasPokedexReward
 	goto_if_eq VAR_RESULT, TRUE, EventScript_GivePokedexReward
 	return
