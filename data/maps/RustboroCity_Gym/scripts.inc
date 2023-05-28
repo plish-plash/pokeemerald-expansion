@@ -209,10 +209,8 @@ RustboroCity_Gym_Text_ReceivedStoneBadge:
 	.string "from ROXANNE.$"
 
 RustboroCity_Gym_Text_StoneBadgeInfoTakeThis:
-	.string "The STONE BADGE causes you to attract\n"
-	.string "more powerful wild POKéMON.\p"
-	.string "It also enables your POKéMON to use the\n"
-	.string "HM move CUT outside of battle.\p"
+	.string "The STONE BADGE enables your POKéMON to\n"
+	.string "use the HM move CUT outside of battle.\p"
 	.string "Please take this with you, too.$"
 
 RustboroCity_Gym_Text_ExplainThrowingRock:
@@ -220,7 +218,8 @@ RustboroCity_Gym_Text_ExplainThrowingRock:
 	.string "That THROWING ROCK is one of the tools\n"
 	.string "TRAINERS use to find wild POKéMON.\p"
 	.string "Throw it at POKéMON flying overhead\n"
-	.string "to get their attention.$"
+	.string "to get their attention.\p"
+	.string "… … … … … …$"
 
 RustboroCity_Gym_Text_ExplainRockTomb:
 	.string "That's my signature move, ROCK TOMB.\p"

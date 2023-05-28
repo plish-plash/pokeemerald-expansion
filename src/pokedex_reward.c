@@ -5,7 +5,7 @@
 #include "pokedex_reward.h"
 #include "constants/items.h"
 
-static const u16 sFirstRewardItem = ITEM_ABILITY_PATCH;
+static const u16 sFirstRewardItem = ITEM_ABILITY_CAPSULE;
 
 static const u16 sMilestoneRewardItem = ITEM_ABILITY_PATCH;
 

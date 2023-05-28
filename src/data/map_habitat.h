@@ -129,14 +129,14 @@ struct MapHabitatData
     {
         .mapGroup = MAP_GROUP(ROUTE103),
         .mapNum = MAP_NUM(ROUTE103),
-        .biome = BIOME_SWAMP,
+        .biome = BIOME_TEMPERATE,
         .levelMin = 2,
         .levelMax = 4,
     },
     {
         .mapGroup = MAP_GROUP(ROUTE104),
         .mapNum = MAP_NUM(ROUTE104),
-        .biome = BIOME_TEMPERATE,
+        .biome = BIOME_SWAMP,
         .levelMin = 4,
         .levelMax = 5,
     },

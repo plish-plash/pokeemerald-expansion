@@ -436,12 +436,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_GRIMER] = {
-        .flags = HABITAT_WATER,
+        .flags = 0,
         .biome = BIOME_URBAN,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_MUK] = {
-        .flags = HABITAT_WATER,
+        .flags = 0,
         .biome = BIOME_URBAN,
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
@@ -786,12 +786,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_TOTODILE] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_LAND,
         .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_CROCONAW] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_LAND,
         .biome = BIOME_SWAMP,
         .encounter = 0,
     },
@@ -891,12 +891,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_PSYCHIC,
     },
     [SPECIES_MAREEP] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_TEMPERATE,
         .encounter = HABITAT_ENCOUNTER_STEEL,
     },
     [SPECIES_FLAAFFY] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_TEMPERATE,
         .encounter = HABITAT_ENCOUNTER_STEEL,
     },
@@ -1286,12 +1286,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_MUDKIP] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_LAND,
         .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_MARSHTOMP] = {
-        .flags = HABITAT_LAND | HABITAT_WATER,
+        .flags = HABITAT_LAND,
         .biome = BIOME_SWAMP,
         .encounter = 0,
     },
@@ -1992,12 +1992,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_BIDOOF] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_BIBAREL] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_SWAMP,
         .encounter = 0,
     },
     [SPECIES_KRICKETOT] = {
@@ -2011,12 +2011,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = 0,
     },
     [SPECIES_SHINX] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_TEMPERATE,
         .encounter = HABITAT_ENCOUNTER_STEEL,
     },
     [SPECIES_LUXIO] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_TEMPERATE,
         .encounter = HABITAT_ENCOUNTER_STEEL,
     },
@@ -2132,12 +2132,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_BUNEARY] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_LOPUNNY] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_MISMAGIUS] = {
@@ -2517,12 +2517,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_PATRAT] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_WATCHOG] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_LILLIPUP] = {
@@ -3292,12 +3292,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_BUNNELBY] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_DIGGERSBY] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_TEMPERATE,
         .encounter = 0,
     },
     [SPECIES_FLETCHLING] = {
@@ -3332,12 +3332,12 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_LITLEO] = {
         .flags = HABITAT_LAND,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_MOUNTAIN,
         .encounter = 0,
     },
     [SPECIES_PYROAR] = {
         .flags = 0,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_MOUNTAIN,
         .encounter = 0,
     },
     [SPECIES_FLABEBE] = {
@@ -3466,7 +3466,7 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
         .encounter = HABITAT_ENCOUNTER_FISHING,
     },
     [SPECIES_HELIOPTILE] = {
-        .flags = HABITAT_LAND,
+        .flags = 0,
         .biome = BIOME_URBAN,
         .encounter = HABITAT_ENCOUNTER_STEEL,
     },

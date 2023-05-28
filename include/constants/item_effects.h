@@ -65,7 +65,7 @@
 // Amount of EV modified by ITEM4_EV_HP, ITEM4_EV_ATK, ITEM5_EV_DEF, ITEM5_EV_SPEED, ITEM5_EV_SPDEF and ITEM5_EV_SPATK
 #define ITEM6_ADD_EV       10
 #define ITEM6_SUBTRACT_EV -10
-#define ITEM6_ADD_EV_FEATHER 2
+#define ITEM6_ADD_EV_FEATHER 5
 
 // Used for GetItemEffectType.
 #define ITEM_EFFECT_X_ITEM 0

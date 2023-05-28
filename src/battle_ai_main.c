@@ -20,6 +20,7 @@
 #include "constants/hold_effects.h"
 #include "constants/moves.h"
 #include "constants/items.h"
+#include "constants/trainers.h"
 
 #define AI_ACTION_DONE          0x0001
 #define AI_ACTION_FLEE          0x0002
@@ -175,6 +176,15 @@ void BattleAI_SetupFlags(void)
 
     if (gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS) || gTrainers[gTrainerBattleOpponent_A].doubleBattle)
         AI_THINKING_STRUCT->aiFlags |= AI_FLAG_DOUBLE_BATTLE; // Act smart in doubles and don't attack your partner.
+
+    // Everyone gets smart AI!
+    if (AI_THINKING_STRUCT->aiFlags & AI_FLAG_TRY_TO_FAINT)
+        AI_THINKING_STRUCT->aiFlags |= AI_FLAG_SETUP_FIRST_TURN | AI_FLAG_RISKY | AI_FLAG_SMART_SWITCHING | AI_FLAG_WILL_SUICIDE;
+    if ((gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_LEADER
+     || gTrainers[gTrainerBattleOpponent_A].trainerClass == TRAINER_CLASS_RIVAL) && !(AI_THINKING_STRUCT->aiFlags & AI_FLAG_DOUBLE_BATTLE))
+        AI_THINKING_STRUCT->aiFlags |= AI_FLAG_ACE_POKEMON;
+    AI_THINKING_STRUCT->aiFlags |= AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_TRY_TO_FAINT | AI_FLAG_CHECK_VIABILITY
+     | AI_FLAG_PREFER_STRONGEST_MOVE | AI_FLAG_HP_AWARE;
 }
 
 // sBattler_AI set in ComputeBattleAiScores

@@ -366,14 +366,12 @@ MauvilleCity_Gym_Text_ReceivedDynamoBadge:
 MauvilleCity_Gym_Text_ExplainDynamoBadgeTakeThis:
 	.string "With the DYNAMO BADGE, POKéMON can\n"
 	.string "use ROCK SMASH out of battle.\p"
-	.string "And, you will attract more\n"
-	.string "powerful wild POKéMON.\p"
 	.string "Hmm…\n"
 	.string "You should take this, too!$"
 
 MauvilleCity_Gym_Text_ExplainBigMagnet:
 	.string "That BIG MAGNET is big enough to\n"
-	.string "drag a whole POKéMON to you!\p"
+	.string "drag a whole POKéMON out of hiding!\p"
 	.string "It's a great way to find wild\n"
 	.string "ELECTRIC-type and STEEL-type POKéMON.\p"
 	.string "… … … … … …$"
