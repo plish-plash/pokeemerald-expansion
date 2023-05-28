@@ -77,17 +77,17 @@ const struct SpeciesHabitat gSpeciesHabitat[NUM_WILD_SPECIES] =
     },
     [SPECIES_PIDGEY] = {
         .flags = 0,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_PIDGEOTTO] = {
         .flags = 0,
-        .biome = BIOME_URBAN,
+        .biome = BIOME_ANY,
         .encounter = HABITAT_ENCOUNTER_FLYING,
     },
     [SPECIES_PIDGEOT] = {
         .flags = 0,
-        .biome = BIOME_FOREST,
+        .biome = BIOME_ANY,
         .encounter = 0,
     },
     [SPECIES_RATTATA] = {

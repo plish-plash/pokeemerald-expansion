@@ -2024,20 +2024,16 @@ static bool8 Fishing_StartEncounter(struct Task *task)
         gPlayerAvatar.preventStep = FALSE;
         UnlockPlayerFieldControls();
         // TODO generating the encounter can still fail here. Maybe show a message box in that case?
-        if (task->tHabitat == WILD_AREA_FISHING && FishingWildEncounter(task->tFishingRod))
+        if (task->tHabitat == WILD_AREA_FISHING)
         {
+            FishingWildEncounter(task->tFishingRod);
             RecordFishingAttemptForTV(TRUE);
-            DestroyTask(FindTaskIdByFunc(Task_Fishing));
-        }
-        else if (task->tHabitat != WILD_AREA_FISHING && HabitatWildEncounter(task->tHabitat, 0))
-        {
-            DestroyTask(FindTaskIdByFunc(Task_Fishing));
         }
         else
         {
-            task->tStep = FISHING_SHOW_RESULT;
-            task->tFrameCounter = 0;
+            HabitatWildEncounter(task->tHabitat, 0);
         }
+        DestroyTask(FindTaskIdByFunc(Task_Fishing));
     }
     return FALSE;
 }

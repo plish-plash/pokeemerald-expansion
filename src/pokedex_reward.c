@@ -35,12 +35,14 @@ static const u16 sMajorRewardItems[] = {
 };
 
 static const u16 sMinorRewardItems[] = {
-    ITEM_HEALTH_FEATHER,
-    ITEM_MUSCLE_FEATHER,
-    ITEM_RESIST_FEATHER,
-    ITEM_GENIUS_FEATHER,
-    ITEM_CLEVER_FEATHER,
-    ITEM_SWIFT_FEATHER,
+    ITEM_HP_UP,
+    ITEM_PROTEIN,
+    ITEM_IRON,
+    ITEM_CALCIUM,
+    ITEM_ZINC,
+    ITEM_CARBOS,
+    ITEM_PP_UP,
+    ITEM_RARE_CANDY,
 };
 
 static u16 GetCaughtMonsCount(void)

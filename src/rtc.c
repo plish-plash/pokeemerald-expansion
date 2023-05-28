@@ -4,6 +4,7 @@
 #include "text.h"
 
 // iwram bss
+static u8 sSkipFrame;
 
 // iwram common
 struct Time gLocalTime;
@@ -100,9 +101,10 @@ void FormatHexDate(u8 *dest, s32 year, s32 month, s32 day)
 
 void RtcInit(void)
 {
+    sSkipFrame = 0;
     gLocalTime.seconds = 0;
     gLocalTime.minutes = 0;
-    gLocalTime.hours = 10;
+    gLocalTime.hours = 11;
     gLocalTime.days = 0;
 }
 
@@ -112,6 +114,13 @@ void RtcCalcLocalTime(void)
 
 void LocalTimeAdvance(void)
 {
+    sSkipFrame++;
+    if (sSkipFrame < 2) {
+        return;
+    } else {
+        sSkipFrame = 0;
+    }
+
     gLocalTime.seconds++;
     if (gLocalTime.seconds >= 60) {
         gLocalTime.seconds -= 60;

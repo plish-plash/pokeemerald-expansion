@@ -376,10 +376,6 @@ static bool8 TryGenerateWildMon(u8 area, u8 flags)
     {
         biome = BIOME_ANY;
     }
-    else if (gMapHeader.mapType == MAP_TYPE_TOWN || gMapHeader.mapType == MAP_TYPE_CITY)
-    {
-        biome = BIOME_URBAN;
-    }
     else
     {
         biome = gMapHabitat[habitatIndex].biome;
