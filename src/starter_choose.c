@@ -23,6 +23,8 @@
 #include "window.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
+#include "script_pokemon_util.h"
+#include "string_util.h"
 
 #define STARTER_MON_COUNT   3
 
@@ -664,4 +666,33 @@ static void SpriteCB_StarterPokemon(struct Sprite *sprite)
         sprite->y -= 2;
     if (sprite->y < STARTER_PKMN_POS_Y)
         sprite->y += 2;
+}
+
+static const u16 sActualStarterMon = SPECIES_EEVEE;
+
+static const u16 sStarterGems[STARTER_MON_COUNT] =
+{
+    ITEM_GRASS_GEM,
+    ITEM_FIRE_GEM,
+    ITEM_WATER_GEM,
+};
+
+static const u8 sStarterGemTypeStrings[STARTER_MON_COUNT][8] =
+{
+    _("GRASS"),
+    _("FIRE"),
+    _("WATER"),
+};
+
+void TakeStarterBack(void)
+{
+    ZeroMonData(&gPlayerParty[0]);
+    ScriptGiveMon(sActualStarterMon, 5, ITEM_NONE, 0, 0, 0);
+}
+
+void GetStarterGem(void)
+{
+    u16 starter = VarGet(VAR_STARTER_MON);
+    gSpecialVar_Result = sStarterGems[starter];
+    StringCopy(gStringVar1, sStarterGemTypeStrings[starter]);
 }
