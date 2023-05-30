@@ -669,7 +669,7 @@ static void SpriteCB_StarterPokemon(struct Sprite *sprite)
 }
 
 static const u16 sActualStarterMon = SPECIES_ZIGZAGOON;
-static const u8 sActualStarterLevel = 10;
+static const u8 sActualStarterLevel = 7;
 
 static const u8 *const sStarterGemTypeStrings[] =
 {
@@ -695,8 +695,10 @@ static const u8 *const sStarterGemTypeStrings[] =
 
 void TakeStarterBack(void)
 {
+    u8 abilityNum = 0;
     ZeroMonData(&gPlayerParty[0]);
     ScriptGiveMon(sActualStarterMon, sActualStarterLevel, ITEM_NONE, 0, 0, 0);
+    SetMonData(&gPlayerParty[0], MON_DATA_ABILITY_NUM, &abilityNum);
 }
 
 void StarterGemChoiceToItem(void)
