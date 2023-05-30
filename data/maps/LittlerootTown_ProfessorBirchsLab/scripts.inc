@@ -131,13 +131,12 @@ LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter::
 	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterGem::
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_AlsoTakeThis, MSGBOX_DEFAULT
-	special GetStarterGem
+	message LittlerootTown_ProfessorBirchsLab_Text_AskFavoriteType
+	waitmessage
+	multichoicegrid 2, 0, MULTI_STARTER_TYPE, 3, TRUE
+	special StarterGemChoiceToItem
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_InThatCaseTakeThis, MSGBOX_DEFAULT
 	giveitem VAR_RESULT
-	goto LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
-	end
-
-LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_MightBeGoodIdeaToGoSeeRival, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, LittlerootTown_ProfessorBirchsLab_EventScript_AgreeToSeeRival
 	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_DeclineSeeingRival
@@ -709,24 +708,29 @@ LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon:
 	.string "I guess you have your father's blood\n"
 	.string "in your veins after all!\p"
 	.string "Unfortunately, the POKéMON you used\n"
-	.string "earlier is for my research and\l"
-	.string "I can't give it to you.\p"
-	.string "However, I have another\n"
-	.string "POKéMON you can take.\p"
+	.string "earlier is for my research\l"
+	.string "so I can't give it to you.\p"
+	.string "But I have another POKéMON\n"
+	.string "here that you can take.\p"
 	.string "{PLAYER} received the {STR_VAR_1}!$"
 
 LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon:
 	.string "PROF. BIRCH: While you're at it, why not\n"
 	.string "give a nickname to that {STR_VAR_1}?$"
 
-LittlerootTown_ProfessorBirchsLab_Text_AlsoTakeThis:
-	.string "PROF. BIRCH: I'd also like you\n"
-	.string "to have this.$"
+LittlerootTown_ProfessorBirchsLab_Text_AskFavoriteType:
+	.string "PROF. BIRCH: {PLAYER}{KUN},\n"
+	.string "do you have a favorite type of POKéMON?$"
+
+LittlerootTown_ProfessorBirchsLab_Text_InThatCaseTakeThis:
+	.string "PROF. BIRCH: Really? In that case,\n"
+	.string "I'd like you to have this.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_MightBeGoodIdeaToGoSeeRival:
-	.string "PROF. BIRCH: Since you seem to like\n"
-	.string "{STR_VAR_1}-type POKéMON, that rare GEM\l"
-	.string "will help you find more of them.\p"
+	.string "PROF. BIRCH: That rare GEM attracts\n"
+	.string "{STR_VAR_1}-type POKéMON.\p"
+	.string "I hope it can help you\n"
+	.string "become a strong TRAINER.\p"
 	.string "My kid, {RIVAL}, is also studying\n"
 	.string "POKéMON while helping me out.\p"
 	.string "{PLAYER}{KUN}, don't you think it might be\n"

@@ -1778,94 +1778,76 @@ static const u8 sDianciteDesc[] = _(
 
 // Gems
 static const u8 sNormalGemDesc[] = _(
-    "Increases the\n"
-    "power of Normal\n"
-    "Type moves.");
+    "Attracts Normal\n"
+    "Type Pokémon.");
 
 static const u8 sFireGemDesc[] = _(
-    "Increases the\n"
-    "power of Fire\n"
-    "Type moves.");
+    "Attracts Fire\n"
+    "Type Pokémon.");
 
 static const u8 sWaterGemDesc[] = _(
-    "Increases the\n"
-    "power of Water\n"
-    "Type moves.");
+    "Attracts Water\n"
+    "Type Pokémon.");
 
 static const u8 sElectricGemDesc[] = _(
-    "Increases the\n"
-    "power of Electric\n"
-    "Type moves.");
+    "Attracts Electric\n"
+    "Type Pokémon.");
 
 static const u8 sGrassGemDesc[] = _(
-    "Increases the\n"
-    "power of Grass\n"
-    "Type moves.");
+    "Attracts Grass\n"
+    "Type Pokémon.");
 
 static const u8 sIceGemDesc[] = _(
-    "Increases the\n"
-    "power of Ice\n"
-    "Type moves.");
+    "Attracts Ice\n"
+    "Type Pokémon.");
 
 static const u8 sFightingGemDesc[] = _(
-    "Increases the\n"
-    "power of Fighting\n"
-    "Type moves.");
+    "Attracts Fighting\n"
+    "Type Pokémon.");
 
 static const u8 sPoisonGemDesc[] = _(
-    "Increases the\n"
-    "power of Poison\n"
-    "Type moves.");
+    "Attracts Poison\n"
+    "Type Pokémon.");
 
 static const u8 sGroundGemDesc[] = _(
-    "Increases the\n"
-    "power of Ground\n"
-    "Type moves.");
+    "Attracts Ground\n"
+    "Type Pokémon.");
 
 static const u8 sFlyingGemDesc[] = _(
-    "Increases the\n"
-    "power of Flying\n"
-    "Type moves.");
+    "Attracts Flying\n"
+    "Type Pokémon.");
 
 static const u8 sPsychicGemDesc[] = _(
-    "Increases the\n"
-    "power of Psychic\n"
-    "Type moves.");
+    "Attracts Psychic\n"
+    "Type Pokémon.");
 
 static const u8 sBugGemDesc[] = _(
-    "Increases the\n"
-    "power of Bug\n"
-    "Type moves.");
+    "Attracts Bug\n"
+    "Type Pokémon.");
 
 static const u8 sRockGemDesc[] = _(
-    "Increases the\n"
-    "power of Rock\n"
-    "Type moves.");
+    "Attracts Rock\n"
+    "Type Pokémon.");
 
 static const u8 sGhostGemDesc[] = _(
-    "Increases the\n"
-    "power of Ghost\n"
-    "Type moves.");
+    "Attracts Ghost\n"
+    "Type Pokémon.");
 
 static const u8 sDragonGemDesc[] = _(
-    "Increases the\n"
-    "power of Dragon\n"
-    "Type moves.");
+    "Attracts Dragon\n"
+    "Type Pokémon.");
 
 static const u8 sDarkGemDesc[] = _(
-    "Increases the\n"
-    "power of Dark\n"
-    "Type moves.");
+    "Attracts Dark\n"
+    "Type Pokémon.");
 
 static const u8 sSteelGemDesc[] = _(
-    "Increases the\n"
-    "power of Steel\n"
-    "Type moves.");
+    "Attracts Steel\n"
+    "Type Pokémon.");
 
 static const u8 sFairyGemDesc[] = _(
-    "Increases the\n"
-    "power of Fairy\n"
-    "Type moves.");
+    "Attracts Fairy\n"
+    "Type Pokémon.");
 
 // Z-Crystals
 static const u8 sNormaliumZDesc[] = _(

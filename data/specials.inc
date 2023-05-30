@@ -169,7 +169,7 @@ gSpecials::
 	def_special Special_ViewWallClock
 	def_special ChooseStarter
 	def_special TakeStarterBack
-	def_special GetStarterGem
+	def_special StarterGemChoiceToItem
 	def_special StartWallyTutorialBattle
 	def_special ChangePokemonNickname
 	def_special ChoosePartyMon

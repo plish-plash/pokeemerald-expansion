@@ -668,31 +668,51 @@ static void SpriteCB_StarterPokemon(struct Sprite *sprite)
         sprite->y += 2;
 }
 
-static const u16 sActualStarterMon = SPECIES_EEVEE;
+static const u16 sActualStarterMon = SPECIES_ZIGZAGOON;
+static const u8 sActualStarterLevel = 10;
 
-static const u16 sStarterGems[STARTER_MON_COUNT] =
+static const u8 *const sStarterGemTypeStrings[] =
 {
-    ITEM_GRASS_GEM,
-    ITEM_FIRE_GEM,
-    ITEM_WATER_GEM,
-};
-
-static const u8 sStarterGemTypeStrings[STARTER_MON_COUNT][8] =
-{
-    _("GRASS"),
-    _("FIRE"),
-    _("WATER"),
+    gText_Normal,
+    gText_FireType,
+    gText_WaterType,
+    gText_ElectricType,
+    gText_GrassType,
+    gText_IceType,
+    gText_FightingType,
+    gText_PoisonType,
+    gText_GroundType,
+    gText_FlyingType,
+    gText_PsychicType,
+    gText_BugType,
+    gText_RockType,
+    gText_GhostType,
+    gText_DragonType,
+    gText_DarkType,
+    gText_SteelType,
+    gText_FairyType,
 };
 
 void TakeStarterBack(void)
 {
     ZeroMonData(&gPlayerParty[0]);
-    ScriptGiveMon(sActualStarterMon, 5, ITEM_NONE, 0, 0, 0);
+    ScriptGiveMon(sActualStarterMon, sActualStarterLevel, ITEM_NONE, 0, 0, 0);
 }
 
-void GetStarterGem(void)
+void StarterGemChoiceToItem(void)
 {
-    u16 starter = VarGet(VAR_STARTER_MON);
-    gSpecialVar_Result = sStarterGems[starter];
-    StringCopy(gStringVar1, sStarterGemTypeStrings[starter]);
+    // failsafe
+    if (gSpecialVar_Result >= ARRAY_COUNT(sStarterGemTypeStrings))
+        gSpecialVar_Result = 0;
+    
+    // If the player chose one of the three starter types, update VAR_STARTER_MON
+    if (gSpecialVar_Result == 1) // fire
+        *GetVarPointer(VAR_STARTER_MON) = 1;
+    else if (gSpecialVar_Result == 2) // water
+        *GetVarPointer(VAR_STARTER_MON) = 2;
+    else if (gSpecialVar_Result == 4) // grass
+        *GetVarPointer(VAR_STARTER_MON) = 0;
+
+    StringCopy(gStringVar1, sStarterGemTypeStrings[gSpecialVar_Result]);
+    gSpecialVar_Result += ITEM_NORMAL_GEM;
 }

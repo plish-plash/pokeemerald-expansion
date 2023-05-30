@@ -771,6 +771,28 @@ static const struct MenuAction MultichoiceList_TagMatchType[] =
     {gText_Exit},
 };
 
+static const struct MenuAction MultichoiceList_StarterType[] =
+{
+    {gText_Normal},
+    {gText_FireType},
+    {gText_WaterType},
+    {gText_ElectricType},
+    {gText_GrassType},
+    {gText_IceType},
+    {gText_FightingType},
+    {gText_PoisonType},
+    {gText_GroundType},
+    {gText_FlyingType},
+    {gText_PsychicType},
+    {gText_BugType},
+    {gText_RockType},
+    {gText_GhostType},
+    {gText_DragonType},
+    {gText_DarkType},
+    {gText_SteelType},
+    {gText_FairyType},
+};
+
 static const struct MenuAction MultichoiceList_Exit[] =
 {
     {gText_Exit},
@@ -793,7 +815,7 @@ static const struct MultichoiceListStruct sMultichoiceLists[] =
     [MULTI_BASE_PC_WITH_REGISTRY]      = MULTICHOICE(MultichoiceList_BasePCWithRegistry),
     [MULTI_REGISTER_MENU]              = MULTICHOICE(MultichoiceList_RegisterMenu),
     [MULTI_SSTIDAL_LILYCOVE]           = MULTICHOICE(MultichoiceList_Exit),
-    [MULTI_UNUSED_9]                   = MULTICHOICE(MultichoiceList_Exit),
+    [MULTI_STARTER_TYPE]               = MULTICHOICE(MultichoiceList_StarterType),
     [MULTI_UNUSED_10]                  = MULTICHOICE(MultichoiceList_Exit),
     [MULTI_FRONTIER_PASS_INFO]         = MULTICHOICE(MultichoiceList_FrontierPassInfo),
     [MULTI_BIKE]                       = MULTICHOICE(MultichoiceList_Bike),

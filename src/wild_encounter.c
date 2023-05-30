@@ -56,15 +56,18 @@ EWRAM_DATA bool8 gIsFishingEncounter = 0;
 EWRAM_DATA bool8 gIsSurfingEncounter = 0;
 
 #include "data/wild_encounters.h"
+#include "data/pokemon/species_is_evolved.h"
 
 void DisableWildEncounters(bool8 disabled)
 {
     sWildEncountersDisabled = disabled;
 }
 
-static bool8 IsValidWildMonSpecies(u16 species, u8 requiredType, u8 secondaryType, u8 level)
+static bool8 IsValidWildMonSpecies(u16 species, u8 requiredType, u8 secondaryType)
 {
     const struct SpeciesInfo *speciesInfo = &gSpeciesInfo[species];
+    if (gSpeciesIsEvolved[species])
+        return FALSE;
     if (speciesInfo->flags != 0) // Legendary, mythical, ultra beast, etc.
         return FALSE;
     if (requiredType != TYPE_NONE)
@@ -73,23 +76,23 @@ static bool8 IsValidWildMonSpecies(u16 species, u8 requiredType, u8 secondaryTyp
     if (secondaryType != TYPE_NONE)
         if (!(speciesInfo->types[0] == secondaryType || speciesInfo->types[1] == secondaryType))
             return FALSE;
-    // TODO check level
+    return TRUE;
 }
 
-static u16 ChooseWildMonSpecies(u8 requiredType, u8 secondaryType, u8 level)
+static u16 ChooseWildMonSpecies(u8 requiredType, u8 secondaryType)
 {
     u16 i;
     u16 speciesIndex = 0;
 
     for (i = 1; i < NUM_WILD_SPECIES; i++)
     {
-        if (IsValidWildMonSpecies(i, requiredType, secondaryType, level))
+        if (IsValidWildMonSpecies(i, requiredType, secondaryType))
             speciesIndex++;
     }
     if (speciesIndex == 0)
     {
         if (secondaryType != TYPE_NONE)
-            return ChooseWildMonSpecies(requiredType, TYPE_NONE, level);
+            return ChooseWildMonSpecies(requiredType, TYPE_NONE);
         else
             return SPECIES_NONE;
     }
@@ -97,7 +100,7 @@ static u16 ChooseWildMonSpecies(u8 requiredType, u8 secondaryType, u8 level)
     speciesIndex = Random() % speciesIndex;
     for (i = 1; i < NUM_WILD_SPECIES; i++)
     {
-        if (IsValidWildMonSpecies(i, requiredType, secondaryType, level))
+        if (IsValidWildMonSpecies(i, requiredType, secondaryType))
         {
             if (speciesIndex == 0)
                 return i;
@@ -384,7 +387,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
     if (gMapHeader.mapLayoutId != LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS && flags & WILD_CHECK_KEEN_EYE && !IsAbilityAllowingEncounter(level))
         return FALSE;
 
-    species = ChooseWildMonSpecies(requiredType, secondaryType, level);
+    species = ChooseWildMonSpecies(requiredType, secondaryType);
     if (species == SPECIES_NONE)
         return FALSE;
     CreateWildMon(species, level);
@@ -395,7 +398,7 @@ static u16 GenerateFishingWildMon(const struct WildPokemonInfo *wildMonInfo, u8 
 {
     u8 requiredType = GetWildMonTypeFromGemItem();
     u8 level = ChooseWildMonLevelFishing(rod);
-    u16 species = ChooseWildMonSpecies(requiredType, TYPE_WATER, level);
+    u16 species = ChooseWildMonSpecies(requiredType, TYPE_WATER);
     // TODO actually handle failure, instead of just defaulting to Magikarp
     if (species == SPECIES_NONE)
         species = SPECIES_MAGIKARP;
