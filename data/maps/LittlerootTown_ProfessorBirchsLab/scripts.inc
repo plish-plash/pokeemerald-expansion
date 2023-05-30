@@ -708,8 +708,8 @@ LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon:
 	.string "I guess you have your father's blood\n"
 	.string "in your veins after all!\p"
 	.string "Unfortunately, the POKéMON you used\n"
-	.string "earlier is for my research\l"
-	.string "so I can't give it to you.\p"
+	.string "earlier is part of my research\l"
+	.string "so I can't let you have it.\p"
 	.string "But I have another POKéMON\n"
 	.string "here that you can take.\p"
 	.string "{PLAYER} received the {STR_VAR_1}!$"
@@ -719,7 +719,7 @@ LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon:
 	.string "give a nickname to that {STR_VAR_1}?$"
 
 LittlerootTown_ProfessorBirchsLab_Text_AskFavoriteType:
-	.string "PROF. BIRCH: {PLAYER}{KUN},\n"
+	.string "PROF. BIRCH: Say, {PLAYER}{KUN},\n"
 	.string "do you have a favorite type of POKéMON?$"
 
 LittlerootTown_ProfessorBirchsLab_Text_InThatCaseTakeThis:
@@ -730,7 +730,7 @@ LittlerootTown_ProfessorBirchsLab_Text_MightBeGoodIdeaToGoSeeRival:
 	.string "PROF. BIRCH: That rare GEM attracts\n"
 	.string "{STR_VAR_1}-type POKéMON.\p"
 	.string "I hope it can help you\n"
-	.string "become a strong TRAINER.\p"
+	.string "become a great TRAINER.\p"
 	.string "My kid, {RIVAL}, is also studying\n"
 	.string "POKéMON while helping me out.\p"
 	.string "{PLAYER}{KUN}, don't you think it might be\n"
