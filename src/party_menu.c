@@ -2093,6 +2093,19 @@ static u8 CanTeachMove(struct Pokemon *mon, u16 move)
         return CAN_LEARN_MOVE;
 }
 
+static u16 GetTutorMove(u8 tutor)
+{
+    return gTutorMoves[tutor];
+}
+
+bool8 CanLearnTutorMove(u16 species, u8 tutor)
+{
+    if (sTutorLearnsets[species] & (1 << tutor))
+        return TRUE;
+    else
+        return FALSE;
+}
+
 static void InitPartyMenuWindows(u8 layout)
 {
     u8 i;
@@ -7001,4 +7014,9 @@ void IsLastMonThatKnowsSurf(void)
         if (AnyStorageMonWithMove(move) != TRUE)
             gSpecialVar_Result = TRUE;
     }
+}
+
+u16 GetTMHMMoves(u16 position)
+{
+    return sTMHMMoves[position];
 }
