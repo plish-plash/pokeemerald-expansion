@@ -254,6 +254,8 @@ const u8 gText_TheBattle[] = _("the battle");
 const u8 gText_ThePokemonList[] = _("the POKéMON LIST");
 const u8 gText_TheShop[] = _("the shop");
 const u8 gText_ThePC[] = _("the PC");
+const u8 gText_ExpShareTurnOn[] = _("Turned on the EXP. SHARE.\pYour team will now gain a portion\nof EXP Points from battle.{PAUSE_UNTIL_PRESS}");
+const u8 gText_ExpShareTurnOff[] = _("Turned off the EXP. SHARE.\pYour team will no longer gain a portion\nof EXP Points from battle.{PAUSE_UNTIL_PRESS}");
 
 const u8 *const gBagMenu_ReturnToStrings[] =
 {
