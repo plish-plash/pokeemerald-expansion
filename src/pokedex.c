@@ -5607,3 +5607,17 @@ static void ClearSearchParameterBoxText(void)
 {
     ClearSearchMenuRect(144, 8, 96, 96);
 }
+
+static const u16 sPokedexInitialSpeciesSeen[] =
+{
+    SPECIES_RATTATA,
+};
+
+void FillInitialPokedex(void)
+{
+    int i;
+    for (i = 0; i < ARRAY_COUNT(sPokedexInitialSpeciesSeen); i++)
+    {
+        GetSetPokedexFlag(SpeciesToNationalPokedexNum(sPokedexInitialSpeciesSeen[i]), FLAG_SET_SEEN);
+    }
+}

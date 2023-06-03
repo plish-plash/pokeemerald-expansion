@@ -9,6 +9,7 @@
 #include "safari_zone.h"
 #include "overworld.h"
 #include "pokeblock.h"
+#include "pokedex.h"
 #include "battle_setup.h"
 #include "roamer.h"
 #include "tv.h"
@@ -486,6 +487,8 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
             break;
 
         wildMonIndex = ChooseWildMonIndex_Land();
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
+            return FALSE;
         break;
     case WILD_AREA_WATER:
         if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
@@ -502,6 +505,8 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
             break;
 
         wildMonIndex = ChooseWildMonIndex_WaterRock();
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
+            return FALSE;
         break;
     case WILD_AREA_ROCKS:
         wildMonIndex = ChooseWildMonIndex_WaterRock();
@@ -1030,6 +1035,8 @@ static bool8 TryGetRandomWildMonIndexByType(const struct WildPokemon *wildMon, u
 
     for (validMonCount = 0, i = 0; i < numMon; i++)
     {
+        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMon[i].species), FLAG_GET_SEEN))
+            continue;
         if (gSpeciesInfo[wildMon[i].species].types[0] == type || gSpeciesInfo[wildMon[i].species].types[1] == type)
             validIndexes[validMonCount++] = i;
     }
