@@ -44,4 +44,7 @@
 #define P_GEN_7_POKEMON             TRUE        // Generation 7 Pokémon (SM, USUM, LGPE)
 #define P_GEN_8_POKEMON             TRUE        // Generation 8 Pokémon (SwSh, BDSP, LA)
 
+// Encounter settings
+#define P_ENCOUNTER_ONLY_SEEN       FALSE       // If TRUE, only Pokemon that have been seen before can be encountered in the wild.
+
 #endif // GUARD_CONFIG_POKEMON_H

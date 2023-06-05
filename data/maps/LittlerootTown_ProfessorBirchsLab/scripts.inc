@@ -556,7 +556,6 @@ LittlerootTown_ProfessorBirchsLab_EventScript_ReceivePokedex::
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 1
 	setflag FLAG_SYS_NATIONAL_DEX
 	special EnableNationalPokedex
-	special FillInitialPokedex
 	setflag FLAG_SYS_DEXNAV_GET
 	setflag FLAG_SYS_DETECTOR_MODE
 	return

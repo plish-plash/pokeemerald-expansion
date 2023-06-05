@@ -29,6 +29,7 @@ extern const u8 EventScript_RepelWoreOff[];
 extern const u8 EventScript_LureWoreOff[];
 
 #define MAX_ENCOUNTER_RATE 2880
+#define MAX_GENERATE_RETRIES 10
 
 #define NUM_FEEBAS_SPOTS 6
 
@@ -469,6 +470,7 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
 {
     u8 wildMonIndex = 0;
     u8 level;
+    u8 retries = 0;
 
     switch (area)
     {
@@ -487,8 +489,15 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
             break;
 
         wildMonIndex = ChooseWildMonIndex_Land();
-        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
-            return FALSE;
+    #if P_ENCOUNTER_ONLY_SEEN == TRUE
+        while (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
+        {
+            if (retries >= MAX_GENERATE_RETRIES)
+                return FALSE;
+            retries++;
+            wildMonIndex = ChooseWildMonIndex_Land();
+        }
+    #endif
         break;
     case WILD_AREA_WATER:
         if (TryGetAbilityInfluencedWildMonIndex(wildMonInfo->wildPokemon, TYPE_STEEL, ABILITY_MAGNET_PULL, &wildMonIndex))
@@ -505,8 +514,15 @@ static bool8 TryGenerateWildMon(const struct WildPokemonInfo *wildMonInfo, u8 ar
             break;
 
         wildMonIndex = ChooseWildMonIndex_WaterRock();
-        if (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
-            return FALSE;
+    #if P_ENCOUNTER_ONLY_SEEN == TRUE
+        while (!GetSetPokedexFlag(SpeciesToNationalPokedexNum(wildMonInfo->wildPokemon[wildMonIndex].species), FLAG_GET_SEEN))
+        {
+            if (retries >= MAX_GENERATE_RETRIES)
+                return FALSE;
+            retries++;
+            wildMonIndex = ChooseWildMonIndex_WaterRock();
+        }
+    #endif
         break;
     case WILD_AREA_ROCKS:
         wildMonIndex = ChooseWildMonIndex_WaterRock();
