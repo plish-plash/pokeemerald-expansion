@@ -257,6 +257,7 @@ extern const u8 gText_MenuExit[];
 extern const u8 gText_MenuRetire[];
 extern const u8 gText_MenuRest[];
 extern const u8 gText_MenuDexNav[];
+extern const u8 gText_MenuCrafting[];
 extern const u8 gText_Floor1[];
 extern const u8 gText_Floor2[];
 extern const u8 gText_Floor3[];
@@ -3154,5 +3155,10 @@ extern const u8 gText_YourName[];
 extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
+
+// Crafting
+extern const u8 gText_CraftVar1[];
+extern const u8 gText_NotEnoughToCraftVar1[];
+extern const u8 gText_PlayerCreatedVar1[];
 
 #endif // GUARD_STRINGS_H
