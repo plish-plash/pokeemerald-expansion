@@ -150,6 +150,9 @@ static u32 GetWildAiFlags(void)
     return flags;
 }
 
+const static u32 sSmartTrainerFlags = AI_FLAG_CHECK_BAD_MOVE | AI_FLAG_CHECK_VIABILITY | AI_FLAG_TRY_TO_FAINT | AI_FLAG_SETUP_FIRST_TURN
+    | AI_FLAG_RISKY | AI_FLAG_PREFER_STRONGEST_MOVE | AI_FLAG_HP_AWARE | AI_FLAG_WILL_SUICIDE | AI_FLAG_SMART_SWITCHING;
+
 void BattleAI_SetupFlags(void)
 {
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
@@ -172,6 +175,10 @@ void BattleAI_SetupFlags(void)
     // check smart wild AI
     if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_TRAINER)) && IsWildMonSmart())
         AI_THINKING_STRUCT->aiFlags |= GetWildAiFlags();
+    
+    // smart trainer AI
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        AI_THINKING_STRUCT->aiFlags |= sSmartTrainerFlags;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_DOUBLE | BATTLE_TYPE_TWO_OPPONENTS) || gTrainers[gTrainerBattleOpponent_A].doubleBattle)
         AI_THINKING_STRUCT->aiFlags |= AI_FLAG_DOUBLE_BATTLE; // Act smart in doubles and don't attack your partner.
