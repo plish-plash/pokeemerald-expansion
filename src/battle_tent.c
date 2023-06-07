@@ -11,6 +11,8 @@
 #include "battle_factory_screen.h"
 #include "frontier_util.h"
 #include "string_util.h"
+#include "crafting.h"
+#include "strings.h"
 #include "constants/battle_tent.h"
 #include "constants/battle_tent_trainers.h"
 #include "constants/battle_tent_mons.h"
@@ -70,8 +72,6 @@ void static (*const sVerdanturfTentFuncs[])(void) =
     [VERDANTURF_TENT_FUNC_GIVE_PRIZE]         = GiveVerdanturfTentPrize
 };
 
-static const u16 sVerdanturfTentRewards[] = {ITEM_NEST_BALL};
-
 void static (*const sFallarborTentFuncs[])(void) =
 {
     [FALLARBOR_TENT_FUNC_INIT]              = InitFallarborTentChallenge,
@@ -82,8 +82,6 @@ void static (*const sFallarborTentFuncs[])(void) =
     [FALLARBOR_TENT_FUNC_GIVE_PRIZE]        = GiveFallarborTentPrize,
     [FALLARBOR_TENT_FUNC_GET_OPPONENT_NAME] = BufferFallarborTentTrainerName
 };
-
-static const u16 sFallarborTentRewards[] = {ITEM_HYPER_POTION};
 
 void static (*const sSlateportTentFuncs[])(void) =
 {
@@ -98,8 +96,6 @@ void static (*const sSlateportTentFuncs[])(void) =
     [SLATEPORT_TENT_FUNC_GENERATE_OPPONENT_MONS] = GenerateOpponentMons,
     [SLATEPORT_TENT_FUNC_GENERATE_RENTAL_MONS]   = GenerateInitialRentalMons
 };
-
-static const u16 sSlateportTentRewards[] = {ITEM_FULL_HEAL};
 
 // code
 void CallVerdanturfTentFunction(void)
@@ -147,12 +143,20 @@ static void SaveVerdanturfTentChallenge(void)
 
 static void SetRandomVerdanturfTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.verdanturfTentPrize = sVerdanturfTentRewards[Random() % ARRAY_COUNT(sVerdanturfTentRewards)];
+    gSaveBlock2Ptr->frontier.verdanturfTentPrize = ITEM_NEST_BALL;
 }
 
 static void GiveVerdanturfTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.verdanturfTentPrize, 1) == TRUE)
+    if (!IsRecipeUnlocked(RECIPE_NEST_BALL))
+    {
+        gSpecialVar_0x8000 = RECIPE_NEST_BALL;
+        UnlockRecipe();
+        StringExpandPlaceholders(gStringVar1, gText_Var2Recipe);
+        gSaveBlock2Ptr->frontier.verdanturfTentPrize = ITEM_NONE;
+        gSpecialVar_Result = TRUE;
+    }
+    else if (AddBagItem(gSaveBlock2Ptr->frontier.verdanturfTentPrize, 1) == TRUE)
     {
         CopyItemName(gSaveBlock2Ptr->frontier.verdanturfTentPrize, gStringVar1);
         gSaveBlock2Ptr->frontier.verdanturfTentPrize = ITEM_NONE;
@@ -197,12 +201,20 @@ static void SaveFallarborTentChallenge(void)
 
 static void SetRandomFallarborTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.fallarborTentPrize = sFallarborTentRewards[Random() % ARRAY_COUNT(sFallarborTentRewards)];
+    gSaveBlock2Ptr->frontier.fallarborTentPrize = ITEM_QUICK_BALL;
 }
 
 static void GiveFallarborTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.fallarborTentPrize, 1) == TRUE)
+    if (!IsRecipeUnlocked(RECIPE_QUICK_BALL))
+    {
+        gSpecialVar_0x8000 = RECIPE_QUICK_BALL;
+        UnlockRecipe();
+        StringExpandPlaceholders(gStringVar1, gText_Var2Recipe);
+        gSaveBlock2Ptr->frontier.fallarborTentPrize = ITEM_NONE;
+        gSpecialVar_Result = TRUE;
+    }
+    else if (AddBagItem(gSaveBlock2Ptr->frontier.fallarborTentPrize, 1) == TRUE)
     {
         CopyItemName(gSaveBlock2Ptr->frontier.fallarborTentPrize, gStringVar1);
         gSaveBlock2Ptr->frontier.fallarborTentPrize = ITEM_NONE;
@@ -252,12 +264,20 @@ static void SaveSlateportTentChallenge(void)
 
 static void SetRandomSlateportTentPrize(void)
 {
-    gSaveBlock2Ptr->frontier.slateportTentPrize = sSlateportTentRewards[Random() % ARRAY_COUNT(sSlateportTentRewards)];
+    gSaveBlock2Ptr->frontier.slateportTentPrize = ITEM_HEAVY_BALL;
 }
 
 static void GiveSlateportTentPrize(void)
 {
-    if (AddBagItem(gSaveBlock2Ptr->frontier.slateportTentPrize, 1) == TRUE)
+    if (!IsRecipeUnlocked(RECIPE_HEAVY_BALL))
+    {
+        gSpecialVar_0x8000 = RECIPE_HEAVY_BALL;
+        UnlockRecipe();
+        StringExpandPlaceholders(gStringVar1, gText_Var2Recipe);
+        gSaveBlock2Ptr->frontier.slateportTentPrize = ITEM_NONE;
+        gSpecialVar_Result = TRUE;
+    }
+    else if (AddBagItem(gSaveBlock2Ptr->frontier.slateportTentPrize, 1) == TRUE)
     {
         CopyItemName(gSaveBlock2Ptr->frontier.slateportTentPrize, gStringVar1);
         gSaveBlock2Ptr->frontier.slateportTentPrize = ITEM_NONE;

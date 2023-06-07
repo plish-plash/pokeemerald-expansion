@@ -203,8 +203,7 @@ Route120_EventScript_ItemHyperPotion::
 	end
 
 Route120_EventScript_ItemNestBall::
-	msgbox gText_FindRecipe, MSGBOX_DEFAULT
-	unlockrecipe RECIPE_NEST_BALL
+	finditem ITEM_NEST_BALL
 	end
 
 Route120_EventScript_ItemRevive::

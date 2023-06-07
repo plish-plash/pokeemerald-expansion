@@ -15,6 +15,7 @@ struct Recipe
 extern const struct Recipe gRecipes[];
 
 bool8 IsRecipeUnlocked(u16 recipeIndex);
+void UnlockRecipe(void);
 u16 GetMaxCraftingCount(u16 recipeIndex);
 
 #endif // GUARD_CRAFTING_H

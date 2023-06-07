@@ -7777,7 +7777,7 @@ u16 GetWildMonHeldApricorn(u16 species)
     case TYPE_GROUND:
     case TYPE_ROCK:
     case TYPE_STEEL:
-        return ITEM_WHITE_APRICORN;
+        return ITEM_BLACK_APRICORN;
     case TYPE_FLYING:
     case TYPE_GRASS:
         return ITEM_PINK_APRICORN;
@@ -7795,7 +7795,7 @@ u16 GetWildMonHeldApricorn(u16 species)
     case TYPE_PSYCHIC:
     case TYPE_DRAGON:
     case TYPE_FAIRY:
-        return ITEM_BLACK_APRICORN;
+        return ITEM_WHITE_APRICORN;
     default:
         return ITEM_RED_APRICORN;
     }

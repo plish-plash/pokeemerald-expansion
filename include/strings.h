@@ -3161,5 +3161,6 @@ extern const u8 gText_CraftVar1[];
 extern const u8 gText_NotEnoughToCraftVar1[];
 extern const u8 gText_PlayerCreatedVar1[];
 extern const u8 gText_RedApricorns[];
+extern const u8 gText_Var2Recipe[];
 
 #endif // GUARD_STRINGS_H

@@ -14,9 +14,8 @@ bool8 IsRecipeUnlocked(u16 recipeIndex)
 // This is a script special. Prefer using the "unlockrecipe" macro to calling this function.
 void UnlockRecipe(void)
 {
-    u16 recipeIndex = VarGet(VAR_0x8000);
-    FlagSet(RECIPE_FLAGS_START + recipeIndex);
-    CopyItemName(gRecipes[recipeIndex].result, gStringVar2);
+    FlagSet(RECIPE_FLAGS_START + gSpecialVar_0x8000);
+    CopyItemName(gRecipes[gSpecialVar_0x8000].result, gStringVar2);
 }
 
 u16 GetMaxCraftingCount(u16 recipeIndex)
