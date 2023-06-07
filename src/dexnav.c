@@ -1344,6 +1344,9 @@ static u16 DexNavGenerateHeldItem(u16 species, u8 searchLevel)
     u16 item1 = gSpeciesInfo[species].itemCommon;
     u16 item2 = gSpeciesInfo[species].itemRare;
     
+    if (item1 == ITEM_NONE && sDexNavSearchDataPtr->environment != ENCOUNTER_TYPE_WATER)
+        item1 = GetWildMonHeldApricorn(species);
+
     // if both are the same, 100% to hold
     if (item1 == item2)
         return item1;

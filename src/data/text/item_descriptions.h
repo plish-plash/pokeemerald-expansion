@@ -1055,14 +1055,14 @@ static const u8 sGalaricaTwigDesc[] = _(
     "Galarica.");
 
 static const u8 sArmoriteOreDesc[] = _(
-    "A rare ore. Can be\n"
-    "found in the Isle\n"
-    "of Armor at Galar.");
+    "A mysterious stone.\n"
+    "Used in the creation\n"
+    "of Poké Balls.");
 
 static const u8 sDyniteOreDesc[] = _(
-    "A mysterious ore.\n"
-    "It can be found in\n"
-    "Galar's Max Lair.");
+    "A hunk of iron.\n"
+    "Used in the creation\n"
+    "of Poké Balls.");
 
 // Mail
 static const u8 sOrangeMailDesc[] = _(

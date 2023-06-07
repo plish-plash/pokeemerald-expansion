@@ -2527,9 +2527,9 @@ const struct Item gItems[] =
 
     [ITEM_ARMORITE_ORE] =
     {
-        .name = _("Armorite Ore"),
+        .name = _("Tumblestone"),
         .itemId = ITEM_ARMORITE_ORE,
-        .price = 40,
+        .price = 600,
         .description = sArmoriteOreDesc,
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_BAG_MENU,
@@ -2539,9 +2539,9 @@ const struct Item gItems[] =
 
     [ITEM_DYNITE_ORE] =
     {
-        .name = _("Dynite Ore"),
+        .name = _("Iron Chunk"),
         .itemId = ITEM_DYNITE_ORE,
-        .price = 20,
+        .price = 800,
         .description = sDyniteOreDesc,
         .pocket = POCKET_ITEMS,
         .type = ITEM_USE_BAG_MENU,

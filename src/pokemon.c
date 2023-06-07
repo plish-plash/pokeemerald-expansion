@@ -39,6 +39,7 @@
 #include "text.h"
 #include "trainer_hill.h"
 #include "util.h"
+#include "wild_encounter.h"
 #include "constants/abilities.h"
 #include "constants/battle_frontier.h"
 #include "constants/battle_move_effects.h"
@@ -7764,6 +7765,42 @@ static s32 GetWildMonTableIdInAlteringCave(u16 species)
     return 0;
 }
 
+u16 GetWildMonHeldApricorn(u16 species)
+{
+    u8 type1 = gSpeciesInfo[species].types[0];
+    u8 type2 = gSpeciesInfo[species].types[1];
+    if (type1 != type2 && Random() & 1)
+        type1 = type2;
+
+    switch (type1)
+    {
+    case TYPE_GROUND:
+    case TYPE_ROCK:
+    case TYPE_STEEL:
+        return ITEM_WHITE_APRICORN;
+    case TYPE_FLYING:
+    case TYPE_GRASS:
+        return ITEM_PINK_APRICORN;
+    case TYPE_BUG:
+    case TYPE_POISON:
+        return ITEM_GREEN_APRICORN;
+    case TYPE_GHOST:
+        return ITEM_NONE;
+    case TYPE_WATER:
+    case TYPE_ICE:
+        return ITEM_BLUE_APRICORN;
+    case TYPE_FIRE:
+    case TYPE_ELECTRIC:
+        return ITEM_YELLOW_APRICORN;
+    case TYPE_PSYCHIC:
+    case TYPE_DRAGON:
+    case TYPE_FAIRY:
+        return ITEM_BLACK_APRICORN;
+    default:
+        return ITEM_RED_APRICORN;
+    }
+}
+
 void SetWildMonHeldItem(void)
 {
     if (!(gBattleTypeFlags & (BATTLE_TYPE_LEGENDARY | BATTLE_TYPE_TRAINER | BATTLE_TYPE_PYRAMID | BATTLE_TYPE_PIKE)) && !gDexnavBattle)
@@ -7774,6 +7811,7 @@ void SetWildMonHeldItem(void)
         u16 chanceNotRare = 95;
         u16 count = (WILD_DOUBLE_BATTLE) ? 2 : 1;
         u16 i;
+        u16 heldItem;
 
         if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG, 0)
             && (GetMonAbility(&gPlayerParty[0]) == ABILITY_COMPOUND_EYES
@@ -7823,9 +7861,12 @@ void SetWildMonHeldItem(void)
                     if (rnd < chanceNoItem)
                         continue;
                     if (rnd < chanceNotRare)
-                        SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemCommon);
+                        heldItem = gSpeciesInfo[species].itemCommon;
                     else
-                        SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &gSpeciesInfo[species].itemRare);
+                        heldItem = gSpeciesInfo[species].itemRare;
+                    if (heldItem == ITEM_NONE && !gIsFishingEncounter && !gIsSurfingEncounter)
+                        heldItem = GetWildMonHeldApricorn(species);
+                    SetMonData(&gEnemyParty[i], MON_DATA_HELD_ITEM, &heldItem);
                 }
             }
         }

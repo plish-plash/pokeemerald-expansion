@@ -1958,3 +1958,4 @@ const u8 gText_FORMS_NONE[]                         = _("{STR_VAR_1} has no alte
 const u8 gText_CraftVar1[]                          = _("Craft {STR_VAR_1}?");
 const u8 gText_NotEnoughToCraftVar1[]               = _("You do not have the necessary\nitems to craft {STR_VAR_1}.{PAUSE_UNTIL_PRESS}");
 const u8 gText_PlayerCreatedVar1[]                  = _("{PLAYER} created {STR_VAR_1}!{PAUSE_UNTIL_PRESS}");
+const u8 gText_RedApricorns[]                       = _("Red Apricorns");

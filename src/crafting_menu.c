@@ -209,6 +209,13 @@ void Task_OpenCraftingMenuFromStartMenu(u8 taskId)
     }
 }
 
+// Show the crafting menu from scripts
+void ShowCraftingMenu(void)
+{
+    CleanupOverworldWindowsAndTilemaps();
+    CraftingMenu_Init(CB2_ReturnToFieldContinueScript);
+}
+
 // This is our main initialization function if you want to call the menu from elsewhere
 void CraftingMenu_Init(MainCallback callback)
 {
@@ -562,6 +569,7 @@ static void Task_CraftingMenuReturnToRecipes(u8 taskId)
     ClearDialogWindowAndFrameToTransparent(CRAFTINGWIN_MESSAGE, FALSE);
     RedrawListMenu(data[0]);
     CraftingRecipesPrintCursor(data[0], COLORID_ITEM_LIST);
+    CraftingRecipesPrintInfo(data[2]);
     ScheduleBgCopyTilemapToVram(2);
     CraftingMenu_AddScrollIndicator(taskId);
     gTasks[taskId].func = Task_CraftingMenuMain;

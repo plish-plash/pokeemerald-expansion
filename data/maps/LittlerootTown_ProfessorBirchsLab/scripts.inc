@@ -532,7 +532,9 @@ LittlerootTown_ProfessorBirchsLab_EventScript_GivePokedex::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_MayGotPokedexTooTakeThese, MSGBOX_DEFAULT
-	giveitem ITEM_POKE_BALL, 5
+	giveitem ITEM_RED_APRICORN, 5
+	setflag FLAG_SYS_CRAFTING
+	call_if_eq VAR_RESULT, TRUE, LittlerootTown_ProfessorBirchsLab_EventScript_MayExplainCrafting
 	call_if_eq VAR_RESULT, FALSE, LittlerootTown_ProfessorBirchsLab_EventScript_MayNoRoomForPokeBalls
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_CatchCutePokemonWithPokeBalls, MSGBOX_DEFAULT
 	setvar VAR_RESULT, 0
@@ -540,7 +542,9 @@ LittlerootTown_ProfessorBirchsLab_EventScript_MayGivePokeBalls::
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanGivePokeBalls::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_BrendanGotPokedexTooTakeThese, MSGBOX_DEFAULT
-	giveitem ITEM_POKE_BALL, 5
+	giveitem ITEM_RED_APRICORN, 5
+	setflag FLAG_SYS_CRAFTING
+	call_if_eq VAR_RESULT, TRUE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanExplainCrafting
 	call_if_eq VAR_RESULT, FALSE, LittlerootTown_ProfessorBirchsLab_EventScript_BrendanNoRoomForPokeBalls
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_CatchCoolPokemonWithPokeBalls, MSGBOX_DEFAULT
 	setvar VAR_RESULT, 1
@@ -565,8 +569,20 @@ LittlerootTown_ProfessorBirchsLab_EventScript_PokemonAwait::
 	release
 	end
 
+LittlerootTown_ProfessorBirchsLab_EventScript_MayExplainCrafting::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_MayExplainCrafting, MSGBOX_DEFAULT
+	special ShowCraftingMenu
+	waitstate
+	return
+
 LittlerootTown_ProfessorBirchsLab_EventScript_MayNoRoomForPokeBalls::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_OhYourBagsFull, MSGBOX_DEFAULT
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_BrendanExplainCrafting::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_BrendanExplainCrafting, MSGBOX_DEFAULT
+	special ShowCraftingMenu
+	waitstate
 	return
 
 LittlerootTown_ProfessorBirchsLab_EventScript_BrendanNoRoomForPokeBalls::
@@ -776,6 +792,11 @@ LittlerootTown_ProfessorBirchsLab_Text_MayGotPokedexTooTakeThese:
 	.string "That's great! Just like me!\n"
 	.string "I've got something for you, too!$"
 
+LittlerootTown_ProfessorBirchsLab_Text_MayExplainCrafting:
+	.string "MAY: You can create your own\n"
+	.string "POKé BALLS using APRICORNS.\l"
+	.string "Let me show you!$"
+
 LittlerootTown_ProfessorBirchsLab_Text_CatchCutePokemonWithPokeBalls:
 	.string "MAY: It's fun if you can get a lot of\n"
 	.string "POKéMON!\p"
@@ -796,6 +817,11 @@ LittlerootTown_ProfessorBirchsLab_Text_BrendanGotPokedexTooTakeThese:
 	.string "So you got a POKéDEX, too.\p"
 	.string "Well then, here.\n"
 	.string "I'll give you these.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_BrendanExplainCrafting:
+	.string "BRENDAN: APRICORNS can be\n"
+	.string "used to create POKé BALLS.\l"
+	.string "Here, I'll show you.$"
 
 LittlerootTown_ProfessorBirchsLab_Text_CatchCoolPokemonWithPokeBalls:
 	.string "BRENDAN: You know it's more fun to\n"

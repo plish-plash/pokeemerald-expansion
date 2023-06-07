@@ -800,8 +800,8 @@ static const u8 sText_ItemCuredSpeciesStatus[] = _("{B_BUFF1} had\nits status he
 static const u8 sText_ItemRestoredSpeciesPP[] = _("{B_BUFF1} had its\nPP restored!");
 static const u8 sText_AtkTrappedDef[] = _("{B_ATK_NAME_WITH_PREFIX} trapped\nthe {B_DEF_NAME_WITH_PREFIX}!");
 static const u8 sText_MirrorHerbCopied[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} used its {B_LAST_ITEM}\nto mirror its opponent's stat changes!");
-static const u8 sText_PkmnDroppedItem[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} dropped its {B_LAST_ITEM}!{WAIT_SE}\p");
-static const u8 sText_BagIsFull[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} dropped its {B_LAST_ITEM},\nbut your BAG is full.{WAIT_SE}\p");
+static const u8 sText_PkmnDroppedItem[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} dropped its\n{B_LAST_ITEM}!{WAIT_SE}\p");
+static const u8 sText_PkmnDroppedItemBagFull[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} dropped its\n{B_LAST_ITEM}, but your BAG is full.{WAIT_SE}\p");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
@@ -1457,7 +1457,7 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_PKMNFROSTBITEHEALED - BATTLESTRINGS_TABLE_START] = sText_PkmnFrostbiteHealed,
     [STRINGID_PKMNFROSTBITEHEALED2 - BATTLESTRINGS_TABLE_START] = sText_PkmnFrostbiteHealed2,
     [STRINGID_PKMNFROSTBITEHEALEDBY - BATTLESTRINGS_TABLE_START] = sText_PkmnFrostbiteHealedBy,
-    [STRINGID_BAGISFULL - BATTLESTRINGS_TABLE_START] = sText_BagIsFull,
+    [STRINGID_BAGISFULL - BATTLESTRINGS_TABLE_START] = sText_PkmnDroppedItemBagFull,
     [STRINGID_PKMNDROPPEDITEM - BATTLESTRINGS_TABLE_START] = sText_PkmnDroppedItem,
     [STRINGID_PKMNGAINEDEXPALL - BATTLESTRINGS_TABLE_START] = sText_PkmnGainedEXPAll,
 };
