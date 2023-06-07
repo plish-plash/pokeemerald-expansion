@@ -56,8 +56,7 @@ Route116_EventScript_DevonEmployee::
 
 Route116_EventScript_GiveRepeatBall::
 	setflag FLAG_MET_DEVON_EMPLOYEE
-	giveitem ITEM_REPEAT_BALL
-	goto_if_eq VAR_RESULT, FALSE, Route116_EventScript_NoRoomForRepeatBall
+	unlockrecipe RECIPE_REPEAT_BALL
 	msgbox Route116_Text_NewBallAvailableAtMart, MSGBOX_DEFAULT
 	closemessage
 	call_if_eq VAR_FACING, DIR_NORTH, Route116_EventScript_DevonEmployeeExit
@@ -398,13 +397,12 @@ Route116_Text_ThankYouTokenOfAppreciation:
 	.string "I bear good news!\p"
 	.string "Recently, our company developed\n"
 	.string "a new kind of POKé BALL.\p"
-	.string "As a token of our appreciation, this\n"
-	.string "is our gift to our wonderful TRAINER!$"
+	.string "As a token of our appreciation,\n"
+	.string "I'll show you how to craft it!$"
 
 Route116_Text_NewBallAvailableAtMart:
-	.string "Our new POKé BALL will be available\n"
-	.string "at the POKéMON MART in RUSTBORO.\p"
-	.string "Please do try it out!\n"
+	.string "I hope our new POKé BALL\n"
+	.string "will be useful to you!\p"
 	.string "Thank you and bye-bye!$"
 
 Route116_Text_BagIsJamPacked:

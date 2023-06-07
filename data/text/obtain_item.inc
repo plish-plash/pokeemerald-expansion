@@ -29,3 +29,9 @@ gText_NoRoomLeftForAnother::
 gText_TheDecorWasTransferredToThePC::
 	.string "The {STR_VAR_2} was transferred\n"
 	.string "to the PC.$"
+
+gText_PlayerLearnedToCraft::
+	.string "{PLAYER} learned how to craft\n{STR_VAR_2}!$"
+
+gText_FindRecipe::
+	.string "There are some instructions\non the ground…$"

@@ -203,7 +203,8 @@ Route120_EventScript_ItemHyperPotion::
 	end
 
 Route120_EventScript_ItemNestBall::
-	finditem ITEM_NEST_BALL
+	msgbox gText_FindRecipe, MSGBOX_DEFAULT
+	unlockrecipe RECIPE_NEST_BALL
 	end
 
 Route120_EventScript_ItemRevive::
@@ -323,7 +324,8 @@ LilycoveCity_EventScript_ItemMaxRepel::
 	end
 
 MossdeepCity_EventScript_ItemNetBall::
-	finditem ITEM_NET_BALL
+	msgbox gText_FindRecipe, MSGBOX_DEFAULT
+	unlockrecipe RECIPE_NET_BALL
 	end
 
 PetalburgWoods_EventScript_ItemXAttack::
@@ -399,7 +401,8 @@ MeteorFalls_B1F_2R_EventScript_ItemTM02::
 	end
 
 NewMauville_Inside_EventScript_ItemUltraBall::
-	finditem ITEM_ULTRA_BALL
+	msgbox gText_FindRecipe, MSGBOX_DEFAULT
+	unlockrecipe RECIPE_ULTRA_BALL
 	end
 
 NewMauville_Inside_EventScript_ItemEscapeRope::
@@ -427,7 +430,8 @@ AbandonedShip_Rooms_B1F_EventScript_ItemEscapeRope::
 	end
 
 AbandonedShip_Rooms2_B1F_EventScript_ItemDiveBall::
-	finditem ITEM_DIVE_BALL
+	msgbox gText_FindRecipe, MSGBOX_DEFAULT
+	unlockrecipe RECIPE_DIVE_BALL
 	end
 
 AbandonedShip_Room_B1F_EventScript_ItemTM13::
@@ -443,7 +447,8 @@ AbandonedShip_CaptainsOffice_EventScript_ItemStorageKey::
 	end
 
 AbandonedShip_HiddenFloorRooms_EventScript_ItemLuxuryBall::
-	finditem ITEM_LUXURY_BALL
+	msgbox gText_FindRecipe, MSGBOX_DEFAULT
+	unlockrecipe RECIPE_LUXURY_BALL
 	end
 
 AbandonedShip_HiddenFloorRooms_EventScript_ItemScanner::

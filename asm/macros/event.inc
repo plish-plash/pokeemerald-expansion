@@ -55,6 +55,7 @@
 	STD_FIND_ITEM = 1
 	STD_OBTAIN_DECORATION = 7
 	STD_REGISTER_MATCH_CALL = 8
+	STD_UNLOCK_RECIPE = 11
 
 	@ Calls the script in gStdScripts at index function.
 	.macro callstd function:req
@@ -1913,6 +1914,12 @@
 	.macro givedecoration decoration:req
 	setorcopyvar VAR_0x8000, \decoration
 	callstd STD_OBTAIN_DECORATION
+	.endm
+
+	@ Unlock a crafting recipe.
+	.macro unlockrecipe recipe:req
+	setorcopyvar VAR_0x8000, \recipe
+	callstd STD_UNLOCK_RECIPE
 	.endm
 
 	@ Registers the specified trainer in Match Call and plays a fanfare with a notification message.

@@ -190,3 +190,14 @@ EventScript_NoRoomForHiddenItem::
 	setvar VAR_RESULT, 0
 	releaseall
 	end
+
+Std_UnlockRecipe::
+	special UnlockRecipe
+	call EventScript_UnlockRecipeMessage
+	return
+
+EventScript_UnlockRecipeMessage::
+	call EventScript_PlayFanfareObtainedItem
+	message gText_PlayerLearnedToCraft
+	waitfanfare
+	return
