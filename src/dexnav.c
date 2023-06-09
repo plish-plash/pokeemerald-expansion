@@ -820,6 +820,8 @@ static void Task_SetUpDexNavSearch(u8 taskId)
     
     DexNavGenerateMoveset(species, searchLevel, sDexNavSearchDataPtr->monLevel, &sDexNavSearchDataPtr->moves[0]);
     sDexNavSearchDataPtr->heldItem = DexNavGenerateHeldItem(species, searchLevel);
+    if (sDexNavSearchDataPtr->heldItem == ITEM_NONE && sDexNavSearchDataPtr->environment != ENCOUNTER_TYPE_WATER)
+        sDexNavSearchDataPtr->heldItem = GetWildMonHeldApricorn(species);
     sDexNavSearchDataPtr->abilityNum = DexNavGetAbilityNum(species, searchLevel);
     sDexNavSearchDataPtr->potential = DexNavGeneratePotential(searchLevel);
     DexNavProximityUpdate();
@@ -1343,9 +1345,6 @@ static u16 DexNavGenerateHeldItem(u16 species, u8 searchLevel)
     u8 searchLevelInfluence = searchLevel >> 1;
     u16 item1 = gSpeciesInfo[species].itemCommon;
     u16 item2 = gSpeciesInfo[species].itemRare;
-    
-    if (item1 == ITEM_NONE && sDexNavSearchDataPtr->environment != ENCOUNTER_TYPE_WATER)
-        item1 = GetWildMonHeldApricorn(species);
 
     // if both are the same, 100% to hold
     if (item1 == item2)
