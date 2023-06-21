@@ -665,7 +665,7 @@
 #define STRINGID_SNOWSTOPPED                          663
 #define STRINGID_SNOWWARNINGSNOW                      664
 #define STRINGID_PKMNDROPPEDITEM                      665
-#define STRINGID_BAGISFULL                            666
+#define STRINGID_PKMNDROPPEDITEMBAGFULL               666
 #define STRINGID_PKMNGAINEDEXPALL                     667
 
 #define BATTLESTRINGS_COUNT                           668
@@ -968,6 +968,6 @@
 
 // gItemDroppedStringIds
 #define B_MSG_ITEM_DROPPED   0
-#define B_MSG_BAG_IS_FULL    1
+#define B_MSG_ITEM_DROPPED_BAG_FULL 1
 
 #endif // GUARD_CONSTANTS_BATTLE_STRING_IDS_H

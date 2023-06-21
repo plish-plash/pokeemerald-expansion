@@ -11241,7 +11241,7 @@ static void Cmd_various(void)
                 if(AddBagItem(gLastUsedItem, 1))
                     gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ITEM_DROPPED;
                 else
-                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_BAG_IS_FULL;
+                    gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ITEM_DROPPED_BAG_FULL;
                 if (IsDoubleBattle())
                     BattleScriptPushCursor();
                 else
