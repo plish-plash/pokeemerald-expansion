@@ -276,8 +276,8 @@ static void ShiftDaycareSlots(struct DayCare *daycare)
 static void ApplyDaycareExperience(struct Pokemon *mon)
 {
     s32 i;
-    bool8 firstMove;
-    u16 learnedMove;
+    // bool8 firstMove;
+    // u16 learnedMove;
 
     for (i = 0; i < MAX_LEVEL; i++)
     {
@@ -285,13 +285,13 @@ static void ApplyDaycareExperience(struct Pokemon *mon)
         if (TryIncrementMonLevel(mon))
         {
             // Teach the mon new moves it learned while in the daycare.
-            firstMove = TRUE;
-            while ((learnedMove = MonTryLearningNewMove(mon, firstMove)) != 0)
-            {
-                firstMove = FALSE;
-                if (learnedMove == MON_HAS_MAX_MOVES)
-                    DeleteFirstMoveAndGiveMoveToMon(mon, gMoveToLearn);
-            }
+            // firstMove = TRUE;
+            // while ((learnedMove = MonTryLearningNewMove(mon, firstMove)) != 0)
+            // {
+            //     firstMove = FALSE;
+            //     if (learnedMove == MON_HAS_MAX_MOVES)
+            //         DeleteFirstMoveAndGiveMoveToMon(mon, gMoveToLearn);
+            // }
         }
         else
         {

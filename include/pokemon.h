@@ -100,6 +100,7 @@ enum {
     MON_DATA_SPEED2,
     MON_DATA_SPATK2,
     MON_DATA_SPDEF2,
+    MON_DATA_TRAINING,
 };
 
 struct PokemonSubstruct0
@@ -110,7 +111,8 @@ struct PokemonSubstruct0
     /*0x08*/ u8 ppBonuses;
     /*0x09*/ u8 friendship;
     /*0x0A*/ u16 pokeball:5; //31 balls
-             u16 filler:11;
+             u16 filler:3;
+             u8 training;
 }; /* size = 12 */
 
 struct PokemonSubstruct1
@@ -575,5 +577,7 @@ bool32 TryFormChange(u32 monId, u32 side, u16 method);
 void TryToSetBattleFormChangeMoves(struct Pokemon *mon, u16 method);
 u32 GetMonFriendshipScore(struct Pokemon *pokemon);
 void UpdateMonPersonality(struct BoxPokemon *boxMon, u32 personality);
+
+bool32 IsMonFullyTrained(struct Pokemon *mon);
 
 #endif // GUARD_POKEMON_H

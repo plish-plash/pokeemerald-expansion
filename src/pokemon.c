@@ -4808,6 +4808,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
     case MON_DATA_FRIENDSHIP:
         retVal = substruct0->friendship;
         break;
+    case MON_DATA_TRAINING:
+        retVal = substruct0->training;
+        break;
     case MON_DATA_MOVE1:
     case MON_DATA_MOVE2:
     case MON_DATA_MOVE3:
@@ -5181,6 +5184,9 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         break;
     case MON_DATA_FRIENDSHIP:
         SET8(substruct0->friendship);
+        break;
+    case MON_DATA_TRAINING:
+        SET8(substruct0->training);
         break;
     case MON_DATA_MOVE1:
     case MON_DATA_MOVE2:
@@ -7135,6 +7141,8 @@ void MonGainEVs(struct Pokemon *mon, u16 defeatedSpecies)
         }
 
         if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
+            evIncrease *= 5;
+        if (!IsMonFullyTrained(mon))
             evIncrease *= 2;
 
         if (totalEVs + (s16)evIncrease > MAX_TOTAL_EVS)
@@ -8427,7 +8435,7 @@ u16 MonTryLearningNewMoveEvolution(struct Pokemon *mon, bool8 firstMove)
     }
     while(gLevelUpLearnsets[species][sLearningMoveTableID].move != LEVEL_UP_END)
     {
-        while (gLevelUpLearnsets[species][sLearningMoveTableID].level == 0 || gLevelUpLearnsets[species][sLearningMoveTableID].level == level)
+        while (gLevelUpLearnsets[species][sLearningMoveTableID].level == 0)// || gLevelUpLearnsets[species][sLearningMoveTableID].level == level)
         {
             gMoveToLearn = gLevelUpLearnsets[species][sLearningMoveTableID].move;
             sLearningMoveTableID++;
@@ -8597,4 +8605,21 @@ void UpdateMonPersonality(struct BoxPokemon *boxMon, u32 personality)
     *new3 = *old3;
     boxMon->checksum = CalculateBoxMonChecksum(boxMon);
     EncryptBoxMon(boxMon);
+}
+
+static const u8 sTrainingsNeededForGrowthRate[] =
+{
+    [GROWTH_MEDIUM_FAST]  = 9,
+    [GROWTH_ERRATIC]      = 10,
+    [GROWTH_FLUCTUATING]  = 10,
+    [GROWTH_MEDIUM_SLOW]  = 11,
+    [GROWTH_FAST]         = 8,
+    [GROWTH_SLOW]         = 12,
+};
+
+bool32 IsMonFullyTrained(struct Pokemon *mon)
+{
+    u8 training = GetMonData(mon, MON_DATA_TRAINING, NULL);
+    u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+    return training >= sTrainingsNeededForGrowthRate[gSpeciesInfo[species].growthRate];
 }

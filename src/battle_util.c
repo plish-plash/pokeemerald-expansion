@@ -8007,7 +8007,7 @@ u8 IsMonDisobedient(void)
 #endif
         levelReferenced = gBattleMons[gBattlerAttacker].level;
 
-    if (levelReferenced <= obedienceLevel)
+    if (levelReferenced <= obedienceLevel && IsMonFullyTrained(&gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]]))
         return 0;
     rnd = (Random() & 255);
     calc = (levelReferenced + obedienceLevel) * rnd >> 8;

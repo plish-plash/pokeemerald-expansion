@@ -4393,6 +4393,12 @@ static void Cmd_getexp(void)
                         i = STRINGID_EMPTYSTRING4;
                     }
 
+                    if (IsMonFullyTrained(&gPlayerParty[gBattleStruct->expGetterMonId]))
+                    {
+                        gBattleMoveDamage /= 2;
+                        i = STRINGID_AREDUCED;
+                    }
+
                     // get exp getter battlerId
                     if (gBattleTypeFlags & BATTLE_TYPE_DOUBLE)
                     {
@@ -4476,12 +4482,12 @@ static void Cmd_getexp(void)
                         SWAP(gBattleMons[battlerId].attack, gBattleMons[battlerId].defense, temp);
                 }
 
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = 7;
             }
             else
             {
                 gBattleMoveDamage = 0;
-                gBattleScripting.getexpState = 5;
+                gBattleScripting.getexpState = 7;
             }
         }
         break;
@@ -4530,6 +4536,23 @@ static void Cmd_getexp(void)
             gBattleMons[gBattlerFainted].ability = ABILITY_NONE;
             gBattlescriptCurrInstr = cmd->nextInstr;
         }
+        break;
+    case 7: // check for training
+        if (gBattleControllerExecFlags == 0)
+        {
+            if (GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_HP)
+                && !IsMonFullyTrained(&gPlayerParty[gBattleStruct->expGetterMonId])
+                && (gBattleStruct->sentInPokes & (1 << gBattleStruct->expGetterMonId)))
+            {
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_Train;
+
+                i = GetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_TRAINING);
+                i += 1;
+                SetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_TRAINING, &i);
+            }
+        }
+        gBattleScripting.getexpState = 5;
         break;
     }
 }
@@ -7317,11 +7340,44 @@ static void Cmd_handlelearnnewmove(void)
     const u8 *learnedMovePtr = cmd->learnedMovePtr;
     const u8 *nothingToLearnPtr = cmd->nothingToLearnPtr;
 
-    u16 learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], cmd->isFirstMove);
-    while (learnMove == MON_ALREADY_KNOWS_MOVE)
-        learnMove = MonTryLearningNewMove(&gPlayerParty[gBattleStruct->expGetterMonId], FALSE);
+    struct Pokemon *mon = &gPlayerParty[gBattleStruct->expGetterMonId];
+    u16 learnMove = MOVE_NONE;
+    int moveTableLength = 0;
+    int moveTableCurrentID = 0;
+    int moveTableMin = 0;
+    int rand = 0;
+    u16 species;
+    u8 level;
+    u8 training;
 
-    if (learnMove == MOVE_NONE)
+    // The "handlelearnnewmove" command has been repurposed to be called when training happens
+    // rather than on level up. The code below chooses a random move to learn from the level up
+    // table, between the start of the table (skipping level=0 entries) and the mon's current level.
+    if (cmd->isFirstMove)
+    {
+        species = GetMonData(mon, MON_DATA_SPECIES, NULL);
+        level = GetMonData(mon, MON_DATA_LEVEL, NULL);
+        training = GetMonData(mon, MON_DATA_TRAINING, NULL);
+        while (gLevelUpLearnsets[species][moveTableLength].move != LEVEL_UP_END)
+        {
+            if (gLevelUpLearnsets[species][moveTableLength].level == 0)
+                moveTableMin++;
+            if (gLevelUpLearnsets[species][moveTableLength].level <= level)
+                moveTableCurrentID = moveTableLength;
+            moveTableLength++;
+        }
+        if (moveTableLength > 0)
+        {
+            if (moveTableCurrentID - moveTableMin > 0)
+                rand = Random() % (moveTableCurrentID - moveTableMin);
+            moveTableMin += min(training / 2, (moveTableLength - moveTableCurrentID) - 1);
+
+            gMoveToLearn = gLevelUpLearnsets[species][moveTableMin + rand].move;
+            learnMove = GiveMoveToMon(mon, gMoveToLearn);
+        }
+    }
+
+    if (learnMove == MOVE_NONE || learnMove == MON_ALREADY_KNOWS_MOVE)
     {
         gBattlescriptCurrInstr = nothingToLearnPtr;
     }
