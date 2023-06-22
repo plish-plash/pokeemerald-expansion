@@ -17,15 +17,15 @@ Debug_CheatStart::
 	setflag FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG
 	setvar VAR_BIRCH_LAB_STATE, 2
 	setvar VAR_ROUTE101_STATE, 3
-	givemon SPECIES_TREECKO, 20, ITEM_NONE
-	givemon SPECIES_TORCHIC, 20, ITEM_NONE
-	givemon SPECIES_MUDKIP, 20, ITEM_NONE
+	givemon SPECIES_TREECKO, 10, ITEM_NONE
+	givemon SPECIES_TORCHIC, 10, ITEM_NONE
+	givemon SPECIES_MUDKIP, 10, ITEM_NONE
 	setflag FLAG_SYS_POKEDEX_GET
 	special SetUnlockedPokedexFlags
 	setflag FLAG_RECEIVED_POKEDEX_FROM_BIRCH
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 2
-	setflag FLAG_SYS_NATIONAL_DEX
-	special EnableNationalPokedex
+	@setflag FLAG_SYS_NATIONAL_DEX
+	@special EnableNationalPokedex
 	setflag FLAG_RECEIVED_RUNNING_SHOES
 	setflag FLAG_SYS_B_DASH
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4 @ 4: Received Running Shoes
@@ -40,7 +40,7 @@ Debug_CheatStart::
 	setflag FLAG_HIDE_ROUTE_116_MR_BRINEY
 	clearflag FLAG_HIDE_BRINEYS_HOUSE_MR_BRINEY
 	clearflag FLAG_HIDE_BRINEYS_HOUSE_PEEKO
-	release
+	releaseall
 	end
 
 Debug_FlagsNotSetOverworldConfigMessage::
