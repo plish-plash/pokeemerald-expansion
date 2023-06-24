@@ -978,6 +978,19 @@ struct ExternalEventFlags
 
 } __attribute__((packed));/*size = 0x15*/
 
+struct WildPokemon
+{
+    u8 minLevel;
+    u8 maxLevel;
+    u16 species;
+};
+
+struct WildMapWildPokemon
+{
+    struct WildPokemon landMons[12];
+    struct WildPokemon hiddenMons[3];
+};
+
 struct SaveBlock1
 {
     /*0x00*/ struct Coords16 pos;
@@ -1071,6 +1084,7 @@ struct SaveBlock1
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
                u8 dexNavSearchLevels[NUM_SPECIES];
                u8 dexNavChain;
+               struct WildMapWildPokemon wildMapWildMons[3];
     // sizeof: 0x3???
 };
 

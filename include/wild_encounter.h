@@ -3,13 +3,6 @@
 
 #include "constants/wild_encounter.h"
 
-struct WildPokemon
-{
-    u8 minLevel;
-    u8 maxLevel;
-    u16 species;
-};
-
 struct WildPokemonInfo
 {
     u8 encounterRate;
@@ -30,6 +23,7 @@ struct WildPokemonHeader
 extern const struct WildPokemonHeader gWildMonHeaders[];
 extern bool8 gIsFishingEncounter;
 extern bool8 gIsSurfingEncounter;
+extern struct WildPokemonHeader gCurrentMapWildMonHeader;
 
 void DisableWildEncounters(bool8 disabled);
 bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavior);
@@ -41,10 +35,11 @@ u16 GetLocalWaterMon(void);
 bool8 UpdateRepelCounter(void);
 bool8 TryDoDoubleWildBattle(void);
 void CreateWildMon(u16 species, u8 level);
-u16 GetCurrentMapWildMonHeaderId(void);
+void LoadCurrentMapWildMonHeader(void);
 u8 ChooseWildMonIndex_Land(void);
 u8 ChooseWildMonIndex_WaterRock(void);
 u8 ChooseHiddenMonIndex(void);
 bool32 MapHasNoEncounterData(void);
+void UpdateWildAreas(void);
 
 #endif // GUARD_WILD_ENCOUNTER_H

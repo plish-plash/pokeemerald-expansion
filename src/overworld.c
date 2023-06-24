@@ -620,12 +620,14 @@ static void LoadCurrentMapData(void)
     gMapHeader = *Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     gSaveBlock1Ptr->mapLayoutId = gMapHeader.mapLayoutId;
     gMapHeader.mapLayout = GetMapLayout();
+    LoadCurrentMapWildMonHeader();
 }
 
 static void LoadSaveblockMapHeader(void)
 {
     gMapHeader = *Overworld_GetMapHeaderByGroupAndId(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     gMapHeader.mapLayout = GetMapLayout();
+    LoadCurrentMapWildMonHeader();
 }
 
 static void SetPlayerCoordsFromWarp(void)

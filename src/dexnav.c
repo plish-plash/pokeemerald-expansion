@@ -1530,10 +1530,9 @@ static u8 DexNavGeneratePotential(u8 searchLevel)
 
 static u8 GetEncounterLevelFromMapData(u16 species, u8 environment)
 {
-    u16 headerId = GetCurrentMapWildMonHeaderId();
-    const struct WildPokemonInfo *landMonsInfo = gWildMonHeaders[headerId].landMonsInfo;
-    const struct WildPokemonInfo *waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
-    const struct WildPokemonInfo *hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
+    const struct WildPokemonInfo *landMonsInfo = gCurrentMapWildMonHeader.landMonsInfo;
+    const struct WildPokemonInfo *waterMonsInfo = gCurrentMapWildMonHeader.waterMonsInfo;
+    const struct WildPokemonInfo *hiddenMonsInfo = gCurrentMapWildMonHeader.hiddenMonsInfo;
     u8 min = 100;
     u8 max = 0;
     u8 i;
@@ -1739,11 +1738,11 @@ static void CreateNoDataIcon(s16 x, s16 y)
     CreateSprite(&sNoDataIconTemplate, x, y, 0);
 }
 
-static bool8 CapturedAllLandMons(u16 headerId)
+static bool8 CapturedAllLandMons()
 {
     u16 i, species;
     int count = 0;
-    const struct WildPokemonInfo* landMonsInfo = gWildMonHeaders[headerId].landMonsInfo;
+    const struct WildPokemonInfo* landMonsInfo = gCurrentMapWildMonHeader.landMonsInfo;
         
     if (landMonsInfo != NULL)
     {        
@@ -1771,12 +1770,12 @@ static bool8 CapturedAllLandMons(u16 headerId)
 }
 
 //Checks if all Pokemon that can be encountered while surfing have been capture
-static bool8 CapturedAllWaterMons(u16 headerId)
+static bool8 CapturedAllWaterMons()
 {
     u32 i;
     u16 species;
     u8 count = 0;
-    const struct WildPokemonInfo* waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
+    const struct WildPokemonInfo* waterMonsInfo = gCurrentMapWildMonHeader.waterMonsInfo;
 
     if (waterMonsInfo != NULL)
     {
@@ -1802,12 +1801,12 @@ static bool8 CapturedAllWaterMons(u16 headerId)
     return FALSE;
 }
 
-static bool8 CapturedAllHiddenMons(u16 headerId)
+static bool8 CapturedAllHiddenMons()
 {
     u32 i;
     u16 species;
     u8 count = 0;
-    const struct WildPokemonInfo* hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
+    const struct WildPokemonInfo* hiddenMonsInfo = gCurrentMapWildMonHeader.hiddenMonsInfo;
     
     if (hiddenMonsInfo != NULL)
     {
@@ -1835,17 +1834,15 @@ static bool8 CapturedAllHiddenMons(u16 headerId)
 
 static void DexNavLoadCapturedAllSymbols(void)
 {
-    u16 headerId = GetCurrentMapWildMonHeaderId();
-    
     LoadCompressedSpriteSheetUsingHeap(&sCapturedAllPokemonSpriteSheet);
 
-    if (CapturedAllLandMons(headerId))
+    if (CapturedAllLandMons())
         CreateSprite(&sCaptureAllMonsSpriteTemplate, 152, 58, 0);
 
-    if (CapturedAllWaterMons(headerId))
+    if (CapturedAllWaterMons())
         CreateSprite(&sCaptureAllMonsSpriteTemplate, 139, 17, 0);
     
-    if (CapturedAllHiddenMons(headerId))
+    if (CapturedAllHiddenMons())
         CreateSprite(&sCaptureAllMonsSpriteTemplate, 114, 123, 0);
 }
 
@@ -1951,10 +1948,9 @@ static void DexNavLoadEncounterData(void)
     u8 hiddenIndex = 0;
     u16 species;
     u32 i;
-    u16 headerId = GetCurrentMapWildMonHeaderId();
-    const struct WildPokemonInfo* landMonsInfo = gWildMonHeaders[headerId].landMonsInfo;
-    const struct WildPokemonInfo* waterMonsInfo = gWildMonHeaders[headerId].waterMonsInfo;
-    const struct WildPokemonInfo* hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
+    const struct WildPokemonInfo* landMonsInfo = gCurrentMapWildMonHeader.landMonsInfo;
+    const struct WildPokemonInfo* waterMonsInfo = gCurrentMapWildMonHeader.waterMonsInfo;
+    const struct WildPokemonInfo* hiddenMonsInfo = gCurrentMapWildMonHeader.hiddenMonsInfo;
     
     // nop struct data
     memset(sDexNavUiDataPtr->landSpecies, 0, sizeof(sDexNavUiDataPtr->landSpecies));
@@ -2524,13 +2520,12 @@ bool8 TryFindHiddenPokemon(void)
     if ((*stepPtr) == 0 && (Random() % 100 < HIDDEN_MON_SEARCH_RATE))
     {
         // hidden pokemon
-        u16 headerId = GetCurrentMapWildMonHeaderId();
         u8 index;
         u16 species;
         u8 environment;
         u8 taskId;
         u8 total;
-        const struct WildPokemonInfo* hiddenMonsInfo = gWildMonHeaders[headerId].hiddenMonsInfo;
+        const struct WildPokemonInfo* hiddenMonsInfo = gCurrentMapWildMonHeader.hiddenMonsInfo;
         bool8 isHiddenMon = FALSE;
         
         //while you can still technically find hidden pokemon if there are not hidden-only pokemon on a map,
@@ -2555,7 +2550,7 @@ bool8 TryFindHiddenPokemon(void)
             }
             else
             {
-                species = gWildMonHeaders[headerId].landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
+                species = gCurrentMapWildMonHeader.landMonsInfo->wildPokemon[ChooseWildMonIndex_Land()].species;
                 environment = ENCOUNTER_TYPE_LAND;
             }
             break;
@@ -2573,7 +2568,7 @@ bool8 TryFindHiddenPokemon(void)
                 }
                 else
                 {
-                    species = gWildMonHeaders[headerId].waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
+                    species = gCurrentMapWildMonHeader.waterMonsInfo->wildPokemon[ChooseWildMonIndex_WaterRock()].species;
                     environment = ENCOUNTER_TYPE_WATER;
 
                 }

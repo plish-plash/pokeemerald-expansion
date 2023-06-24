@@ -11,6 +11,7 @@
 #include "main.h"
 #include "overworld.h"
 #include "wallclock.h"
+#include "wild_encounter.h"
 
 static void UpdatePerDay(struct Time *localTime);
 static void UpdatePerMinute(struct Time *localTime);
@@ -21,6 +22,7 @@ static void InitTimeBasedEvents(void)
     RtcCalcLocalTime();
     gSaveBlock2Ptr->lastBerryTreeUpdate = gLocalTime;
     VarSet(VAR_DAYS, gLocalTime.days);
+    UpdateWildAreas();
 }
 
 void DoTimeBasedEvents(void)
@@ -52,6 +54,7 @@ static void UpdatePerDay(struct Time *localTime)
         UpdateFrontierGambler(daysSince);
         SetShoalItemFlag(daysSince);
         SetRandomLotteryNumber(daysSince);
+        UpdateWildAreas();
         *days = localTime->days;
     }
 }
