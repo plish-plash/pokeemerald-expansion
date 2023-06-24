@@ -36,11 +36,7 @@ Route103_EventScript_RivalMay::
 	waitmovement 0
 	applymovement LOCALID_RIVAL, Common_Movement_Delay48
 	waitmovement 0
-	msgbox Route103_Text_MayLetsBattle, MSGBOX_DEFAULT
-	switch VAR_STARTER_MON
-	case 0, Route103_EventScript_StartMayBattleTreecko
-	case 1, Route103_EventScript_StartMayBattleTorchic
-	case 2, Route103_EventScript_StartMayBattleMudkip
+	goto Route103_EventScript_AfterMayBattle
 	end
 
 Route103_EventScript_RivalBrendan::
@@ -53,11 +49,7 @@ Route103_EventScript_RivalBrendan::
 	waitmovement 0
 	applymovement LOCALID_RIVAL, Common_Movement_Delay48
 	waitmovement 0
-	msgbox Route103_Text_BrendanLetsBattle, MSGBOX_DEFAULT
-	switch VAR_STARTER_MON
-	case 0, Route103_EventScript_StartBrendanBattleTreecko
-	case 1, Route103_EventScript_StartBrendanBattleTorchic
-	case 2, Route103_EventScript_StartBrendanBattleMudkip
+	goto Route103_EventScript_AfterBrendanBattle
 	end
 
 Route103_EventScript_StartMayBattleTreecko::
@@ -306,12 +298,16 @@ Route103_Text_MayDefeated:
 	.string "{PLAYER}{KUN}, you're pretty good!$"
 
 Route103_Text_MayTimeToHeadBack:
-	.string "MAY: I think I know why my dad has\n"
-	.string "an eye out for you now.\p"
-	.string "I mean, you just got that POKéMON,\n"
-	.string "but it already likes you.\p"
-	.string "You might be able to befriend any\n"
-	.string "kind of POKéMON easily.\p"
+	.string "Oh, hi, {PLAYER}{KUN}!\p"
+	.string "…Oh, I see, my dad gave you\n"
+	.string "a POKéMON as a gift.\p"
+	.string "Did you know POKéMON need to be\n"
+	.string "trained to behave in battle?\p"
+	.string "Untrained POKéMON won't always listen\n"
+	.string "to you, but trained POKéMON stop\l"
+	.string "learning moves and gain less EXP.\p"
+	.string "Think carefully about when you want\n"
+	.string "to finish your POKéMON's training.\p"
 	.string "Well, it's time to head back to\n"
 	.string "the LAB.$"
 
@@ -331,13 +327,15 @@ Route103_Text_BrendanDefeated:
 	.string "Huh, {PLAYER}, you're not too shabby.$"
 
 Route103_Text_BrendanTimeToHeadBack:
-	.string "BRENDAN: I think I get it.\n"
-	.string "I think I know why my dad has his eye\l"
-	.string "out for you now.\p"
-	.string "Look, your POKéMON already likes you,\n"
-	.string "even though you just got it.\p"
-	.string "{PLAYER}, I get the feeling that you\n"
-	.string "could befriend any POKéMON with ease.\p"
+	.string "Hey, it's {PLAYER}!\p"
+	.string "…Oh, yeah, Dad gave you a POKéMON.\p"
+	.string "Did you know POKéMON need to be\n"
+	.string "trained to behave in battle?\p"
+	.string "Untrained POKéMON won't always listen\n"
+	.string "to you, but trained POKéMON stop\l"
+	.string "learning moves and gain less EXP.\p"
+	.string "Think carefully about when you want\n"
+	.string "to finish your POKéMON's training.\p"
 	.string "We should head back to the LAB.$"
 
 Route103_Text_ShouldHaveBroughtPotion:
