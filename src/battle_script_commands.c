@@ -7558,7 +7558,7 @@ static void Cmd_yesnoboxstoplearningmove(void)
         {
             PlaySE(SE_SELECT);
 
-            if (gBattleCommunication[1] != 0)
+            if (gBattleCommunication[1] == 0)
                 gBattlescriptCurrInstr = cmd->noInstr;
             else
                 gBattlescriptCurrInstr = cmd->nextInstr;
@@ -7568,7 +7568,7 @@ static void Cmd_yesnoboxstoplearningmove(void)
         else if (JOY_NEW(B_BUTTON))
         {
             PlaySE(SE_SELECT);
-            gBattlescriptCurrInstr = cmd->noInstr;
+            gBattlescriptCurrInstr = cmd->nextInstr;
             HandleBattleWindow(YESNOBOX_X_Y, WINDOW_CLEAR);
         }
         break;
