@@ -4482,7 +4482,10 @@ static void Cmd_getexp(void)
                         SWAP(gBattleMons[battlerId].attack, gBattleMons[battlerId].defense, temp);
                 }
 
-                gBattleScripting.getexpState = 7;
+                if (gBattleMoveDamage) // exp remaining after level up
+                    gBattleScripting.getexpState = 3;
+                else
+                    gBattleScripting.getexpState = 7;
             }
             else
             {
@@ -4551,8 +4554,8 @@ static void Cmd_getexp(void)
                 i += 1;
                 SetMonData(&gPlayerParty[gBattleStruct->expGetterMonId], MON_DATA_TRAINING, &i);
             }
+            gBattleScripting.getexpState = 5;
         }
-        gBattleScripting.getexpState = 5;
         break;
     }
 }

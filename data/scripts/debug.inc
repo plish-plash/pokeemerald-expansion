@@ -26,6 +26,8 @@ Debug_CheatStart::
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 2
 	setflag FLAG_SYS_NATIONAL_DEX
 	special EnableNationalPokedex
+	setflag FLAG_SYS_DEXNAV_GET
+	setflag FLAG_SYS_DETECTOR_MODE
 	setflag FLAG_RECEIVED_RUNNING_SHOES
 	setflag FLAG_SYS_B_DASH
 	setvar VAR_LITTLEROOT_TOWN_STATE, 4 @ 4: Received Running Shoes
@@ -69,7 +71,25 @@ Debug_FlagsNotSetBattleConfigMessage_Text:
 	.string "Please define a usable flag in:\l"
 	.string "'include/config/battle.h'!$"
 
+@ Print all of the land encounters for the current map
 Debug_Script_1::
+	setvar VAR_0x8000, 0
+	callnative DebugCheckLandEncounters
+	goto_if_eq VAR_RESULT, FALSE, Debug_Script_1_NoEncounters
+	goto_if_eq VAR_RESULT, TRUE, Debug_Script_1_PrintEncounter
+	end
+
+Debug_Script_1_PrintEncounter::
+	callnative DebugGetLandEncounter
+	msgbox gText_NumberVar1Var2, MSGBOX_DEFAULT
+	addvar VAR_0x8000, 1
+	goto_if_lt VAR_0x8000, 12, Debug_Script_1_PrintEncounter
+	release
+	end
+
+Debug_Script_1_NoEncounters::
+	msgbox Debug_NoEncounters, MSGBOX_DEFAULT
+	release
 	end
 
 Debug_Script_2::
@@ -111,5 +131,8 @@ Debug_SaveBlock2Size::
 
 Debug_PokemonStorageSize::
 	.string "{PKMN}Storage size: {STR_VAR_1}/{STR_VAR_2}.$"
+
+Debug_NoEncounters::
+	.string "Current map has no land encounters.$"
 
 .endif

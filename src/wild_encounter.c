@@ -73,6 +73,7 @@ EWRAM_DATA bool8 gIsSurfingEncounter = 0;
 EWRAM_DATA struct WildPokemonHeader gCurrentMapWildMonHeader = {0};
 EWRAM_DATA static struct WildPokemonInfo sDynamicLandMonsInfo = {10, NULL};
 EWRAM_DATA static struct WildPokemonInfo sDynamicHiddenMonsInfo = {0, NULL};
+EWRAM_DATA static struct WildMapWildPokemon sDynamicWildPokemon = {0};
 
 #include "data/wild_encounters.h"
 
@@ -376,8 +377,7 @@ void LoadCurrentMapWildMonHeader(void)
     {
         for (i = 0; ; i++)
         {
-            const struct WildPokemonHeader *wildHeader = &gWildMonHeaders[i];
-            if (wildHeader->mapGroup == MAP_GROUP(UNDEFINED))
+            if (gWildMonHeaders[i].mapGroup == MAP_GROUP(UNDEFINED))
                 break;
 
             if (gWildMonHeaders[i].mapGroup == gSaveBlock1Ptr->location.mapGroup &&
@@ -397,10 +397,11 @@ void LoadCurrentMapWildMonHeader(void)
                 i = GetCurrentWildMap();
                 if (i != WILD_MAP_NONE)
                 {
+                    memcpy(&sDynamicWildPokemon, &gSaveBlock1Ptr->wildMapWildMons[i], sizeof(sDynamicWildPokemon));
                     sDynamicLandMonsInfo.encounterRate = GetWildMapEncounterRate(i);
-                    sDynamicLandMonsInfo.wildPokemon = gSaveBlock1Ptr->wildMapWildMons[i].landMons;
+                    sDynamicLandMonsInfo.wildPokemon = sDynamicWildPokemon.landMons;
                     sDynamicHiddenMonsInfo.encounterRate = 0;
-                    sDynamicHiddenMonsInfo.wildPokemon = gSaveBlock1Ptr->wildMapWildMons[i].hiddenMons;
+                    sDynamicHiddenMonsInfo.wildPokemon = sDynamicWildPokemon.hiddenMons;
                     gCurrentMapWildMonHeader.landMonsInfo = &sDynamicLandMonsInfo;
                     gCurrentMapWildMonHeader.hiddenMonsInfo = &sDynamicHiddenMonsInfo;
                 }
@@ -1128,7 +1129,7 @@ u8 ChooseHiddenMonIndex(void)
 
 bool32 MapHasNoEncounterData(void)
 {
-    return gCurrentMapWildMonHeader.landMonsInfo == NULL && gCurrentMapWildMonHeader.waterMonsInfo == NULL && gCurrentMapWildMonHeader.hiddenMonsInfo == NULL;
+    return gCurrentMapWildMonHeader.landMonsInfo == NULL && gCurrentMapWildMonHeader.waterMonsInfo == NULL;
 }
 
 static u32 GetCurrentWildMap(void)
@@ -1182,13 +1183,13 @@ static bool32 BasicTypeMatches(u8 basicType, u8 type) {
 
 static u16 ChooseWildAreaMonSpecies(u8 basicType, u32 rarity, u32 rarityMax)
 {
-    u32 i;
+    u16 i;
     const struct SpeciesInfo *speciesInfo;
     if (rarity > rarityMax)
         rarity = rarityMax;
     while (TRUE)
     {
-        i = Random() % NUM_SPECIES;
+        i = (Random() % FORMS_START) + 1;
         speciesInfo = &gSpeciesInfo[i];
         if (!(speciesInfo->flags == 0 || speciesInfo->flags == SPECIES_FLAG_GENDER_DIFFERENCE))
             continue;
@@ -1226,9 +1227,9 @@ static void GenerateWildArea(u32 wildMap, u8 basicType)
         if (FlagGet(i))
             nBadges++;
     }
-    baseLevel = min(nBadges, 1) * 5;
+    baseLevel = max(nBadges, 1) * 5;
 
-    for (i = 0; i < 12; i++)
+    for (i = 0; i < LAND_WILD_COUNT; i++)
     {
         mon = &wildMons->landMons[i];
         if ((i == 3 || i == 4 || i == 7 || i == 8 || i == 11) && Random() & 1)
@@ -1236,11 +1237,11 @@ static void GenerateWildArea(u32 wildMap, u8 basicType)
         else
             mon->species = ChooseWildAreaMonSpecies(basicType, i >= 8 ? 1 : 0, nBadges);
         mon->minLevel = baseLevel;
-        if (i > 1)
+        if (i > 1 && Random() & 1)
             mon->minLevel += Random() % (i / 2);
         mon->maxLevel = mon->minLevel;
     }
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < HIDDEN_WILD_COUNT; i++)
     {
         mon = &wildMons->hiddenMons[i];
         mon->species = ChooseWildAreaMonSpecies(basicType, 2, nBadges);

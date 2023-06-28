@@ -7969,6 +7969,7 @@ u8 IsMonDisobedient(void)
     s32 calc;
     u8 obedienceLevel = 0;
     u8 levelReferenced;
+    bool32 fullyTrained = FALSE;
 
     if (gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_RECORDED_LINK))
         return 0;
@@ -7979,16 +7980,14 @@ u8 IsMonDisobedient(void)
     {
         if (gBattleTypeFlags & BATTLE_TYPE_INGAME_PARTNER && GetBattlerPosition(gBattlerAttacker) == 2)
             return 0;
-        if (gBattleTypeFlags & BATTLE_TYPE_FRONTIER)
+        if (gBattleTypeFlags & (BATTLE_TYPE_FRONTIER | BATTLE_TYPE_RECORDED | BATTLE_TYPE_WALLY_TUTORIAL))
             return 0;
-        if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
-            return 0;
+        
+        fullyTrained = IsMonFullyTrained(&gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]]);
     #if B_OBEDIENCE_MECHANICS < GEN_8
-        if (!IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
+        if (!IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName) && fullyTrained)
             return 0;
     #endif
-        if (FlagGet(FLAG_BADGE08_GET))
-            return 0;
 
         obedienceLevel = 10;
 
@@ -7998,6 +7997,8 @@ u8 IsMonDisobedient(void)
             obedienceLevel = 50;
         if (FlagGet(FLAG_BADGE06_GET))
             obedienceLevel = 70;
+        if (FlagGet(FLAG_BADGE08_GET))
+            obedienceLevel = 100;
     }
 
 #if B_OBEDIENCE_MECHANICS >= GEN_8
@@ -8007,7 +8008,7 @@ u8 IsMonDisobedient(void)
 #endif
         levelReferenced = gBattleMons[gBattlerAttacker].level;
 
-    if (levelReferenced <= obedienceLevel && IsMonFullyTrained(&gPlayerParty[gBattlerPartyIndexes[gBattlerAttacker]]))
+    if (levelReferenced <= obedienceLevel && fullyTrained)
         return 0;
     rnd = (Random() & 255);
     calc = (levelReferenced + obedienceLevel) * rnd >> 8;

@@ -58,6 +58,7 @@
 #include "constants/species.h"
 #include "constants/weather.h"
 #include "save.h"
+#include "wild_encounter.h"
 
 #if DEBUG_OVERWORLD_MENU == TRUE
 // *******************************
@@ -1396,6 +1397,18 @@ static void DebugAction_Util_Script_8(u8 taskId)
     Debug_DestroyMenu_Full(taskId);
     LockPlayerFieldControls();
     ScriptContext_SetupScript(Debug_Script_8);
+}
+
+// Used by script 1
+void DebugCheckLandEncounters(void)
+{
+    gSpecialVar_Result = gCurrentMapWildMonHeader.landMonsInfo != NULL;
+}
+void DebugGetLandEncounter(void)
+{
+    u16 species = gCurrentMapWildMonHeader.landMonsInfo->wildPokemon[gSpecialVar_0x8000].species;
+    ConvertIntToDecimalStringN(gStringVar1, species, STR_CONV_MODE_LEADING_ZEROS, 3);
+    StringCopy(gStringVar2, gSpeciesNames[species]);
 }
 
 // *******************************

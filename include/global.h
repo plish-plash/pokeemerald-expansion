@@ -1082,7 +1082,7 @@ struct SaveBlock1
     /*0x3???*/ struct TrainerNameRecord trainerNameRecords[20];
     /*0x3???*/ struct TrainerHillSave trainerHill;
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
-               u8 dexNavSearchLevels[NUM_SPECIES];
+               u8 dexNavSearchLevels[POKEMON_SLOTS_NUMBER];
                u8 dexNavChain;
                struct WildMapWildPokemon wildMapWildMons[3];
     // sizeof: 0x3???
