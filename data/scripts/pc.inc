@@ -3,8 +3,8 @@ EventScript_PC::
 	setvar VAR_0x8004, PC_LOCATION_OTHER
 	special DoPCTurnOnEffect
 	playse SE_PC_ON
-	msgbox Text_BootUpPC, MSGBOX_DEFAULT
-	goto EventScript_PCMainMenu
+	waitse
+	goto EventScript_AccessPokemonStorage
 	end
 
 EventScript_PCMainMenu::
@@ -33,13 +33,9 @@ EventScript_AccessPlayersPC::
 	end
 
 EventScript_AccessPokemonStorage::
-	playse SE_PC_LOGIN
-	call_if_unset FLAG_SYS_PC_LANETTE, EventScript_AccessSomeonesPC
-	call_if_set FLAG_SYS_PC_LANETTE, EventScript_AccessLanettesPC
-	msgbox gText_StorageSystemOpened, MSGBOX_DEFAULT
 	special ShowPokemonStorageSystemPC
 	waitstate
-	goto EventScript_PCMainMenu
+	goto EventScript_TurnOffPC
 	end
 
 EventScript_AccessSomeonesPC::
@@ -52,7 +48,7 @@ EventScript_AccessLanettesPC::
 
 EventScript_TurnOffPC::
 	setvar VAR_0x8004, PC_LOCATION_OTHER
-	playse SE_PC_OFF
+	delay 30
 	special DoPCTurnOffEffect
 	releaseall
 	end

@@ -1561,7 +1561,10 @@ static void Task_PCMainMenu(u8 taskId)
         break;
     case STATE_FADE_IN:
         if (IsWeatherNotFadingIn())
-            task->tState++;
+        {
+            FadeScreen(FADE_TO_BLACK, 0);
+            task->tState = STATE_ENTER_PC;
+        }
         break;
     case STATE_HANDLE_INPUT:
         task->tInput = Menu_ProcessInput();
@@ -1648,7 +1651,7 @@ static void Task_PCMainMenu(u8 taskId)
         {
             CleanupOverworldWindowsAndTilemaps();
             EnterPokeStorage(task->tInput);
-            RemoveWindow(task->tWindowId);
+            // RemoveWindow(task->tWindowId);
             DestroyTask(taskId);
         }
         break;
@@ -1658,23 +1661,18 @@ static void Task_PCMainMenu(u8 taskId)
 void ShowPokemonStorageSystemPC(void)
 {
     u8 taskId = CreateTask(Task_PCMainMenu, 80);
-    gTasks[taskId].tState = 0;
+    gTasks[taskId].tState = STATE_FADE_IN;
+    gTasks[taskId].tInput = OPTION_MOVE_MONS;
     gTasks[taskId].tSelectedOption = 0;
     LockPlayerFieldControls();
 }
 
 static void FieldTask_ReturnToPcMenu(void)
 {
-    u8 taskId;
-    MainCallback vblankCb = gMain.vblankCallback;
-
-    SetVBlankCallback(NULL);
-    taskId = CreateTask(Task_PCMainMenu, 80);
-    gTasks[taskId].tState = 0;
-    gTasks[taskId].tSelectedOption = sPreviousBoxOption;
-    Task_PCMainMenu(taskId);
-    SetVBlankCallback(vblankCb);
+    SetVBlankCallback(gMain.vblankCallback);
     FadeInFromBlack();
+    UnlockPlayerFieldControls();
+    ScriptContext_Enable();
 }
 
 #undef tState
