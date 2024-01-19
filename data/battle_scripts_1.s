@@ -6819,10 +6819,11 @@ BattleScript_LevelUp::
 	drawlvlupbox
 	return
 BattleScript_Train::
-	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, TRUE
+	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_CheckFullyTrained, TRUE
 	goto BattleScript_AskToLearnMove
-BattleScript_TryLearnMoveLoop::
-	handlelearnnewmove BattleScript_LearnedNewMove, BattleScript_LearnMoveReturn, FALSE
+BattleScript_CheckFullyTrained::
+	jumpifbyte CMP_EQUAL, gBattleCommunication, TRUE, BattleScript_MonFullyTrained
+	return
 BattleScript_AskToLearnMove::
 	buffermovetolearn
 	printstring STRINGID_TRYTOLEARNMOVE1
@@ -6836,7 +6837,7 @@ BattleScript_AskToLearnMove::
 	setbyte sLEARNMOVE_STATE, 0
 	yesnoboxstoplearningmove BattleScript_AskToLearnMove
 	printstring STRINGID_DIDNOTLEARNMOVE
-	goto BattleScript_TryLearnMoveLoop
+	goto BattleScript_CheckFullyTrained
 BattleScript_ForgotAndLearnedNewMove::
 	printstring STRINGID_123POOF
 	printstring STRINGID_PKMNFORGOTMOVE
@@ -6847,8 +6848,10 @@ BattleScript_LearnedNewMove::
 	printstring STRINGID_PKMNLEARNEDMOVE
 	waitmessage B_WAIT_TIME_LONG
 	updatechoicemoveonlvlup BS_ATTACKER
-	goto BattleScript_TryLearnMoveLoop
-BattleScript_LearnMoveReturn::
+	goto BattleScript_CheckFullyTrained
+BattleScript_MonFullyTrained::
+	fanfare MUS_EVOLVED
+	printstring STRINGID_PKMNFULLYTRAINED
 	return
 
 BattleScript_RainContinuesOrEnds::

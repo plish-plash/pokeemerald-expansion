@@ -7409,6 +7409,7 @@ static void Cmd_handlelearnnewmove(void)
 
         gBattlescriptCurrInstr = learnedMovePtr;
     }
+    gBattleCommunication[0] = IsMonFullyTrained(mon);
 }
 
 static void Cmd_yesnoboxlearnmove(void)

@@ -167,6 +167,7 @@ static EWRAM_DATA struct PokemonSummaryScreenData
         u8 sanity; // 0x35
         u8 OTName[17]; // 0x36
         u32 OTID; // 0x48
+        bool8 trained;
     } summary;
     u16 bgTilemapBuffers[PSS_PAGE_COUNT][2][0x400];
     u8 mode;
@@ -731,6 +732,10 @@ static const u8 sMemoMiscTextColor[] = _("{COLOR WHITE}{SHADOW DARK_GRAY}"); // 
 static const u8 sStatsLeftColumnLayout[] = _("{DYNAMIC 0}/{DYNAMIC 1}\n{DYNAMIC 2}\n{DYNAMIC 3}");
 static const u8 sStatsRightColumnLayout[] = _("{DYNAMIC 0}\n{DYNAMIC 1}\n{DYNAMIC 2}");
 static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
+
+static const u8 sNatureDownTextColor[] = _("{COLOR}{08}");
+static const u8 sNatureUpTextColor[] = _("{COLOR}{05}");
+static const u8 sNatureNeutralTextColor[] = _("{COLOR}{01}");
 
 #define TAG_MOVE_SELECTOR 30000
 #define TAG_MON_STATUS 30001
@@ -1539,6 +1544,7 @@ static bool8 ExtractMonDataToSummaryStruct(struct Pokemon *mon)
         break;
     default:
         sum->ribbonCount = GetMonData(mon, MON_DATA_RIBBON_COUNT);
+        sum->trained = IsMonFullyTrained(mon);
         return TRUE;
     }
     sMonSummaryScreen->switchCounter++;
@@ -3190,7 +3196,7 @@ static void BufferMonTrainerMemo(void)
 
     if (InBattleFactory() == TRUE || InSlateportBattleTent() == TRUE || IsInGamePartnerMon() == TRUE)
     {
-        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, gText_XNature);
+        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar3, gText_XNature);
     }
     else
     {
@@ -3217,17 +3223,32 @@ static void BufferMonTrainerMemo(void)
         }
         else if (sum->metLocation != METLOC_IN_GAME_TRADE && DidMonComeFromGBAGames())
         {
-            text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTrade : gText_XNatureProbablyMetAt;
+            text = (sum->metLocation >= MAPSEC_NONE) ? gText_XNatureObtainedInTrade : gText_XNatureMetAtYZ;
         }
         else
         {
             text = gText_XNatureObtainedInTrade;
         }
 
-        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, text);
+        DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar3, text);
         Free(metLevelString);
         Free(metLocationString);
     }
+
+    DynamicPlaceholderTextUtil_Reset();
+    if (sum->trained)
+    {
+        text = gText_TrainedX;
+        DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sNatureUpTextColor);
+    }
+    else
+    {
+        text = gText_UntrainedX;
+        DynamicPlaceholderTextUtil_SetPlaceholderPtr(0, sNatureDownTextColor);
+    }
+    DynamicPlaceholderTextUtil_SetPlaceholderPtr(1, sMemoMiscTextColor);
+    DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gStringVar3);
+    DynamicPlaceholderTextUtil_ExpandPlaceholders(gStringVar4, text);
 }
 
 static void PrintMonTrainerMemo(void)
@@ -3239,7 +3260,6 @@ static void BufferNatureString(void)
 {
     struct PokemonSummaryScreenData *sumStruct = sMonSummaryScreen;
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(2, gNatureNamePointers[sumStruct->summary.nature]);
-    DynamicPlaceholderTextUtil_SetPlaceholderPtr(5, gText_EmptyString5);
 }
 
 static void GetMetLevelString(u8 *output)
@@ -4235,17 +4255,13 @@ static void KeepMoveSelectorVisible(u8 firstSpriteId)
 
 static void BufferStat(u8 *dst, s8 natureMod, u32 stat, u32 strId, u32 n)
 {
-    static const u8 sTextNatureDown[] = _("{COLOR}{08}");
-    static const u8 sTextNatureUp[] = _("{COLOR}{05}");
-    static const u8 sTextNatureNeutral[] = _("{COLOR}{01}");
     u8 *txtPtr;
-
     if (natureMod == 0)
-        txtPtr = StringCopy(dst, sTextNatureNeutral);
+        txtPtr = StringCopy(dst, sNatureNeutralTextColor);
     else if (natureMod > 0)
-        txtPtr = StringCopy(dst, sTextNatureUp);
+        txtPtr = StringCopy(dst, sNatureUpTextColor);
     else
-        txtPtr = StringCopy(dst, sTextNatureDown);
+        txtPtr = StringCopy(dst, sNatureDownTextColor);
 
     ConvertIntToDecimalStringN(txtPtr, stat, STR_CONV_MODE_RIGHT_ALIGN, n);
     DynamicPlaceholderTextUtil_SetPlaceholderPtr(strId, dst);
