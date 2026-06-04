@@ -7,4 +7,4 @@
   - Mons must hold training items to gain EVs from battle
   - Low friendship causes mons to disobey (DONE)
 - Battles are more strategic
-  - Damage formula changed to greatly reduce damage when attack is below opponent's defense
+  - Damage formula changed to greatly reduce damage when attack is below opponent's defense (DONE)
