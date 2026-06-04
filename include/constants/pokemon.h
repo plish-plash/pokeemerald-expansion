@@ -219,6 +219,7 @@ enum OtIdMethod
 
 // Friendship value that the majority of species use.
 #define STANDARD_FRIENDSHIP ((P_UPDATED_FRIENDSHIP >= GEN_8) ? 50 : 70)
+#define STARTER_FRIENDSHIP  (STANDARD_FRIENDSHIP + 10)
 
 #define MAX_FRIENDSHIP  255
 #define MAX_SHEEN       255

@@ -36,6 +36,6 @@
 #define WE_OWE_PREVENT_FEEBAS_DESPAWN           TRUE    // If TRUE, Feebas OWEs spawned from special Feebas fishing spots (when WE_OWE_FEEBAS_SPOTS is TRUE) will not be despawned when off-screen if on the same map as the player, or be replaced if WE_OWE_SPAWN_REPLACEMENT is TRUE.
 #define WE_OWE_PREVENT_SPECIAL_MOVEMENT_DESPAWN TRUE    // If TRUE, shiny OWEs (if WE_OWE_PREVENT_SHINY_DESPAWN is TRUE) or Feebas OWEs (if WE_OWE_PREVENT_FEEBAS_DESPAWN is TRUE) will not be despawned by their movement type (for example, OWE_DESPAWN_ON_NOTICE).
 #define WE_OWE_DESPAWN_ON_ENTER_TOWN            TRUE    // If TRUE, despawns all OWEs upon entering a city (MAP_TYPE_CITY) or town (MAP_TYPE_TOWN).
-#define WE_OWE_NO_REPEL_DEXNAV_COLLISION        FALSE   // If TRUE, OWEs cannot be triggered by a collision if a Repel or the DexNav is active.
+#define WE_OWE_NO_REPEL_DEXNAV_COLLISION        TRUE    // If TRUE, OWEs cannot be triggered by a collision if a Repel or the DexNav is active.
 
 #endif // GUARD_CONFIG_WILD_ENCOUNTER_H
