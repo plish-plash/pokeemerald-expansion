@@ -5583,8 +5583,8 @@ enum Obedience GetAttackerObedienceForAction(void)
         return OBEYS;
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED)
         return OBEYS;
-    if (B_OBEDIENCE_MECHANICS < GEN_8 && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
-        return OBEYS;
+    // if (B_OBEDIENCE_MECHANICS < GEN_8 && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
+    //     return OBEYS;
     if (FlagGet(FLAG_BADGE08_GET)) // Rain Badge, ignore obedience altogether
         return OBEYS;
 
@@ -5604,12 +5604,15 @@ enum Obedience GetAttackerObedienceForAction(void)
         obedienceLevel = 70;
     if (FlagGet(FLAG_BADGE07_GET)) // Mind Badge
         obedienceLevel = 80;
+    
+    obedienceLevel -= 10;
+    obedienceLevel += min(max(gBattleMons[gBattlerAttacker].friendship, STANDARD_FRIENDSHIP) - STANDARD_FRIENDSHIP, 80);
 
-    if (B_OBEDIENCE_MECHANICS >= GEN_8
-     && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
-        levelReferenced = gBattleMons[gBattlerAttacker].metLevel;
-    else
-        levelReferenced = gBattleMons[gBattlerAttacker].level;
+    // if (B_OBEDIENCE_MECHANICS >= GEN_8
+    //  && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
+    //     levelReferenced = gBattleMons[gBattlerAttacker].metLevel;
+    // else
+    levelReferenced = gBattleMons[gBattlerAttacker].level;
 
     if (levelReferenced <= obedienceLevel)
         return OBEYS;

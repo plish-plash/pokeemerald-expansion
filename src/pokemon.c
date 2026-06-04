@@ -4995,8 +4995,8 @@ void AdjustFriendship(struct Pokemon *mon, u8 event)
         if (event == FRIENDSHIP_EVENT_WALKING)
         {
             // 50% chance every 128 steps
-            if (Random() & 1)
-                return;
+            // if (Random() & 1)
+            //     return;
         }
         if (event == FRIENDSHIP_EVENT_LEAGUE_BATTLE)
         {
