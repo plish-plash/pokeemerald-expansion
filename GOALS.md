@@ -3,8 +3,8 @@
   - Catch rate changed so catching a full-health mon is almost impossible and catching a low-health mon with status is almost guaranteed
   - Balls can only catch certain types of mons: dive balls must be used to catch water types, etc.
 - Training is more rewarding
-  - Base stats are lower, EVs count for more
-  - Mons must hold training items to gain EVs from battle
+  - Base stats are lower, EVs count for more (DONE)
+  - Mons must hold training items to gain EVs from battle (DONE)
   - Low friendship causes mons to disobey (DONE)
 - Battles are more strategic
   - Damage formula changed to greatly reduce damage when attack is below opponent's defense (DONE)

@@ -219,9 +219,14 @@ static const struct MenuAction sItemStorage_MenuActions[] =
     [MENU_EXIT]     = { gText_Cancel,       {ItemStorage_Exit} }
 };
 
-static const u16 sNewGamePCItems[][2] =
+static const u16 sNewGamePCItems[][7] =
 {
-    { ITEM_POTION, 1 },
+    { ITEM_POWER_WEIGHT, 1 },
+    { ITEM_POWER_BRACER, 1 },
+    { ITEM_POWER_BELT, 1 },
+    { ITEM_POWER_LENS, 1 },
+    { ITEM_POWER_BAND, 1 },
+    { ITEM_POWER_ANKLET, 1 },
     { ITEM_NONE, 0 }
 };
 
