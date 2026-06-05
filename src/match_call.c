@@ -1734,97 +1734,10 @@ static void PopulateMapName(int matchCallId, u8 *destStr)
     GetMapName(destStr, GetRematchTrainerLocation(matchCallId), 0);
 }
 
-static u8 GetLandEncounterSlot(void)
-{
-    int rand = Random() % 100;
-    if (rand < 20)
-        return 0;
-    else if (rand >= 20 && rand < 40)
-        return 1;
-    else if (rand >= 40 && rand < 50)
-        return 2;
-    else if (rand >= 50 && rand < 60)
-        return 3;
-    else if (rand >= 60 && rand < 70)
-        return 4;
-    else if (rand >= 70 && rand < 80)
-        return 5;
-    else if (rand >= 80 && rand < 85)
-        return 6;
-    else if (rand >= 85 && rand < 90)
-        return 7;
-    else if (rand >= 90 && rand < 94)
-        return 8;
-    else if (rand >= 94 && rand < 98)
-        return 9;
-    else if (rand >= 98 && rand < 99)
-        return 10;
-    else
-        return 11;
-}
-
-static u8 GetWaterEncounterSlot(void)
-{
-    int rand = Random() % 100;
-    if (rand < 60)
-        return 0;
-    else if (rand >= 60 && rand < 90)
-        return 1;
-    else if (rand >= 90 && rand < 95)
-        return 2;
-    else if (rand >= 95 && rand < 99)
-        return 3;
-    else
-        return 4;
-}
-
 static void PopulateSpeciesFromTrainerLocation(int matchCallId, u8 *destStr)
 {
-    enum Species species[2];
-    int numSpecies;
-    u8 slot;
-    int i = 0;
-    enum TimeOfDay timeOfDay;
-
-    if (gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED)) // ??? This check is nonsense.
-    {
-        while (gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED))
-        {
-            if (gWildMonHeaders[i].mapGroup == gRematchTable[matchCallId].mapGroup
-             && gWildMonHeaders[i].mapNum == gRematchTable[matchCallId].mapNum)
-                break;
-
-            i++;
-        }
-
-        if (gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED))
-        {
-            timeOfDay = GetTimeOfDayForEncounters(i, WILD_AREA_LAND);
-            numSpecies = 0;
-            if (gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo)
-            {
-                slot = GetLandEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].landMonsInfo->wildPokemon[slot].species;
-                numSpecies++;
-            }
-
-            timeOfDay = GetTimeOfDayForEncounters(i, WILD_AREA_WATER);
-            if (gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo)
-            {
-                slot = GetWaterEncounterSlot();
-                species[numSpecies] = gWildMonHeaders[i].encounterTypes[timeOfDay].waterMonsInfo->wildPokemon[slot].species;
-                numSpecies++;
-            }
-
-            if (numSpecies)
-            {
-                StringCopy(destStr, GetSpeciesName(species[Random() % numSpecies]));
-                return;
-            }
-        }
-    }
-
-    destStr[0] = EOS;
+    bool8 isWaterMon;
+    StringCopy(destStr, GetSpeciesName(GetLocalWildMon(&isWaterMon)));
 }
 
 static void PopulateSpeciesFromTrainerParty(int matchCallId, u8 *destStr)

@@ -37,8 +37,8 @@ static bool32 Fishing_EndNoMon(struct Task *);
 static void AlignFishingAnimationFrames(void);
 static bool32 DoesFishingMinigameAllowCancel(void);
 static bool32 Fishing_DoesFirstMonInPartyHaveSuctionCupsOrStickyHold(void);
-static bool32 Fishing_RollForBite(u32, bool32);
-static u32 CalculateFishingBiteOdds(u32, bool32);
+static bool32 Fishing_RollForBite(u8, u8, bool32);
+static u32 CalculateFishingBiteOdds(u8, u8, bool32);
 static u32 CalculateFishingFollowerBoost(void);
 static u32 CalculateFishingProximityBoost(void);
 static u32 CalculateFishingTimeOfDayBoost(void);
@@ -65,6 +65,18 @@ static const u8 sText_OhABite[] = _("Oh! A bite!");
 static const u8 sText_PokemonOnHook[] = _("A POKéMON's on the hook!{PAUSE_UNTIL_PRESS}");
 static const u8 sText_NotEvenANibble[] = _("Not even a nibble…{PAUSE_UNTIL_PRESS}");
 static const u8 sText_ItGotAway[] = _("It got away…{PAUSE_UNTIL_PRESS}");
+static const u8 sText_SomethingOverhead[] = _("You see something overhead!");
+static const u8 sText_DirectHit[] = _("A direct hit! Looks like it's mad…{PAUSE_UNTIL_PRESS}");
+static const u8 sText_NothingInTheSky[] = _("You don't see any\nPOKéMON in the sky.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_ItFlewAway[] = _("It flew away…{PAUSE_UNTIL_PRESS}");
+static const u8 sText_YouAreChallenged[] = _("You are challenged by a POKéMON!{PAUSE_UNTIL_PRESS}");
+static const u8 sText_YouFeelATug[] = _("You feel a tug!");
+static const u8 sText_MagnetPulledInPokemon[] = _("The magnet pulled in a POKéMON!{PAUSE_UNTIL_PRESS}");
+static const u8 sText_NoMagneticPokemon[] = _("There don't seem to be any\nmagnetic POKéMON around.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_YouFeelAPresence[] = _("You feel a presence…");
+static const u8 sText_PokemonAppeared[] = _("A POKéMON appeared!{PAUSE_UNTIL_PRESS}");
+static const u8 sText_YouDoNotSense[] = _("You do not sense any POKéMON.{PAUSE_UNTIL_PRESS}");
+static const u8 sText_ThePresenceIsGone[] = _("The presence is gone.{PAUSE_UNTIL_PRESS}");
 
 struct FriendshipHookChanceBoost
 {
@@ -133,15 +145,17 @@ static bool32 (*const sFishingStateFuncs[])(struct Task *) =
 #define tFrameCounter      data[1]
 #define tNumDots           data[2]
 #define tDotsRequired      data[3]
+#define tHabitat           data[4]
 #define tRoundsPlayed      data[12]
 #define tMinRoundsRequired data[13]
 #define tPlayerGfxId       data[14]
 #define tFishingRod        data[15]
 
-void StartFishing(u8 rod)
+void StartFishing(u8 area, u8 rod)
 {
     u8 taskId = CreateTask(Task_Fishing, 0xFF);
 
+    gTasks[taskId].tHabitat = area;
     gTasks[taskId].tFishingRod = rod;
     Task_Fishing(taskId);
 }
@@ -180,14 +194,16 @@ static bool32 Fishing_GetRodOut(struct Task *task)
     playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
     ObjectEventClearHeldMovementIfActive(playerObjEvent);
     playerObjEvent->enableAnim = TRUE;
-    SetPlayerAvatarFishing(playerObjEvent->facingDirection);
+    if (task->tHabitat == WILD_AREA_FISHING)
+        SetPlayerAvatarFishing(playerObjEvent->facingDirection);
     task->tStep = FISHING_WAIT_BEFORE_DOTS;
     return FALSE;
 }
 
 static bool32 Fishing_WaitBeforeDots(struct Task *task)
 {
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
 
     // Wait one second
     task->tFrameCounter++;
@@ -218,7 +234,8 @@ static bool32 Fishing_ShowDots(struct Task *task)
 {
     const u8 dot[] = _("·");
 
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     task->tFrameCounter++;
     if (JOY_NEW(A_BUTTON))
     {
@@ -256,28 +273,34 @@ static bool32 Fishing_CheckForBite(struct Task *task)
 {
     bool32 bite, firstMonHasSuctionOrSticky;
 
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     task->tStep = FISHING_GOT_BITE;
     bite = FALSE;
 
-    if (!DoesCurrentMapHaveFishingMons())
+    // if (!DoesCurrentMapHaveFishingMons())
+    // {
+    //     task->tStep = FISHING_NOT_EVEN_NIBBLE;
+    //     return TRUE;
+    // }
+    if (task->tHabitat == WILD_AREA_CHALLENGE)
     {
-        task->tStep = FISHING_NOT_EVEN_NIBBLE;
-        return TRUE;
+        bite = TRUE;
+        task->tStep = FISHING_MON_ON_HOOK;
     }
 
-    firstMonHasSuctionOrSticky = Fishing_DoesFirstMonInPartyHaveSuctionCupsOrStickyHold();
+    firstMonHasSuctionOrSticky = task->tHabitat == WILD_AREA_FISHING && Fishing_DoesFirstMonInPartyHaveSuctionCupsOrStickyHold();
 
     if (firstMonHasSuctionOrSticky && I_FISHING_STICKY_BOOST < GEN_4)
         bite = RandomPercentage(RNG_FISHING_GEN3_STICKY, FISHING_GEN3_STICKY_CHANCE);
 
     if (!bite)
-        bite = Fishing_RollForBite(task->tFishingRod, firstMonHasSuctionOrSticky);
+        bite = Fishing_RollForBite(task->tHabitat, task->tFishingRod, firstMonHasSuctionOrSticky);
 
     if (!bite)
         task->tStep = FISHING_NOT_EVEN_NIBBLE;
 
-    if (bite)
+    if (bite && task->tHabitat == WILD_AREA_FISHING)
         StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingBiteDirectionAnimNum(GetPlayerFacingDirection()));
 
     return TRUE;
@@ -285,8 +308,27 @@ static bool32 Fishing_CheckForBite(struct Task *task)
 
 static bool32 Fishing_GotBite(struct Task *task)
 {
-    AlignFishingAnimationFrames();
-    AddTextPrinterParameterized(0, FONT_NORMAL, sText_OhABite, 0, 17, 0, NULL);
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = sText_SomethingOverhead;
+        break;
+    case WILD_AREA_MAGNET:
+        str = sText_YouFeelATug;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = sText_YouFeelAPresence;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = sText_OhABite;
+        break;
+    }
+
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
+    AddTextPrinterParameterized(0, FONT_NORMAL, str, 0, 17, 0, NULL);
     task->tStep = FISHING_CHANGE_MINIGAME;
     task->tFrameCounter = 0;
     return FALSE;
@@ -317,7 +359,8 @@ static bool32 Fishing_WaitForA(struct Task *task)
         [SUPER_ROD] = 30
     };
 
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     task->tFrameCounter++;
     if (task->tFrameCounter >= reelTimeouts[task->tFishingRod])
         task->tStep = FISHING_GOT_AWAY;
@@ -328,7 +371,8 @@ static bool32 Fishing_WaitForA(struct Task *task)
 
 static bool32 Fishing_APressNoMinigame(struct Task *task)
 {
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     if (JOY_NEW(A_BUTTON))
         task->tStep = FISHING_MON_ON_HOOK;
     return FALSE;
@@ -344,7 +388,8 @@ static bool32 Fishing_CheckMoreDots(struct Task *task)
         [SUPER_ROD] = {70, 30}
     };
 
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     task->tStep = FISHING_MON_ON_HOOK;
     if (task->tRoundsPlayed < task->tMinRoundsRequired)
     {
@@ -363,9 +408,31 @@ static bool32 Fishing_CheckMoreDots(struct Task *task)
 
 static bool32 Fishing_MonOnHook(struct Task *task)
 {
-    AlignFishingAnimationFrames();
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = sText_DirectHit;
+        break;
+    case WILD_AREA_CHALLENGE:
+        str = sText_YouAreChallenged;
+        break;
+    case WILD_AREA_MAGNET:
+        str = sText_MagnetPulledInPokemon;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = sText_PokemonAppeared;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = sText_PokemonOnHook;
+        break;
+    }
+
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, sText_PokemonOnHook, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep = FISHING_START_ENCOUNTER;
     task->tFrameCounter = 0;
     return FALSE;
@@ -373,7 +440,7 @@ static bool32 Fishing_MonOnHook(struct Task *task)
 
 static bool32 Fishing_StartEncounter(struct Task *task)
 {
-    if (task->tFrameCounter == 0)
+    if (task->tFrameCounter == 0 && task->tHabitat == WILD_AREA_FISHING)
         AlignFishingAnimationFrames();
 
     RunTextPrinters();
@@ -400,8 +467,16 @@ static bool32 Fishing_StartEncounter(struct Task *task)
     {
         gPlayerAvatar.preventStep = FALSE;
         UnlockPlayerFieldControls();
-        FishingWildEncounter(task->tFishingRod);
-        RecordFishingAttemptForTV(TRUE);
+        // TODO generating the encounter can still fail here. Maybe show a message box in that case?
+        if (task->tHabitat == WILD_AREA_FISHING)
+        {
+            FishingWildEncounter(task->tFishingRod);
+            RecordFishingAttemptForTV(TRUE);
+        }
+        else
+        {
+            HabitatWildEncounter(task->tHabitat, 0);
+        }
         DestroyTask(FindTaskIdByFunc(Task_Fishing));
     }
     return FALSE;
@@ -409,37 +484,78 @@ static bool32 Fishing_StartEncounter(struct Task *task)
 
 static bool32 Fishing_NotEvenNibble(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = sText_NothingInTheSky;
+        break;
+    case WILD_AREA_MAGNET:
+        str = sText_NoMagneticPokemon;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = sText_YouDoNotSense;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = sText_NotEvenANibble;
+        break;
+    }
+
     gChainFishingDexNavStreak = 0;
-    AlignFishingAnimationFrames();
-    StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
+    if (task->tHabitat == WILD_AREA_FISHING)
+    {
+        AlignFishingAnimationFrames();
+        StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
+    }
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, sText_NotEvenANibble, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep = FISHING_NO_MON;
     return TRUE;
 }
 
 static bool32 Fishing_GotAway(struct Task *task)
 {
+    const u8 *str;
+    switch (task->tHabitat)
+    {
+    case WILD_AREA_SKY:
+        str = sText_ItFlewAway;
+        break;
+    case WILD_AREA_PSYCHIC:
+        str = sText_ThePresenceIsGone;
+        break;
+    case WILD_AREA_FISHING:
+    default:
+        str = sText_ItGotAway;
+        break;
+    }
+
     gChainFishingDexNavStreak = 0;
-    AlignFishingAnimationFrames();
-    StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
+    if (task->tHabitat == WILD_AREA_FISHING)
+    {
+        AlignFishingAnimationFrames();
+        StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFishingNoCatchDirectionAnimNum(GetPlayerFacingDirection()));
+    }
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
-    AddTextPrinterParameterized2(0, FONT_NORMAL, sText_ItGotAway, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
+    AddTextPrinterParameterized2(0, FONT_NORMAL, str, 1, 0, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_WHITE, TEXT_COLOR_LIGHT_GRAY);
     task->tStep = FISHING_NO_MON;
     return TRUE;
 }
 
 static bool32 Fishing_NoMon(struct Task *task)
 {
-    AlignFishingAnimationFrames();
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
     task->tStep = FISHING_PUT_ROD_AWAY;
     return FALSE;
 }
 
 static bool32 Fishing_PutRodAway(struct Task *task)
 {
-    AlignFishingAnimationFrames();
-    if (gSprites[gPlayerAvatar.spriteId].animEnded)
+    if (task->tHabitat == WILD_AREA_FISHING)
+        AlignFishingAnimationFrames();
+    if (task->tHabitat != WILD_AREA_FISHING || gSprites[gPlayerAvatar.spriteId].animEnded)
     {
         struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
 
@@ -463,7 +579,10 @@ static bool32 Fishing_EndNoMon(struct Task *task)
         UnlockPlayerFieldControls();
         UnfreezeObjectEvents();
         ClearDialogWindowAndFrame(0, TRUE);
-        RecordFishingAttemptForTV(FALSE);
+        if (task->tHabitat == WILD_AREA_FISHING)
+        {
+            RecordFishingAttemptForTV(FALSE);
+        }
         DestroyTask(FindTaskIdByFunc(Task_Fishing));
     }
     return FALSE;
@@ -494,25 +613,33 @@ static bool32 Fishing_DoesFirstMonInPartyHaveSuctionCupsOrStickyHold(void)
     return (ability == ABILITY_SUCTION_CUPS || ability == ABILITY_STICKY_HOLD);
 }
 
-static bool32 Fishing_RollForBite(u32 rod, bool32 isStickyHold)
+static bool32 Fishing_RollForBite(u8 area, u8 rod, bool32 isStickyHold)
 {
-    return ((RandomUniform(RNG_FISHING_BITE, 1, 100)) <= CalculateFishingBiteOdds(rod, isStickyHold));
+    return ((RandomUniform(RNG_FISHING_BITE, 1, 100)) <= CalculateFishingBiteOdds(area, rod, isStickyHold));
 }
 
-static u32 CalculateFishingBiteOdds(u32 rod, bool32 isStickyHold)
+static u32 CalculateFishingBiteOdds(u8 area, u8 rod, bool32 isStickyHold)
 {
     u32 odds;
 
-    if (rod == OLD_ROD)
-        odds = FISHING_OLD_ROD_ODDS;
-    if (rod == GOOD_ROD)
-        odds = FISHING_GOOD_ROD_ODDS;
-    if (rod == SUPER_ROD)
-        odds = FISHING_SUPER_ROD_ODDS;
+    if (area == WILD_AREA_FISHING)
+    {
+        if (rod == OLD_ROD)
+            odds = FISHING_OLD_ROD_ODDS;
+        if (rod == GOOD_ROD)
+            odds = FISHING_GOOD_ROD_ODDS;
+        if (rod == SUPER_ROD)
+            odds = FISHING_SUPER_ROD_ODDS;
 
-    odds += CalculateFishingFollowerBoost();
-    odds += CalculateFishingProximityBoost();
-    odds += CalculateFishingTimeOfDayBoost();
+        odds += CalculateFishingFollowerBoost();
+        odds += CalculateFishingProximityBoost();
+        odds += CalculateFishingTimeOfDayBoost();
+    }
+    else
+    {
+        odds = FISHING_GOOD_ROD_ODDS;
+        odds += CalculateFishingFollowerBoost();
+    }
 
     if (isStickyHold && I_FISHING_STICKY_BOOST >= GEN_4)
         odds *= 2;
@@ -642,7 +769,7 @@ void UpdateChainFishingStreak()
 
 u32 CalculateChainFishingShinyRolls(void)
 {
-    if (!I_FISHING_CHAIN || !gIsFishingEncounter)
+    if (!I_FISHING_CHAIN || gEncounterArea != WILD_AREA_FISHING)
         return 0;
     u32 a = 2 * min(gChainFishingDexNavStreak, FISHING_CHAIN_SHINY_STREAK_MAX);
     return a;
@@ -650,5 +777,5 @@ u32 CalculateChainFishingShinyRolls(void)
 
 bool32 ShouldUseFishingEnvironmentInBattle()
 {
-    return (I_FISHING_ENVIRONMENT >= GEN_4 && gIsFishingEncounter);
+    return (I_FISHING_ENVIRONMENT >= GEN_4 && gEncounterArea == WILD_AREA_FISHING);
 }

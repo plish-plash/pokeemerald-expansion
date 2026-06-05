@@ -1698,6 +1698,7 @@ enum __attribute__((packed)) Species
     NUM_SPECIES = SPECIES_EGG,
 };
 
+#define NUM_WILD_SPECIES (SPECIES_ENAMORUS + 1)
 #define SPECIES_SHINY_TAG 5000
 
 #endif  // GUARD_CONSTANTS_SPECIES_H

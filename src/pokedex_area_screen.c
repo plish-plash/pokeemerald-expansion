@@ -121,8 +121,6 @@ static void BuildAreaGlowTilemap(void);
 static void SetAreaHasMon(u16, u16);
 static void SetSpecialMapHasMon(u16, u16);
 static mapsec_u16_t GetRegionMapSectionId(u8, u8);
-static bool8 MapHasSpecies(const struct WildEncounterTypes *, u32, enum Species);
-static bool8 MonListHasSpecies(const struct WildPokemonInfo *, enum Species, u16);
 static void DoAreaGlow(void);
 static void Task_ShowPokedexAreaScreen(u8 taskId);
 static void Task_UpdatePokedexAreaScreen(u8 taskId);
@@ -290,6 +288,7 @@ static void FindMapsWithMon(enum Species species)
     enum RegionMapType currentRegionMapType;
     u16 i;
     struct Roamer *roamer;
+    u8 biome, levelMin, levelMax;
 
     sPokedexAreaScreen->alteringCaveCounter = 0;
     sPokedexAreaScreen->alteringCaveId = VarGet(VAR_ALTERING_CAVE_WILD_SET);
@@ -299,6 +298,8 @@ static void FindMapsWithMon(enum Species species)
     sPokedexAreaScreen->numOverworldAreas = 0;
     sPokedexAreaScreen->numSpecialAreas = 0;
 
+    if (species >= NUM_WILD_SPECIES) { return; }
+
     // Check if this species should be hidden from the area map.
     // This only applies to Wynaut, to hide the encounters on Mirage Island.
     for (i = 0; i < ARRAY_COUNT(sSpeciesHiddenFromAreaScreen); i++)
@@ -307,52 +308,30 @@ static void FindMapsWithMon(enum Species species)
             return;
     }
 
-    // Add Pokémon with special encounter circumstances (i.e. not listed
-    // in the regular wild encounter table) to the area map.
-    // This only applies to Feebas on Route 119, but it was clearly set
-    // up to allow handling others.
-    for (i = 0; sFeebasData[i][0] != NUM_SPECIES; i++)
-    {
-        if (species == sFeebasData[i][0])
-        {
-            switch (sFeebasData[i][1])
-            {
-            case MAP_GROUP_TOWNS_AND_ROUTES:
-            case MAP_GROUP_TOWNS_AND_ROUTES_FRLG:
-                SetAreaHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                break;
-            case MAP_GROUP_DUNGEONS:
-            case MAP_GROUP_DUNGEONS_FRLG:
-            case MAP_GROUP_SPECIAL_AREA:
-            case MAP_GROUP_SPECIAL_AREA_FRLG:
-                SetSpecialMapHasMon(sFeebasData[i][1], sFeebasData[i][2]);
-                break;
-            }
-        }
-    }
+    biome = gSpeciesHabitat[species].biome;
+    levelMin = gSpeciesLevelRange[species][0];
+    levelMax = gSpeciesLevelRange[species][1];
 
-    currentRegionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
     // Add regular species to the area map
-    for (i = 0; gWildMonHeaders[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
+    currentRegionMapType = GetRegionMapType(gMapHeader.regionMapSectionId);
+    for (i = 0; gMapHabitat[i].mapGroup != MAP_GROUP(MAP_UNDEFINED); i++)
     {
-        u32 headerSectionId = Overworld_GetMapHeaderByGroupAndId(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum)->regionMapSectionId;
-
+        u32 headerSectionId = Overworld_GetMapHeaderByGroupAndId(gMapHabitat[i].mapGroup, gMapHabitat[i].mapNum)->regionMapSectionId;
         if (GetRegionMapType(headerSectionId) != currentRegionMapType)
             continue;
-
-        if (MapHasSpecies(&gWildMonHeaders[i].encounterTypes[gAreaTimeOfDay], headerSectionId, species))
+        if (gMapHabitat[i].biome == biome && max(gMapHabitat[i].levelMin, levelMin) <= min(gMapHabitat[i].levelMax, levelMax))
         {
-            switch (gWildMonHeaders[i].mapGroup)
+            switch (gMapHabitat[i].mapGroup)
             {
             case MAP_GROUP_TOWNS_AND_ROUTES:
             case MAP_GROUP_TOWNS_AND_ROUTES_FRLG:
-                SetAreaHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+                SetAreaHasMon(gMapHabitat[i].mapGroup, gMapHabitat[i].mapNum);
                 break;
             case MAP_GROUP_DUNGEONS:
             case MAP_GROUP_DUNGEONS_FRLG:
             case MAP_GROUP_SPECIAL_AREA:
             case MAP_GROUP_SPECIAL_AREA_FRLG:
-                SetSpecialMapHasMon(gWildMonHeaders[i].mapGroup, gWildMonHeaders[i].mapNum);
+                SetSpecialMapHasMon(gMapHabitat[i].mapGroup, gMapHabitat[i].mapNum);
                 break;
             }
         }
@@ -427,47 +406,6 @@ static void SetSpecialMapHasMon(u16 mapGroup, u16 mapNum)
 static mapsec_u16_t GetRegionMapSectionId(u8 mapGroup, u8 mapNum)
 {
     return Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum)->regionMapSectionId;
-}
-
-static bool8 MapHasSpecies(const struct WildEncounterTypes *info, u32 headerSectionId, enum Species species)
-{
-    // If this is a header for Altering Cave, skip it if it's not the current Altering Cave encounter set
-    if (headerSectionId == MAPSEC_ALTERING_CAVE)
-    {
-        sPokedexAreaScreen->alteringCaveCounter++;
-        if (sPokedexAreaScreen->alteringCaveCounter != sPokedexAreaScreen->alteringCaveId + 1)
-            return FALSE;
-    }
-
-    if (MonListHasSpecies(info->landMonsInfo, species, LAND_WILD_COUNT))
-        return TRUE;
-    if (MonListHasSpecies(info->waterMonsInfo, species, WATER_WILD_COUNT))
-        return TRUE;
-// When searching the fishing encounters, this incorrectly uses the size of the land encounters.
-// As a result it's reading out of bounds of the fishing encounters tables.
-#ifdef BUGFIX
-    if (MonListHasSpecies(info->fishingMonsInfo, species, FISH_WILD_COUNT))
-#else
-    if (MonListHasSpecies(info->fishingMonsInfo, species, LAND_WILD_COUNT))
-#endif
-        return TRUE;
-    if (MonListHasSpecies(info->rockSmashMonsInfo, species, ROCK_WILD_COUNT))
-        return TRUE;
-    return FALSE;
-}
-
-static bool8 MonListHasSpecies(const struct WildPokemonInfo *info, enum Species species, u16 size)
-{
-    u16 i;
-    if (info != NULL)
-    {
-        for (i = 0; i < size; i++)
-        {
-            if (info->wildPokemon[i].species == species)
-                return TRUE;
-        }
-    }
-    return FALSE;
 }
 
 static void BuildAreaGlowTilemap(void)

@@ -143,9 +143,9 @@ static inline bool32 IsObjectActiveOWE(struct ObjectEvent *owe)
 static bool32 CreateEnemyPartyOWE(struct InfoOWE *info, s32 x, s32 y);
 static bool32 OWE_DoesOWERoamerExist(void);
 static bool32 StartWildBattleWithOWE_CheckRoamer(enum CategoryOWE category);
-static bool32 StartWildBattleWithOWE_CheckBattleFrontier(u32 headerId);
+static bool32 StartWildBattleWithOWE_CheckBattleFrontier();
 static bool32 StartWildBattleWithOWE_CheckMassOutbreak(enum CategoryOWE category, enum Species speciesId);
-static bool32 StartWildBattleWithOWE_CheckDoubleBattle(struct ObjectEvent *owe, u32 headerId);
+static bool32 StartWildBattleWithOWE_CheckDoubleBattle(struct ObjectEvent *owe);
 static bool32 CheckCurrentWildMonHeaderForOWE(bool32 shouldSpawnWaterMons);
 static u32 GetOldestActiveOWESlot(bool32 forceRemove);
 static u32 GetNextOWESpawnSlot(void);
@@ -364,7 +364,6 @@ void StartWildBattleWithOWE(struct ScriptContext *ctx)
 {
     u32 localId = VarGet(ScriptReadHalfword(ctx));
     u32 objEventId = GetObjectEventIdByLocalId(localId);
-    u32 headerId = GetCurrentMapWildMonHeaderId();
     struct ObjectEvent *owe = &gObjectEvents[objEventId];
     enum CategoryOWE category = GetOWECategory(owe);
 
@@ -397,13 +396,13 @@ void StartWildBattleWithOWE(struct ScriptContext *ctx)
     GiveMonInitialMoveset(&gParties[B_TRAINER_OPPONENT_A][0]);
     SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_IS_SHINY, &shiny);
     
-    if (StartWildBattleWithOWE_CheckBattleFrontier(headerId))
+    if (StartWildBattleWithOWE_CheckBattleFrontier())
         return;
     
     if (StartWildBattleWithOWE_CheckMassOutbreak(category, speciesId))
         return;
 
-    if (StartWildBattleWithOWE_CheckDoubleBattle(owe, headerId))
+    if (StartWildBattleWithOWE_CheckDoubleBattle(owe))
         return;
 
     BattleSetup_StartWildBattle();
@@ -807,56 +806,36 @@ void SetOverworldObjectSpecies(struct ScriptContext *ctx)
 
 static bool32 CreateEnemyPartyOWE(struct InfoOWE *info, s32 x, s32 y)
 {
-    const struct WildPokemonInfo *wildMonInfo;
-    enum WildPokemonArea wildArea;
-    enum TimeOfDay timeOfDay;
-    u32 headerId = GetCurrentMapWildMonHeaderId();
+    u8 wildArea;
     u32 metatileBehavior = MapGridGetMetatileBehaviorAt(x, y);
 
-    if (headerId == HEADER_NONE)
+    if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS)
     {
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS)
-        {
-            headerId = GetBattlePikeWildMonHeaderId();
-            timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-            if (TryGenerateWildMon(gBattlePikeWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo, WILD_AREA_LAND, 0) != TRUE)
-                return FALSE;
-            else if (!TryGenerateBattlePikeWildMon(TRUE))
-                return FALSE;
-            
-            return TRUE;
-        }
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
-        {
-            headerId = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
-            timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-            if (TryGenerateWildMon(gBattlePyramidWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo, WILD_AREA_LAND, 0) != TRUE)
-                return FALSE;
-
-            u32 id = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
-            GenerateBattlePyramidWildMon(SPECIES_NONE);
-            SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_LEVEL, &id);
-            return TRUE;
-        }
-
-        return FALSE;
+        if (TryGenerateWildMon(WILD_AREA_LAND, 0) != TRUE)
+            return FALSE;
+        else if (!TryGenerateBattlePikeWildMon(TRUE))
+            return FALSE;
+        
+        return TRUE;
     }
+    else if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
+    {
+        if (TryGenerateWildMon(WILD_AREA_LAND, 0) != TRUE)
+            return FALSE;
 
-    if (MetatileBehavior_IsWaterWildEncounter(metatileBehavior))
+        u32 id = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
+        GenerateBattlePyramidWildMon(SPECIES_NONE);
+        SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_LEVEL, &id);
+        return TRUE;
+    }
+    else if (MetatileBehavior_IsWaterWildEncounter(metatileBehavior))
     {
         wildArea = WILD_AREA_WATER;
-        timeOfDay = GetTimeOfDayForEncounters(headerId, wildArea);
-        wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
     }
     else
     {
         wildArea = WILD_AREA_LAND;
-        timeOfDay = GetTimeOfDayForEncounters(headerId, wildArea);
-        wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
     }
-
-    if (wildMonInfo == NULL)
-        return FALSE;
 
     /*
     These functions perform checks of various encounter types in the following order:
@@ -877,15 +856,15 @@ static bool32 CreateEnemyPartyOWE(struct InfoOWE *info, s32 x, s32 y)
             info->category = gEncounteredRoamerIndex;
             return TRUE;
         }
-        else if (WE_OWE_FEEBAS_SPOTS && MetatileBehavior_IsWaterWildEncounter(metatileBehavior) && CheckFeebasAtCoords(x, y))
-        {
-            CreateWildMon(gWildFeebas.species, ChooseWildMonLevel(&gWildFeebas, 0, WILD_AREA_FISHING));
-            info->category = OWE_CATEGORY_FEEBAS;
-            if (WE_OWE_PREVENT_FEEBAS_DESPAWN)
-                info->noDespawn = TRUE;
+        // else if (WE_OWE_FEEBAS_SPOTS && MetatileBehavior_IsWaterWildEncounter(metatileBehavior) && CheckFeebasAtCoords(x, y))
+        // {
+        //     CreateWildMon(gWildFeebas.species, ChooseWildMonLevel(&gWildFeebas, 0, WILD_AREA_FISHING));
+        //     info->category = OWE_CATEGORY_FEEBAS;
+        //     if (WE_OWE_PREVENT_FEEBAS_DESPAWN)
+        //         info->noDespawn = TRUE;
 
-            return TRUE;
-        }
+        //     return TRUE;
+        // }
         else if (DoMassOutbreakEncounterTest() && MetatileBehavior_IsLandWildEncounter(metatileBehavior))
         {
             SetUpMassOutbreakEncounter(0);
@@ -894,11 +873,11 @@ static bool32 CreateEnemyPartyOWE(struct InfoOWE *info, s32 x, s32 y)
         }
         else
         {
-            return TryGenerateWildMon(wildMonInfo, wildArea, 0);
+            return TryGenerateWildMon(wildArea, 0);
         }
     }
 
-    return TryGenerateWildMon(wildMonInfo, wildArea, 0);
+    return TryGenerateWildMon(wildArea, 0);
 }
 
 static bool32 OWE_DoesOWERoamerExist(void)
@@ -927,27 +906,24 @@ static bool32 StartWildBattleWithOWE_CheckRoamer(enum CategoryOWE category)
     return FALSE;
 }
 
-static bool32 StartWildBattleWithOWE_CheckBattleFrontier(u32 headerId)
+static bool32 StartWildBattleWithOWE_CheckBattleFrontier()
 {
-    if (headerId == HEADER_NONE)
+    if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS)
     {
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS)
-        {
-            TryGenerateBattlePikeWildMon(FALSE);
-            BattleSetup_StartBattlePikeWildBattle();
-            return TRUE;
-        }
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
-        {
-            u32 id = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_LEVEL);
-            enum Species species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
-            SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES, &id);
-            if (!BATTLE_PYRAMID_RANDOM_ENCOUNTERS)
-                species = SPECIES_NONE;
-            GenerateBattlePyramidWildMon(species);
-            BattleSetup_StartWildBattle();
-            return TRUE;
-        }
+        TryGenerateBattlePikeWildMon(FALSE);
+        BattleSetup_StartBattlePikeWildBattle();
+        return TRUE;
+    }
+    if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
+    {
+        u32 id = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_LEVEL);
+        enum Species species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
+        SetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES, &id);
+        if (!BATTLE_PYRAMID_RANDOM_ENCOUNTERS)
+            species = SPECIES_NONE;
+        GenerateBattlePyramidWildMon(species);
+        BattleSetup_StartWildBattle();
+        return TRUE;
     }
 
     return FALSE;
@@ -967,11 +943,9 @@ static bool32 StartWildBattleWithOWE_CheckMassOutbreak(enum CategoryOWE category
     return FALSE;
 }
 
-static bool32 StartWildBattleWithOWE_CheckDoubleBattle(struct ObjectEvent *owe, u32 headerId)
+static bool32 StartWildBattleWithOWE_CheckDoubleBattle(struct ObjectEvent *owe)
 {
-    enum WildPokemonArea wildArea;
-    enum TimeOfDay timeOfDay;
-    const struct WildPokemonInfo *wildMonInfo;
+    u8 wildArea;
     u32 metatileBehavior = MapGridGetMetatileBehaviorAt(owe->currentCoords.x, owe->currentCoords.y);
 
     if (TryDoDoubleWildBattle())
@@ -981,17 +955,13 @@ static bool32 StartWildBattleWithOWE_CheckDoubleBattle(struct ObjectEvent *owe, 
         if (MetatileBehavior_IsWaterWildEncounter(metatileBehavior))
         {
             wildArea = WILD_AREA_WATER;
-            timeOfDay = GetTimeOfDayForEncounters(headerId, wildArea);
-            wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo;
         }
         else
         {
             wildArea = WILD_AREA_LAND;
-            timeOfDay = GetTimeOfDayForEncounters(headerId, wildArea);
-            wildMonInfo = gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo;
         }
 
-        if (TryGenerateWildMon(wildMonInfo, wildArea, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE))
+        if (TryGenerateWildMon(wildArea, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE))
         {
             gParties[B_TRAINER_OPPONENT_A][1] = mon1;
             BattleSetup_StartDoubleWildBattle();
@@ -1064,34 +1034,7 @@ const u8 *GetOverworlWildEncounterScript(u32 objectEventId)
 
 static bool32 CheckCurrentWildMonHeaderForOWE(bool32 shouldSpawnWaterMons)
 {
-    u32 headerId = GetCurrentMapWildMonHeaderId();
-    enum TimeOfDay timeOfDay;
-
-    if (headerId == HEADER_NONE)
-    {
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PIKE_ROOM_WILD_MONS)
-        {
-            headerId = GetBattlePikeWildMonHeaderId();
-            timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-            return gBattlePikeWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo != NULL;
-        }
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_FLOOR)
-        {
-            headerId = gSaveBlock2Ptr->frontier.curChallengeBattleNum;
-            timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-            return gBattlePyramidWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo != NULL;
-        }
-        return FALSE;
-    }
-
-    if (shouldSpawnWaterMons)
-    {
-        timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_WATER);
-        return gWildMonHeaders[headerId].encounterTypes[timeOfDay].waterMonsInfo != NULL;
-    }
-
-    timeOfDay = GetTimeOfDayForEncounters(headerId, WILD_AREA_LAND);
-    return gWildMonHeaders[headerId].encounterTypes[timeOfDay].landMonsInfo != NULL;
+    return TRUE;
 }
 
 static u32 GetOldestActiveOWESlot(bool32 forceRemove)

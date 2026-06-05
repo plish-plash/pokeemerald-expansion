@@ -63,6 +63,7 @@ static void Task_OpenRegisteredPokeblockCase(u8);
 static void Task_AccessPokemonBoxLink(u8);
 static void ItemUseOnFieldCB_Bike(u8);
 static void ItemUseOnFieldCB_Rod(u8);
+static void ItemUseOnFieldCB_WildEncounter(u8);
 static void ItemUseOnFieldCB_Itemfinder(u8);
 static void ItemUseOnFieldCB_Berry(u8);
 static void ItemUseOnFieldCB_WailmerPailBerry(u8);
@@ -358,7 +359,27 @@ void ItemUseOutOfBattle_Rod(u8 taskId)
 
 static void ItemUseOnFieldCB_Rod(u8 taskId)
 {
-    StartFishing(GetItemSecondaryId(gSpecialVar_ItemId));
+    StartFishing(WILD_AREA_FISHING, GetItemSecondaryId(gSpecialVar_ItemId));
+    DestroyTask(taskId);
+}
+
+void ItemUseOutOfBattle_WildEncounter(u8 taskId)
+{
+    if (gMapHeader.mapType != MAP_TYPE_INDOOR
+     && (GetItemSecondaryId(gSpecialVar_ItemId) != WILD_AREA_SKY || IsMapTypeOutdoors(gMapHeader.mapType)))
+    {
+        sItemUseOnFieldCB = ItemUseOnFieldCB_WildEncounter;
+        SetUpItemUseOnFieldCallback(taskId);
+    }
+    else
+    {
+        DisplayDadsAdviceCannotUseItemMessage(taskId, gTasks[taskId].tUsingRegisteredKeyItem);
+    }
+}
+
+static void ItemUseOnFieldCB_WildEncounter(u8 taskId)
+{
+    StartFishing(GetItemSecondaryId(gSpecialVar_ItemId), 0);
     DestroyTask(taskId);
 }
 

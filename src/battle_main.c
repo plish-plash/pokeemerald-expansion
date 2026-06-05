@@ -5489,7 +5489,7 @@ static void HandleEndTurn_FinishBattle(void)
             TryPutPokemonTodayOnAir();
         }
 
-        if (gIsFishingEncounter && IsMonShiny(&gParties[B_TRAINER_OPPONENT_A][0]))
+        if (gEncounterArea == WILD_AREA_FISHING && IsMonShiny(&gParties[B_TRAINER_OPPONENT_A][0]))
             gChainFishingDexNavStreak = 0;
 
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK
@@ -5569,8 +5569,7 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void)
 {
     if (!gPaletteFade.active)
     {
-        gIsFishingEncounter = FALSE;
-        gIsSurfingEncounter = FALSE;
+        gEncounterArea = WILD_AREA_LAND;
         if (gDexNavSpecies && (gBattleOutcome == B_OUTCOME_WON || gBattleOutcome == B_OUTCOME_CAUGHT))
         {
             IncrementDexNavChain();

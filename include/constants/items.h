@@ -1052,6 +1052,11 @@ enum __attribute__((packed)) Item
     ITEM_TATSUGIRINITE = 872,
     ITEM_GLIMMORANITE = 873,
 
+    ITEM_SLINGSHOT = 874,
+    ITEM_CHALLENGE_BELT = 875,
+    ITEM_BIG_MAGNET = 876,
+    ITEM_PSYCHIC_BELL = 877,
+
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 };
@@ -1109,6 +1114,15 @@ enum BerryId
 #define EXP_3000  3
 #define EXP_10000 4
 #define EXP_30000 5
+
+#define WILD_AREA_LAND      0
+#define WILD_AREA_WATER     1
+#define WILD_AREA_ROCKS     2
+#define WILD_AREA_FISHING   3
+#define WILD_AREA_SKY       4
+#define WILD_AREA_CHALLENGE 5
+#define WILD_AREA_MAGNET    6
+#define WILD_AREA_PSYCHIC   7
 
 // Item type IDs (used to determine the exit callback)
 enum ItemType

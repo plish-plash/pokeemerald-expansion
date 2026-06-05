@@ -15825,6 +15825,72 @@ const struct ItemInfo gItemsInfo[] =
         .iconPic = gItemIcon_PokeshiDoll,
         .iconPalette = gItemIconPalette_PokeshiDoll,
     },
+
+    [ITEM_SLINGSHOT] =
+    {
+        .name = ITEM_NAME("Slingshot"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Use to pick a fight\n"
+            "with flying Pokémon."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_WildEncounter,
+        .secondaryId = WILD_AREA_SKY,
+        .iconPic = gItemIcon_Slingshot,
+        .iconPalette = gItemIconPalette_Slingshot,
+    },
+
+    [ITEM_CHALLENGE_BELT] =
+    {
+        .name = ITEM_NAME("Challenge Belt"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+    "A belt that provokes\n"
+    "nearby Fighting\n"
+    "Pokémon when worn."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_WildEncounter,
+        .secondaryId = WILD_AREA_CHALLENGE,
+        .iconPic = gItemIcon_ExpertBelt,
+        .iconPalette = gItemIconPalette_ExpertBelt,
+    },
+
+    [ITEM_BIG_MAGNET] =
+    {
+        .name = ITEM_NAME("Big Magnet"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+    "Use to pull nearby\n"
+    "wild Pokémon to you."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_WildEncounter,
+        .secondaryId = WILD_AREA_MAGNET,
+        .iconPic = gItemIcon_Magnet,
+        .iconPalette = gItemIconPalette_Magnet,
+    },
+
+    [ITEM_PSYCHIC_BELL] =
+    {
+        .name = ITEM_NAME("Psychic Bell"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+    "Use to meditate and\n"
+    "connect with nearby\n"
+    "Psychic Pokémon."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_FIELD,
+        .fieldUseFunc = ItemUseOutOfBattle_WildEncounter,
+        .secondaryId = WILD_AREA_PSYCHIC,
+        .iconPic = gItemIcon_SootheBell,
+        .iconPalette = gItemIconPalette_SootheBell,
+    },
 };
 
 #undef ITEM_NAME
