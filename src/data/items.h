@@ -8717,8 +8717,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffect = HOLD_EFFECT_MACHO_BRACE,
         .description = COMPOUND_STRING(
             "A hold item that\n"
-            "promotes growth,\n"
-            "but reduces Speed."),
+            "promotes growth."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8736,8 +8735,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "A hold item that\n"
-            "promotes HP gain,\n"
-            "but reduces Speed."),
+            "promotes HP gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8756,8 +8754,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "A hold item that\n"
-            "promotes Atk gain,\n"
-            "but reduces Speed."),
+            "promotes Atk gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8776,8 +8773,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "A hold item that\n"
-            "promotes Def gain,\n"
-            "but reduces Speed."),
+            "promotes Def gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8797,8 +8793,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "Hold item that pro-\n"
-            "motes Sp. Atk gain,\n"
-            "but reduces Speed."),
+            "motes Sp. Atk gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8817,8 +8812,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "Hold item that pro-\n"
-            "motes Sp. Def gain,\n"
-            "but reduces Speed."),
+            "motes Sp. Def gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
@@ -8837,8 +8831,7 @@ const struct ItemInfo gItemsInfo[] =
         .holdEffectParam = POWER_ITEM_BOOST,
         .description = COMPOUND_STRING(
             "A hold item that\n"
-            "promotes Spd gain,\n"
-            "but reduces Speed."),
+            "promotes Spd gain."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_EV_BOOST_HELD_ITEM,
         .type = ITEM_USE_BAG_MENU,
