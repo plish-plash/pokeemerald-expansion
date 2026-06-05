@@ -15,6 +15,7 @@
 #include "util.h"
 #include "data.h"
 #include "item.h"
+#include "palette.h"
 #include "constants/songs.h"
 
 static void Task_DoPokeballSendOutAnim(u8 taskId);
@@ -416,7 +417,7 @@ static void Task_DoPokeballSendOutAnim(u8 taskId)
     throwCaseId = gTasks[taskId].tThrowId;
     battler = gTasks[taskId].tBattler;
     ballId = GetBattlerPokeballItemId(battler);
-    LoadBallGfx(ballId);
+    LoadBallGfx(ballId, TRUE);
     ballSpriteId = CreateSprite(&gPokeBalls[ballId].spriteTemplate, 32, 80, 29);
     gSprites[ballSpriteId].data[0] = 0x80;
     gSprites[ballSpriteId].data[1] = 0;
@@ -1396,14 +1397,17 @@ static void SpriteCB_HitAnimHealthoxEffect(struct Sprite *sprite)
     }
 }
 
-void LoadBallGfx(enum PokeBall ballId)
+void LoadBallGfx(enum PokeBall ballId, bool8 inBattle)
 {
     u16 var;
 
     if (GetSpriteTileStartByTag(gPokeBalls[ballId].pic.tag) == 0xFFFF)
     {
+        u32 palette;
         LoadCompressedSpriteSheetUsingHeap(&gPokeBalls[ballId].pic);
-        LoadSpritePalette(&gPokeBalls[ballId].palette);
+        palette = LoadSpritePalette(&gPokeBalls[ballId].palette);
+        if (inBattle)
+            TimeMixBattleSpritePalette(OBJ_PLTT_ID(palette));
     }
 
     switch (ballId)
