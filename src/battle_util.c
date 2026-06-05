@@ -5611,7 +5611,7 @@ enum Obedience GetAttackerObedienceForAction(void)
         obedienceLevel = 80;
     
     obedienceLevel -= 10;
-    obedienceLevel += min(max(gBattleMons[gBattlerAttacker].friendship, STANDARD_FRIENDSHIP) - STANDARD_FRIENDSHIP, 80);
+    obedienceLevel += min(max(gBattleMons[gBattlerAttacker].friendship, STANDARD_FRIENDSHIP) - STANDARD_FRIENDSHIP, 160) / 2;
 
     // if (B_OBEDIENCE_MECHANICS >= GEN_8
     //  && !IsOtherTrainer(gBattleMons[gBattlerAttacker].otId, gBattleMons[gBattlerAttacker].otName))
