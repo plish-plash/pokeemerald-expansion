@@ -121,6 +121,9 @@ static const u8 gText_HelpfulTextHigher2[] = _("Just a little bit more!");
 static const u8 gText_HelpfulTextLower0[] = _("Uh oh!\nIt's about to escape!");
 static const u8 gText_HelpfulTextLower1[] = _("It sure is a fighter!");
 static const u8 gText_HelpfulTextLower2[] = _("Aw!\nYou almost had it.");
+static const u8 gText_HelpfulTextSky0[] = _("Keep your eye on it!");
+static const u8 gText_HelpfulTextSky1[] = _("Steady...");
+static const u8 gText_HelpfulTextSky2[] = _("Taking aim...");
 static const u8 gText_FishingWantToQuit[] = _("Do you want to let this one go?");
 static const u8 gText_CaughtPokemonFishing[] = _("{PLAYER} reeled in a POKéMON!{PAUSE_UNTIL_PRESS}");
 static const u8 gText_CaughtPokemonSky[] = _("{PLAYER} hit a POKéMON!\nIt's coming this way!{PAUSE_UNTIL_PRESS}");
@@ -145,14 +148,17 @@ static const u16 gBarColors[] =
     [OUTSIDE_3] = RGB(24, 31, 16)
 };
 
-const u8 * const sHelpfulTextTable[6] =
+const u8 * const sHelpfulTextTable[9] =
 {
     gText_HelpfulTextHigher0,
     gText_HelpfulTextHigher1,
     gText_HelpfulTextHigher2,
     gText_HelpfulTextLower0,
     gText_HelpfulTextLower1,
-    gText_HelpfulTextLower2
+    gText_HelpfulTextLower2,
+    gText_HelpfulTextSky0,
+    gText_HelpfulTextSky1,
+    gText_HelpfulTextSky2
 };
 
 static const struct WindowTemplate sWindowTemplates[] =
@@ -753,6 +759,21 @@ static void VblankCB_FishingGame(void)
 
 #define taskData            gTasks[taskId]
 
+enum GameMode
+{
+    GAME_MODE_FISHING,
+    GAME_MODE_SKY,
+};
+
+static enum GameMode GetGameMode(u8 rodType)
+{
+    switch (rodType >> 4)
+    {
+        case WILD_AREA_SKY: return GAME_MODE_SKY;
+        default: return GAME_MODE_FISHING;
+    }
+}
+
 void CB2_InitFishingMinigame(void)
 {
     u8 taskId;
@@ -976,7 +997,10 @@ static void CreateMinigameSprites(u8 taskId)
     taskData.tFishIconSpriteId = spriteId;
 
     // Create score meter sprite.
-    taskData.tScore = ApplyAbilityEffect(STARTING_SCORE, FG_EFFECT_SCORE_START, taskId); // Set the starting score.
+    if (GetGameMode(taskData.tRodType) == GAME_MODE_SKY)
+        taskData.tScore = SCORE_MAX;
+    else
+        taskData.tScore = ApplyAbilityEffect(STARTING_SCORE, FG_EFFECT_SCORE_START, taskId); // Set the starting score.
     taskData.tScoreDirection = FISH_DIR_RIGHT;
     y = SCORE_SECTION_Y;
     if (taskData.tGameStateBits & FG_SEPARATE_SCREEN)
@@ -1471,6 +1495,13 @@ static void UpdateHelpfulTextLower(u8 taskId)
     scoreMeterData.sTextCooldown = 60; // Reset the text cooldown counter.
 }
 
+static void UpdateHelpfulTextSky(u8 taskId)
+{
+    FillWindowPixelBuffer(0, PIXEL_FILL(1));
+    AddTextPrinterParameterized(0, FONT_NORMAL, sHelpfulTextTable[scoreMeterData.sScoreThird + 6], 0, 1, 1, NULL); // Print the helpful text that corresponds with the current score third.
+    scoreMeterData.sTextCooldown = 60; // Reset the text cooldown counter.
+}
+
 static u16 ApplyAbilityEffect(u16 value, u16 effectType, u8 taskId)
 {
     u32 i;
@@ -1553,9 +1584,15 @@ static bool32 FishIsInsideBar(u8 taskId)
 
 static void HandleScore(u8 taskId)
 {
+    bool8 won, lost;
+    enum GameMode gameMode = GetGameMode(taskData.tRodType);
+
+    if (gameMode == GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
+            taskData.tScore -= SCORE_DECREASE_SKY;
     if (FishIsInsideBar(taskId)) // If the fish hitbox is within the fishing bar.
     {
-        taskData.tScore += ApplyAbilityEffect(SCORE_INCREASE, FG_EFFECT_SCORE_INCREASE, taskId); // Increase the score.
+        if (gameMode != GAME_MODE_SKY)
+            taskData.tScore += ApplyAbilityEffect(SCORE_INCREASE, FG_EFFECT_SCORE_INCREASE, taskId); // Increase the score.
 
         if (taskData.tScoreDirection == FISH_DIR_LEFT) // Only on the frame when the fish enters the fishing bar area.
         {
@@ -1572,7 +1609,7 @@ static void HandleScore(u8 taskId)
     }
     else // If the fish hitbox is outside the fishing bar.
     {
-        if (gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
+        if (gameMode != GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
             taskData.tScore -= ApplyAbilityEffect(SCORE_DECREASE, FG_EFFECT_SCORE_DECREASE, taskId); // Decrease the score.
 
         gSprites[taskData.tScoreMeterSpriteId].sPerfectCatch = FALSE; // Can no longer achieve a perfect catch.
@@ -1591,14 +1628,21 @@ static void HandleScore(u8 taskId)
         }
     }
 
-    if (taskData.tScore >= SCORE_MAX) // If the score goal has been achieved.
+    won = taskData.tScore >= SCORE_MAX;
+    lost = taskData.tScore <= 0;
+    if (gameMode == GAME_MODE_SKY)
+    {
+        won = taskData.tScore <= 0 && taskData.tScoreDirection == FISH_DIR_RIGHT;
+        lost = taskData.tScore <= 0 && taskData.tScoreDirection == FISH_DIR_LEFT;
+    }
+
+    if (won) // If the score goal has been achieved.
     {
         taskData.tGameStateBits |= FG_PAUSED; // Freeze all sprite animations/movements.
         taskData.tFrameCounter = 0; // Reset the frame counter.
         taskData.func = Task_ReeledInFish;
     }
-
-    if (taskData.tScore <= 0) // If the score has hit 0.
+    else if (lost) // If the score has hit 0.
     {
         taskData.tGameStateBits |= FG_PAUSED; // Freeze all sprite animations/movements.
         taskData.tFrameCounter = 0; // Reset the frame counter.
@@ -2003,7 +2047,13 @@ static void SpriteCB_ScoreMeter(struct Sprite *sprite)
             sprite->sScoreThird--; // Decrease the score third by one.
 
             if (sprite->sTextCooldown == 0) // If the counter is at 0.
-                UpdateHelpfulTextLower(sprite->sTaskId); // Show the relevant helpful text.
+            {
+                // Show the relevant helpful text.
+                if (GetGameMode(gTasks[sprite->sTaskId].tRodType) == GAME_MODE_SKY)
+                    UpdateHelpfulTextSky(sprite->sTaskId); 
+                else
+                    UpdateHelpfulTextLower(sprite->sTaskId); 
+            }
         }
     }
     if (sprite->sTextCooldown != 0) // If the text cooldown counter is active.

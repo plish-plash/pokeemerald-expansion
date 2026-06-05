@@ -12,6 +12,7 @@
 #define STARTING_SCORE                  300  // The number of points you already have when the game starts.
 #define SCORE_INCREASE                  3    // The score increases by this many point every frame while the fish is within the bar.
 #define SCORE_DECREASE                  5    // The score decreases by this many point every frame while the fish is outside the bar.
+#define SCORE_DECREASE_SKY              8    // The score decreases by this many point every frame during the Sky mode.
 #define SCORE_MAX                       1920 // The number of points required to win. Must be divisible by SCORE_AREA_WIDTH.
 
 #define FISH_FIRST_MOVE_DELAY           0.8  // Number of seconds before the fish will make its first movement.
