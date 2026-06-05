@@ -24,6 +24,7 @@
 #include "battle_debug.h"
 #include "battle_pike.h"
 #include "battle_pyramid.h"
+#include "config/fishing_game.h"
 #include "constants/abilities.h"
 #include "constants/game_stat.h"
 #include "constants/item.h"
@@ -518,14 +519,14 @@ bool8 StandardWildEncounter(u16 curMetatileBehavior, u16 prevMetatileBehavior, b
             else if (prevMetatileBehavior != curMetatileBehavior && !AllowWildCheckOnNewMetatile())
                 return FALSE;
                 
-            return HabitatWildEncounter(WILD_AREA_WATER, WATER_ENCOUNTER_RATE);
+            return HabitatWildEncounter(WILD_AREA_WATER, WATER_ENCOUNTER_RATE, TRUE);
         }
     }
 
     return FALSE;
 }
 
-bool8 HabitatWildEncounter(u8 area, u32 encounterRate)
+bool8 HabitatWildEncounter(u8 area, u32 encounterRate, bool8 startBattle)
 {
     struct Roamer *roamer;
 
@@ -546,16 +547,19 @@ bool8 HabitatWildEncounter(u8 area, u32 encounterRate)
         if (TryGenerateWildMon(area, WILD_CHECK_REPEL | WILD_CHECK_KEEN_EYE) == TRUE)
         {
             gEncounterArea = area;
-            if (TryDoDoubleWildBattle())
+            if (startBattle)
             {
-                struct Pokemon mon1 = gParties[B_TRAINER_OPPONENT_A][0];
-                TryGenerateWildMon(area, WILD_CHECK_KEEN_EYE);
-                gParties[B_TRAINER_OPPONENT_A][1] = mon1;
-                BattleSetup_StartDoubleWildBattle();
-            }
-            else
-            {
-                BattleSetup_StartWildBattle();
+                if (TryDoDoubleWildBattle())
+                {
+                    struct Pokemon mon1 = gParties[B_TRAINER_OPPONENT_A][0];
+                    TryGenerateWildMon(area, WILD_CHECK_KEEN_EYE);
+                    gParties[B_TRAINER_OPPONENT_A][1] = mon1;
+                    BattleSetup_StartDoubleWildBattle();
+                }
+                else
+                {
+                    BattleSetup_StartWildBattle();
+                }
             }
             return TRUE;
         }
@@ -566,7 +570,7 @@ bool8 HabitatWildEncounter(u8 area, u32 encounterRate)
 
 void RockSmashWildEncounter(void)
 {
-    gSpecialVar_Result = HabitatWildEncounter(WILD_AREA_ROCKS, ROCKS_ENCOUNTER_RATE);
+    gSpecialVar_Result = HabitatWildEncounter(WILD_AREA_ROCKS, ROCKS_ENCOUNTER_RATE, TRUE);
 }
 
 bool8 SweetScentWildEncounter(void)
@@ -583,7 +587,10 @@ bool8 FishingWildEncounter(u8 rod)
     if (TryGenerateFishingWildMon(rod))
     {
         gEncounterArea = WILD_AREA_FISHING;
-        BattleSetup_StartWildBattle();
+        if (!FG_FISH_MINIGAME_ENABLED)
+        {
+            BattleSetup_StartWildBattle();
+        }
         return TRUE;
     }
     return FALSE;

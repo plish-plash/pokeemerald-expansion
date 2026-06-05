@@ -267,9 +267,10 @@ void LoadMonIconPalette(enum Species species)
         LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
 }
 
-void LoadMonIconPalettePersonality(enum Species species, u32 personality)
+u8 LoadMonIconPalettePersonality(enum Species species, u32 personality)
 {
     u8 palIndex;
+    u8 palSlot = 0xFF;
     species = SanitizeSpeciesId(species);
 #if P_GENDER_DIFFERENCES
     if (gSpeciesInfo[species].iconSpriteFemale != NULL && IsPersonalityFemale(species, personality))
@@ -278,7 +279,8 @@ void LoadMonIconPalettePersonality(enum Species species, u32 personality)
 #endif
         palIndex = gSpeciesInfo[species].iconPalIndex;
     if (IndexOfSpritePaletteTag(gMonIconPaletteTable[palIndex].tag) == 0xFF)
-        LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
+        palSlot = LoadSpritePalette(&gMonIconPaletteTable[palIndex]);
+    return palSlot;
 }
 
 void FreeMonIconPalettes(void)

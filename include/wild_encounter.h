@@ -24,7 +24,7 @@ extern u8 gChainFishingDexNavStreak;
 u8 ChooseWildMonLevel(u8 area, u8 min, u8 max);
 void DisableWildEncounters(bool8 disabled);
 bool8 StandardWildEncounter(u16 currMetaTileBehavior, u16 previousMetaTileBehavior, bool8 checkRate);
-bool8 HabitatWildEncounter(u8 area, u32 encounterRate);
+bool8 HabitatWildEncounter(u8 area, u32 encounterRate, bool8 startBattle);
 bool8 SweetScentWildEncounter(void);
 bool8 FishingWildEncounter(u8 rod);
 u16 GetLocalWildMon(bool8 *isWaterMon);
@@ -42,5 +42,6 @@ bool8 SetUpMassOutbreakEncounter(u8 flags);
 bool8 DoMassOutbreakEncounterTest(void);
 bool8 AreLegendariesInSootopolisPreventingEncounters(void);
 bool32 MapHasNoEncounterData(void);
+void UpdateChainFishingStreak(void);
 
 #endif // GUARD_WILD_ENCOUNTER_H
