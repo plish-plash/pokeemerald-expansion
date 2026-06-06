@@ -11,4 +11,3 @@
 
 Consider more ability effects for the different modes of the fishing game (fishing_game_ability_effects.h)
 Berry pests should roll a random bug encounter (OW_BERRY_PESTS)
-Streamline berry interactions

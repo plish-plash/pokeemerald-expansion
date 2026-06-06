@@ -2582,7 +2582,7 @@ void PlantBerryTree(u8 id, enum BerryId berry, u8 stage, bool8 allowGrowth)
     tree->berry = berry;
     tree->minutesUntilNextStage = GetMulchAffectedGrowthRate(GetStageDurationByBerryType(berry), tree->mulch, stage);
     tree->stage = stage;
-    tree->moistureLevel = 100;
+    tree->moistureLevel = 0;
     if (OW_BERRY_ALWAYS_WATERABLE)
     {
         // We simulate a tree having grown without water

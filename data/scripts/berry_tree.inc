@@ -23,43 +23,24 @@ BerryTree_EventScript_Sparkling::
 BerryTree_EventScript_CheckSoil::
 	lock
 	faceplayer
-	specialvar VAR_RESULT, PlayerHasBerries
-	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToPlant
 	specialvar VAR_RESULT, PlayerHasMulch
-	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToMulch
+	call_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToMulch
+	specialvar VAR_RESULT, PlayerHasBerries
+	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_ChooseBerryToPlant
 	message BerryTree_Text_ItsSoftLoamySoil
 	waitmessage
 	waitbuttonpress
 	release
 	end
 
-BerryTree_EventScript_WantToPlant::
-	specialvar VAR_RESULT, PlayerHasMulch
-	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_WantToPlantMulch
-	msgbox BerryTree_Text_WantToPlant, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_ChooseBerryToPlant
-	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPlanting
-	end
-
 BerryTree_EventScript_WantToMulch::
 .if OW_BERRY_MULCH_USAGE == TRUE
 	msgbox BerryTree_Text_WantToMulch, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_ChooseMulchToUse
-	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPlanting
 .endif
-	end
+	return
 
-BerryTree_EventScript_WantToPlantMulch::
 .if OW_BERRY_MULCH_USAGE == TRUE
-	message BerryTree_Text_ItsSoftLoamySoil
-	waitmessage
-	multichoice 0, 0, MULTI_BERRY_PLOT, FALSE
-	switch VAR_RESULT
-	case 0, BerryTree_EventScript_ChooseMulchToUse
-	case 1, BerryTree_EventScript_ChooseBerryToPlant
-	case 2, BerryTree_EventScript_CancelPlanting
-	case MULTI_B_PRESSED, BerryTree_EventScript_CancelPlanting
-
 BerryTree_EventScript_ChooseMulchToUse::
 	fadescreen FADE_TO_BLACK
 	closemessage
@@ -153,12 +134,6 @@ BerryTree_EventScript_CheckBerryFullyGrown::
 	lock
 	faceplayer
 	special ObjectEventInteractionGetBerryCountString
-.if OW_BERRY_MUTATIONS == TRUE
-	goto_if_eq VAR_RESULT, TRUE, BerryTree_EventScript_CheckBerryFullyGrown_Mutation
-.endif
-	msgbox BerryTree_Text_WantToPick, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_PickBerry
-	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPickingBerry
 
 .set BERRY_NORMAL_BAG_FULL, 0
 .set BERRY_NORMAL_SPACE_IN_BAG, 1
@@ -195,13 +170,6 @@ BerryTree_EventScript_BerryPocketFull::
 	release
 	end
 
-BerryTree_EventScript_CancelPickingBerry::
-	message BerryTree_Text_BerryLeftUnpicked
-	waitmessage
-	waitbuttonpress
-	release
-	end
-
 BerryTree_EventScript_ItemUsePlantBerry::
 	lockall
 	special ObjectEventInteractionGetBerryTreeData
@@ -229,17 +197,25 @@ BerryTree_EventScript_DontWater::
 	releaseall
 	end
 
+BerryTree_EventScript_AlreadyMoist::
+	message BerryTree_Text_AlreadyMoist
+	waitmessage
+	waitbuttonpress
+	goto BerryTree_EventScript_DontWater
+
 BerryTree_EventScript_ItemUseWailmerPail::
 	special ObjectEventInteractionGetBerryTreeData
 	lockall
+	specialvar VAR_RESULT, CanWaterBerryPlot
+	goto_if_eq VAR_RESULT, FALSE, BerryTree_EventScript_AlreadyMoist
 BerryTree_EventScript_WaterBerry::
 	special ObjectEventInteractionGetBerryName
 	message BerryTree_Text_WateredTheBerry
 	waitmessage
 	special ObjectEventInteractionWaterBerryTree
 	special DoWateringBerryTreeAnim
-	message BerryTree_Text_PlantIsDelighted
-	waitmessage
+@	message BerryTree_Text_PlantIsDelighted
+@	waitmessage
 	waitbuttonpress
 	releaseall
 	end
@@ -255,7 +231,8 @@ BerryTree_EventScript_PlantBerry::
 	return
 
 BerryTree_Text_ItsSoftLoamySoil:
-	.string "It's soft, loamy soil.$"
+	.string "It's soft, loamy soil.\n"
+	.string "A BERRY can be planted here.$"
 
 BerryTree_Text_WantToPlant:
 	.string "It's soft, loamy soil.\n"
@@ -319,9 +296,7 @@ BerryTree_Text_PickedTheBerry:
 
 BerryTree_Text_PutAwayBerry:
 	.string "{PLAYER} put away the {STR_VAR_1}\n"
-	.string "in the BAG's BERRIES POCKET.\p"
-	.string "The soil returned to its soft and\n"
-	.string "loamy state.$"
+	.string "in the BAG's BERRIES POCKET.$"
 
 BerryTree_Text_BerryPocketFull:
 	.string "The BAG's BERRIES POCKET is full.\p"
@@ -341,22 +316,13 @@ BerryTree_Text_WateredTheBerry:
 BerryTree_Text_PlantIsDelighted:
 	.string "The plant seems to be delighted.$"
 
+BerryTree_Text_AlreadyMoist:
+	.string "The soil is already moist.$"
+
 BerryTree_Text_ExclamationPoint:
 	.string "!$"
 
 .if OW_BERRY_MUTATIONS == TRUE
-BerryTree_EventScript_CheckBerryFullyGrown_Mutation:
-	msgbox BerryTree_Text_WantToPick_Mutation, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, BerryTree_EventScript_PickBerry
-	goto_if_eq VAR_RESULT, NO, BerryTree_EventScript_CancelPickingBerry_Mutation
-
-BerryTree_EventScript_CancelPickingBerry_Mutation::
-	message BerryTree_Text_BerryLeftUnpicked_Mutation
-	waitmessage
-	waitbuttonpress
-	release
-	end
-
 BerryTree_EventScript_BerryPocketFull_Mutation::
 	message BerryTree_Text_BerryPocketFull_Mutation
 	waitmessage
