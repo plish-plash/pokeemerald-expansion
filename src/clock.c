@@ -5,6 +5,7 @@
 #include "event_data.h"
 #include "field_specials.h"
 #include "field_weather.h"
+#include "item.h"
 #include "lottery_corner.h"
 #include "main.h"
 #include "overworld.h"
@@ -65,6 +66,7 @@ static void UpdatePerDay(struct Time *localTime)
         SetRandomLotteryNumber(daysSince);
         UpdateDaysPassedSinceFormChange(daysSince);
         DailyResetApricornTrees();
+        UpdateBerryMarket();
         *days = localTime->days;
     }
 }

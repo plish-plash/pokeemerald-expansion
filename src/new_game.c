@@ -52,6 +52,8 @@
 #include "difficulty.h"
 #include "follower_npc.h"
 
+#define STARTING_MONEY 3000
+
 extern const u8 EventScript_ResetAllMapFlags[];
 extern const u8 EventScript_ResetAllMapFlagsFrlg[];
 
@@ -188,7 +190,7 @@ void NewGameInitData(void)
     ResetGabbyAndTy();
     ClearSecretBases();
     ClearBerryTrees();
-    SetMoney(&gSaveBlock1Ptr->money, 3000);
+    SetMoney(&gSaveBlock1Ptr->money, STARTING_MONEY);
     SetCoins(0);
     ResetLinkContestBoolean();
     ResetGameStats();
@@ -234,6 +236,7 @@ void NewGameInitData(void)
     ResetItemFlags();
     ResetDexNav();
     ClearFollowerNPCData();
+    UpdateBerryMarket();
 }
 
 static void ResetMiniGamesRecords(void)

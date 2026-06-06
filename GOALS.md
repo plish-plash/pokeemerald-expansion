@@ -1,6 +1,6 @@
 - Catching is harder
-  - Balls can't be bought, they must be found or crafted (?)
-  - Balls can only catch certain types of mons: dive balls must be used to catch water types, etc.
+  - Trainer battles no longer give money; berries are more common and selling them is the main source of income (DONE)
+  - Craft balls from apricorns and other useful recipes
 - Training is more rewarding
   - Base stats are lower, EVs count for more (DONE)
   - Mons must hold training items to gain EVs from battle (DONE)

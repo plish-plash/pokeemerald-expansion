@@ -9,6 +9,7 @@
 #include "secret_base.h"
 #include "item_menu.h"
 #include "party_menu.h"
+#include "random.h"
 #include "strings.h"
 #include "load_save.h"
 #include "item_use.h"
@@ -819,7 +820,12 @@ const u8 *GetItemName(enum Item itemId)
 
 u32 GetItemPrice(enum Item itemId)
 {
-    return gItemsInfo[SanitizeItemId(itemId)].price;
+    itemId = SanitizeItemId(itemId);
+    if (itemId >= ITEM_CHERI_BERRY && itemId < ITEM_CHERI_BERRY + NUM_BERRIES)
+    {
+        return gItemsInfo[itemId].price * gSaveBlock1Ptr->berryMarket[itemId - ITEM_CHERI_BERRY] / 100;
+    }
+    return gItemsInfo[itemId].price;
 }
 
 static bool32 DoesItemHavePluralName(enum Item itemId)
@@ -987,4 +993,14 @@ bool32 IsItemShopCriteriaFulfilled(u32 itemId)
         return TRUE;
 
     return func(SanitizeItemId(itemId));
+}
+
+void UpdateBerryMarket(void)
+{
+    // TODO fluctuate instead of randomizing
+    u8 i;
+    for (i = 0; i < NUM_BERRIES; i++)
+    {
+        gSaveBlock1Ptr->berryMarket[i] = (Random() % 100) + 50;
+    }
 }

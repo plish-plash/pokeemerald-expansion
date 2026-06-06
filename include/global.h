@@ -1209,6 +1209,7 @@ struct SaveBlock1
     u8 rivalName[PLAYER_NAME_LENGTH + 1];
     struct DaycareMon route5DayCareMon;
 #endif
+    u8 berryMarket[NUM_BERRIES];
     // sizeof: 0x3???
 };
 
