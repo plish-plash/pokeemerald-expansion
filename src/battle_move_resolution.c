@@ -4247,7 +4247,12 @@ static enum MoveEndResult MoveEndClearBits(struct BattleCalcValues *cv)
 
     // If the Pokémon needs to keep track of move usage for its evolutions, do it
     if (originallyUsedMove != MOVE_NONE)
+    {
         TryUpdateEvolutionTracker(IF_USED_MOVE_X_TIMES, 1, originallyUsedMove);
+        // Gain EVs from using moves
+        if (GetBattlerTrainer(cv->battlerAtk) == B_TRAINER_PLAYER && !gBattleStruct->unableToUseMove)
+            MonGainMoveEVs(&gParties[B_TRAINER_PLAYER][gBattlerPartyIndexes[cv->battlerAtk]], originallyUsedMove);
+    }
 
     SetSameMoveTurnValues(cv->moveEffect);
     TryClearChargeVolatile(moveType);

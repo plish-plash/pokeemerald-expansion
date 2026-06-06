@@ -5129,12 +5129,93 @@ void MonGainEVs(struct Pokemon *mon, enum Species defeatedSpecies)
             break;
         }
 
-        if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
-            evIncrease = (bonus / 4) * multiplier;
-
         if (totalEVs + (s16)evIncrease > currentEVCap)
             evIncrease = ((s16)evIncrease + currentEVCap) - (totalEVs + evIncrease);
 
+        if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS)
+        {
+            int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
+            int val2 = evs[i] + evIncrease;
+            evIncrease = val1 - val2;
+        }
+
+        evs[i] += evIncrease;
+        totalEVs += evIncrease;
+        SetMonData(mon, MON_DATA_HP_EV + i, &evs[i]);
+    }
+}
+
+void MonGainMoveEVs(struct Pokemon *mon, enum Move move)
+{
+    u8 evs[NUM_STATS];
+    u8 statChanges[NUM_STATS] = {0};
+    enum BattleMoveEffects moveEffect = gMovesInfo[move].effect;
+    u16 evIncrease = 0;
+    u16 totalEVs = 0;
+    u16 heldItem;
+    enum HoldEffect holdEffect;
+    enum Stat i;
+    u8 multiplier;
+    u32 effect;
+    u32 currentEVCap = GetCurrentEVCap();
+
+    heldItem = GetMonData(mon, MON_DATA_HELD_ITEM, 0);
+    if (heldItem == ITEM_ENIGMA_BERRY_E_READER)
+    {
+        if (gMain.inBattle)
+            holdEffect = gEnigmaBerries[0].holdEffect;
+        else
+        #if FREE_ENIGMA_BERRY == FALSE
+            holdEffect = gSaveBlock1Ptr->enigmaBerry.holdEffect;
+        #else
+            holdEffect = 0;
+        #endif //FREE_ENIGMA_BERRY
+    }
+    else
+    {
+        holdEffect = GetItemHoldEffect(heldItem);
+    }
+
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        evs[i] = GetMonData(mon, MON_DATA_HP_EV + i, 0);
+        totalEVs += evs[i];
+    }
+
+    multiplier = moveEffect == EFFECT_HIT ? 1 : 2;
+    for (effect = 0; effect < gMovesInfo[move].numAdditionalEffects; effect++)
+    {
+        const struct AdditionalEffect* addEffect = &gMovesInfo[move].additionalEffects[effect];
+        enum MoveEffect addMoveEffect = addEffect->moveEffect;
+        if (addMoveEffect == MOVE_EFFECT_STAT_PLUS || addMoveEffect == MOVE_EFFECT_STAT_MINUS || addMoveEffect == STAT_CHANGE_EFFECT_PLUS || addMoveEffect == STAT_CHANGE_EFFECT_MINUS)
+        {
+            statChanges[STAT_HP] += (addEffect->accuracy + addEffect->evasion) * multiplier;
+            statChanges[STAT_ATK] += addEffect->attack * multiplier;
+            statChanges[STAT_DEF] += addEffect->defense * multiplier;
+            statChanges[STAT_SPEED] += addEffect->speed * multiplier;
+            statChanges[STAT_SPATK] += addEffect->spAtk * multiplier;
+            statChanges[STAT_SPDEF] += addEffect->spDef * multiplier;
+        }
+    }
+    if (moveEffect == EFFECT_RESTORE_HP || moveEffect == EFFECT_REST || moveEffect == EFFECT_PROTECT)
+        statChanges[STAT_HP] += multiplier;
+
+    for (i = 0; i < NUM_STATS; i++)
+    {
+        if (totalEVs >= currentEVCap)
+            break;
+
+        evIncrease = statChanges[i];
+        if (evIncrease == 0)
+            continue;
+        
+        if (CheckMonHasHadPokerus(mon))
+            evIncrease *= 2;
+        if (holdEffect == HOLD_EFFECT_MACHO_BRACE)
+            evIncrease *= 2;
+
+        if (totalEVs + (s16)evIncrease > currentEVCap)
+            evIncrease = ((s16)evIncrease + currentEVCap) - (totalEVs + evIncrease);
         if (evs[i] + (s16)evIncrease > MAX_PER_STAT_EVS)
         {
             int val1 = (s16)evIncrease + MAX_PER_STAT_EVS;
