@@ -4693,9 +4693,9 @@ u32 GetBattlerTotalSpeedStat(enum BattlerId battler, enum Ability ability, enum 
     }
 
     // item effects
-    // if (holdEffect == HOLD_EFFECT_MACHO_BRACE || holdEffect == HOLD_EFFECT_POWER_ITEM)
-    //     speed /= 2;
-    if (holdEffect == HOLD_EFFECT_IRON_BALL)
+    if (holdEffect == HOLD_EFFECT_MACHO_BRACE || holdEffect == HOLD_EFFECT_POWER_ITEM)
+        speed /= 2;
+    else if (holdEffect == HOLD_EFFECT_IRON_BALL)
         speed /= 2;
     else if (holdEffect == HOLD_EFFECT_CHOICE_SCARF && GetActiveGimmick(battler) != GIMMICK_DYNAMAX)
         speed = (speed * 150) / 100;

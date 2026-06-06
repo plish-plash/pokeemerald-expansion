@@ -221,12 +221,7 @@ static const struct MenuAction sItemStorage_MenuActions[] =
 
 static const u16 sNewGamePCItems[][7] =
 {
-    { ITEM_POWER_WEIGHT, 1 },
-    { ITEM_POWER_BRACER, 1 },
-    { ITEM_POWER_BELT, 1 },
-    { ITEM_POWER_LENS, 1 },
-    { ITEM_POWER_BAND, 1 },
-    { ITEM_POWER_ANKLET, 1 },
+    { ITEM_POTION, 1 },
     { ITEM_NONE, 0 }
 };
 
