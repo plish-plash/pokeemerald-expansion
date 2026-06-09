@@ -1210,6 +1210,7 @@ struct SaveBlock1
     struct DaycareMon route5DayCareMon;
 #endif
     u8 berryMarket[NUM_BERRIES];
+    u32 unlockedRecipes[8];
     // sizeof: 0x3???
 };
 

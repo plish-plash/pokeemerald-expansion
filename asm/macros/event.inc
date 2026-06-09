@@ -2949,3 +2949,8 @@
 	getbraillestringwidth \text
 	call EventScript_BrailleCursorWaitButton
 	.endm
+
+	@ Opens the specified crafting UI
+	.macro opencrafting
+	callnative OpenCraftingMenu_FromScript
+	.endm

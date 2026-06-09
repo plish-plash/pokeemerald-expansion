@@ -3693,11 +3693,10 @@ EWRAM_DATA u8 sItemIconSpriteId2 = 0;
 static void ShowItemIconSprite(enum Item item, bool8 firstTime, bool8 flash);
 static void DestroyItemIconSprite(void);
 
-static u8 ReformatItemDescription(enum Item item, u8 *dest)
+u8 ReformatItemDescription(enum Item item, u8 *dest, u8 maxChars)
 {
     u8 count = 0;
     u8 numLines = 1;
-    u8 maxChars = 32;
     u8 *desc = (u8 *)GetItemDescription(item);
 
     while (*desc != EOS)
@@ -3775,7 +3774,7 @@ void ScriptShowItemDescription(struct ScriptContext *ctx)
     SetStandardWindowBorderStyle(sHeaderBoxWindowId, FALSE);
     DrawStdFrameWithCustomTileAndPalette(sHeaderBoxWindowId, FALSE, 0x214, 14);
 
-    if (ReformatItemDescription(item, dst) == 1)
+    if (ReformatItemDescription(item, dst, 32) == 1)
         textY = 4;
     else
         textY = 0;
