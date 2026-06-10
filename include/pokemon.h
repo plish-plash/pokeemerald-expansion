@@ -371,6 +371,7 @@ struct BattlePokemon
     u8 metLevel:7;
     u8 isShiny:1;
     u8 affectionHearts;
+    bool8 hasGainedEVsFromMove[MAX_MON_MOVES];
 };
 
 struct EvolutionParam

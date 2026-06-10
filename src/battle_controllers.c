@@ -1459,6 +1459,7 @@ static u32 GetBattlerMonData(enum BattlerId battler, struct Pokemon *party, u32 
         {
             battleMon.moves[size] = GetMonData(&party[monId], MON_DATA_MOVE1 + size);
             battleMon.pp[size] = GetMonData(&party[monId], MON_DATA_PP1 + size);
+            battleMon.hasGainedEVsFromMove[size] = FALSE;
         }
         battleMon.ppBonuses = GetMonData(&party[monId], MON_DATA_PP_BONUSES);
         battleMon.friendship = GetMonData(&party[monId], MON_DATA_FRIENDSHIP);

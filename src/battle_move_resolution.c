@@ -4251,7 +4251,13 @@ static enum MoveEndResult MoveEndClearBits(struct BattleCalcValues *cv)
         TryUpdateEvolutionTracker(IF_USED_MOVE_X_TIMES, 1, originallyUsedMove);
         // Gain EVs from using moves
         if (GetBattlerTrainer(cv->battlerAtk) == B_TRAINER_PLAYER && !gBattleStruct->unableToUseMove)
-            MonGainMoveEVs(&gParties[B_TRAINER_PLAYER][gBattlerPartyIndexes[cv->battlerAtk]], originallyUsedMove);
+        {
+            if (!gBattleMons[cv->battlerAtk].hasGainedEVsFromMove[gChosenMovePos])
+            {
+                gBattleMons[cv->battlerAtk].hasGainedEVsFromMove[gChosenMovePos] = TRUE;
+                MonGainMoveEVs(&gParties[B_TRAINER_PLAYER][gBattlerPartyIndexes[cv->battlerAtk]], originallyUsedMove);
+            }
+        }
     }
 
     SetSameMoveTurnValues(cv->moveEffect);

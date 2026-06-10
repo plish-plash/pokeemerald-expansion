@@ -1524,6 +1524,7 @@ u16 GiveMoveToBattleMon(struct BattlePokemon *mon, enum Move move)
         {
             mon->moves[i] = move;
             mon->pp[i] = GetMovePP(move);
+            mon->hasGainedEVsFromMove[i] = FALSE;
             return move;
         }
     }
@@ -1558,6 +1559,7 @@ void SetBattleMonMoveSlot(struct BattlePokemon *mon, enum Move move, u8 slot)
 {
     mon->moves[slot] = move;
     mon->pp[slot] = GetMovePP(move);
+    mon->hasGainedEVsFromMove[slot] = FALSE;
 }
 
 void GiveMonInitialMoveset(struct Pokemon *mon)
@@ -3406,6 +3408,7 @@ void PokemonToBattleMon(struct Pokemon *src, struct BattlePokemon *dst)
     {
         dst->moves[i] = GetMonData(src, MON_DATA_MOVE1 + i);
         dst->pp[i] = GetMonData(src, MON_DATA_PP1 + i);
+        dst->hasGainedEVsFromMove[i] = FALSE;
     }
 
     dst->species = GetMonData(src, MON_DATA_SPECIES);

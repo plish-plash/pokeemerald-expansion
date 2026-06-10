@@ -1022,6 +1022,7 @@ void HandleMoveSwitching(enum BattlerId battler)
         if (gMoveSelectionCursor[battler] != gMultiUsePlayerCursor)
         {
             struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct *)(&gBattleResources->bufferA[battler][4]);
+            bool8 hasGainedEVsFromMove[MAX_MON_MOVES];
             s32 i;
 
             // swap moves and pp
@@ -1036,6 +1037,12 @@ void HandleMoveSwitching(enum BattlerId battler)
             i = moveInfo->maxPp[gMoveSelectionCursor[battler]];
             moveInfo->maxPp[gMoveSelectionCursor[battler]] = moveInfo->maxPp[gMultiUsePlayerCursor];
             moveInfo->maxPp[gMultiUsePlayerCursor] = i;
+
+            for (i = 0; i < MAX_MON_MOVES; i++)
+                hasGainedEVsFromMove[i] = gBattleMons[battler].hasGainedEVsFromMove[i];
+            i = hasGainedEVsFromMove[gMoveSelectionCursor[battler]];
+            hasGainedEVsFromMove[gMoveSelectionCursor[battler]] = hasGainedEVsFromMove[gMultiUsePlayerCursor];
+            hasGainedEVsFromMove[gMultiUsePlayerCursor] = i;
 
             if (gBattleMons[battler].volatiles.mimickedMoves & (1u << gMoveSelectionCursor[battler]))
             {
@@ -1062,6 +1069,7 @@ void HandleMoveSwitching(enum BattlerId battler)
             {
                 gBattleMons[battler].moves[i] = moveInfo->moves[i];
                 gBattleMons[battler].pp[i] = moveInfo->currentPp[i];
+                gBattleMons[battler].hasGainedEVsFromMove[i] = hasGainedEVsFromMove[i];
             }
 
             if (!(gBattleMons[battler].volatiles.transformed))
@@ -2021,7 +2029,10 @@ static void PlayerHandleChooseAction(enum BattlerId battler)
 
     gBattlerControllerFuncs[battler] = HandleChooseActionAfterDma3;
     BattleTv_ClearExplosionFaintCause();
-    BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
+    if (gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+        BattlePutTextOnWindow(gText_BattleMenuTrainer, B_WIN_ACTION_MENU);
+    else
+        BattlePutTextOnWindow(gText_BattleMenu, B_WIN_ACTION_MENU);
 
     for (i = 0; i < 4; i++)
         ActionSelectionDestroyCursorAt(i);
