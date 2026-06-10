@@ -19,7 +19,7 @@
 #define FISH_ICON_HITBOX_WIDTH          12   // Width of the fish's hitbox in number of pixels.
 #define FISH_SPEED_MULTIPLIER           100  // Global fish speed multiplier. It is a percent, so 50 would be half speed and 200 would be double speed.
 
-#define DEFAULT_TREASURE_CHANCE         30   // Percent chance a random treasure will spawn if FG_VAR_TREASURE_CHANCE is 0.
+#define DEFAULT_TREASURE_CHANCE         50   // Percent chance a random treasure will spawn if FG_VAR_TREASURE_CHANCE is 0.
 #define TREASURE_ITEM_POOL_SIZE         14   // Number of different items allowed in the treasure pool.
 #define TREASURE_ITEM_COMMON_WEIGHT     50   // The percent chance the treasure item will be restricted to the lower(more common) half of the current pool.
 #define TREASURE_ICON_HITBOX_WIDTH      12   // Width of the treasure's hitbox in number of pixels.
@@ -202,6 +202,7 @@ enum {
 #define TAG_VAGUE_FISH          0x1005
 #define TAG_SCORE_BACKING       0x1006
 #define TAG_ITEM                0x1009
+#define TAG_FEATHER             0x100A
 
 // Game state bit flags
 #define FG_SEPARATE_SCREEN      (1 << 0)

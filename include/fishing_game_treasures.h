@@ -43,4 +43,14 @@ static const u16 sTreasureItems[] =
     ITEM_TM_EARTHQUAKE,
 };
 
+static const u16 sSkyTreasureItems[] =
+{
+    ITEM_HEALTH_FEATHER,
+    ITEM_MUSCLE_FEATHER,
+    ITEM_RESIST_FEATHER,
+    ITEM_GENIUS_FEATHER,
+    ITEM_CLEVER_FEATHER,
+    ITEM_SWIFT_FEATHER,
+};
+
 #endif // GUARD_FISHING_GAME_TREASURES_H

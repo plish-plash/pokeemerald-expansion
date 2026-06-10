@@ -213,6 +213,8 @@ static bool32 Fishing_GetRodOut(struct Task *task)
     playerObjEvent->enableAnim = TRUE;
     if (task->tHabitat == WILD_AREA_FISHING)
         SetPlayerAvatarFishing(playerObjEvent->facingDirection);
+    else
+        ResetPlayerAvatar(task->tPlayerGfxId);
     task->tStep = FISHING_WAIT_BEFORE_DOTS;
     return FALSE;
 }

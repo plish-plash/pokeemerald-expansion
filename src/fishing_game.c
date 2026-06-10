@@ -103,6 +103,8 @@ static const u32 gPerfect_Gfx[] = INCBIN_U32("graphics/fishing_game/perfect.4bpp
 static const u32 gQuestionMark_Gfx[] = INCBIN_U32("graphics/fishing_game/question_mark.4bpp.lz");
 static const u32 gVagueFish_Gfx[] = INCBIN_U32("graphics/fishing_game/vague_fish.4bpp.lz");
 static const u32 gTreasure_Gfx[] = INCBIN_U32("graphics/fishing_game/treasure.4bpp");
+static const u32 gFeather_Gfx[] = INCBIN_U32("graphics/fishing_game/feather.4bpp");
+static const u16 sFeather_Pal[] = INCBIN_U16("graphics/fishing_game/feather.gbapal");
 static const u32 gFishingGameOWBG_Gfx[] = INCBIN_U32("graphics/fishing_game/fishing_bg_ow_tiles.4bpp.lz");
 static const u16 gFishingGameOWBG_Pal[] = INCBIN_U16("graphics/fishing_game/fishing_bg_ow_tiles.gbapal");
 static const u32 gFishingGameOWBG_Tilemap[] = INCBIN_U32("graphics/fishing_game/fishing_bg_ow_tiles.bin.lz");
@@ -131,6 +133,7 @@ static const u8 gText_CaughtPokemonMagnet[] = _("The magnet pulled in a POKéMON
 static const u8 gText_CaughtPokemonPsychic[] = _("A POKéMON appeared!{PAUSE_UNTIL_PRESS}");
 static const u8 gText_PokemonGotAway[] = _("Oh, no!\nThe POKéMON got away…{PAUSE_UNTIL_PRESS}");
 static const u8 gText_ReeledInTreasure[] = _("{PLAYER} reeled in a TREASURE!");
+static const u8 gText_FeatherFell[] = _("A FEATHER fell to the ground!");
 static const u8 gText_PulledInTreasure[] = _("{PLAYER} pulled in a TREASURE!");
 static const u8 gText_FoundATreasureItem[] = _("{PLAYER} found one\n{STR_VAR_2}!");
 static const u8 gText_PutTreasureInPocket[] = _("{PLAYER} put away the {STR_VAR_2}\nin the {STR_VAR_3} POCKET.");
@@ -262,6 +265,28 @@ static const struct SpriteFrameImage sPicTable_Treasure[] =
     treasure_score_frame(gTreasure_Gfx, 15),
     treasure_score_frame(gTreasure_Gfx, 16),
     treasure_score_frame(gTreasure_Gfx, 17),
+};
+
+static const struct SpriteFrameImage sPicTable_Feather[] =
+{
+    treasure_score_frame(gFeather_Gfx, 0),
+    treasure_score_frame(gFeather_Gfx, 1),
+    treasure_score_frame(gFeather_Gfx, 2),
+    treasure_score_frame(gFeather_Gfx, 3),
+    treasure_score_frame(gFeather_Gfx, 4),
+    treasure_score_frame(gFeather_Gfx, 5),
+    treasure_score_frame(gFeather_Gfx, 6),
+    treasure_score_frame(gFeather_Gfx, 7),
+    treasure_score_frame(gFeather_Gfx, 8),
+    treasure_score_frame(gFeather_Gfx, 9),
+    treasure_score_frame(gFeather_Gfx, 10),
+    treasure_score_frame(gFeather_Gfx, 11),
+    treasure_score_frame(gFeather_Gfx, 12),
+    treasure_score_frame(gFeather_Gfx, 13),
+    treasure_score_frame(gFeather_Gfx, 14),
+    treasure_score_frame(gFeather_Gfx, 15),
+    treasure_score_frame(gFeather_Gfx, 16),
+    treasure_score_frame(gFeather_Gfx, 17),
 };
 
 static const union AnimCmd sAnim_Treasure0[] =
@@ -582,6 +607,10 @@ static const struct SpritePalette sSpritePalettes_FishingGame[] =
         .data = sFishingBar_Pal,
         .tag = TAG_FISHING_BAR
     },
+    {
+        .data = sFeather_Pal,
+        .tag = TAG_FEATHER
+    },
     {NULL},
 };
 
@@ -673,6 +702,17 @@ static const struct SpriteTemplate sSpriteTemplate_Treasure =
     .callback = SpriteCB_Treasure
 };
 
+static const struct SpriteTemplate sSpriteTemplate_Feather =
+{
+    .tileTag = TAG_NONE,
+    .paletteTag = TAG_FEATHER,
+    .oam = &sOam_Treasure,
+    .anims = sAnims_Treasure,
+    .images = sPicTable_Feather,
+    .affineAnims = sAffineAnims_Treasure,
+    .callback = SpriteCB_Treasure
+};
+
 static const struct SpriteTemplate sSpriteTemplate_Item =
 {
     .tileTag = TAG_ITEM,
@@ -708,7 +748,7 @@ static void VblankCB_FishingGame(void)
 #define tMonIconPalNum      data[12]
 #define tAbility            data[13]
 #define tPlayerGFXId        data[14]
-#define tRodType            data[15] // upper 4 bits are habitat, lower 4 bits are rod type
+#define tRodType            data[15]
 
 // Data for all sprites
 #define sTaskId             data[0]
@@ -765,12 +805,14 @@ enum GameMode
     GAME_MODE_SKY,
 };
 
-static enum GameMode GetGameMode(u8 rodType)
+static EWRAM_DATA enum GameMode sGameMode;
+
+static void SetGameMode(u8 habitat)
 {
-    switch (rodType >> 4)
+    switch (habitat)
     {
-        case WILD_AREA_SKY: return GAME_MODE_SKY;
-        default: return GAME_MODE_FISHING;
+        case WILD_AREA_SKY: sGameMode = GAME_MODE_SKY; break;
+        default: sGameMode = GAME_MODE_FISHING; break;
     }
 }
 
@@ -830,7 +872,8 @@ void CB2_InitFishingMinigame(void)
         oldTaskId = FindTaskIdByFunc(Task_UnableToUseOW);
     taskId = CreateTask(Task_FishingGame, 0);
     taskData.tGameStateBits |= FG_SEPARATE_SCREEN;
-    taskData.tRodType = gTasks[oldTaskId].tRodType | (gTasks[oldTaskId].data[4] << 4);
+    taskData.tRodType = gTasks[oldTaskId].tRodType;
+    SetGameMode(gTasks[oldTaskId].data[4]);
     DestroyTask(oldTaskId);
 
     CreateMinigameSprites(taskId);
@@ -861,6 +904,8 @@ void Task_InitOWFishingMinigame(u8 taskId)
     LoadFishingSpritesheets();
 
     taskData.tGameStateBits &= ~FG_SEPARATE_SCREEN;
+    SetGameMode(taskData.tRodType >> 4);
+    taskData.tRodType &= 0xF;
     CreateMinigameSprites(taskId);
 
     if (FG_FLAG_FIRST_TIME_TUTORIAL != 0 && !FlagGet(FG_FLAG_FIRST_TIME_TUTORIAL))
@@ -908,6 +953,7 @@ static void CreateMinigameSprites(u8 taskId)
     u8 sections = NUM_SCORE_SECTIONS;
     u16 species = GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_SPECIES);
     u8 iconPalSlot = LoadMonIconPalettePersonality(species, GetMonData(&gParties[B_TRAINER_OPPONENT_A][0], MON_DATA_PERSONALITY));
+    u16 treasureChance;
 
     taskData.tGameStateBits |= FG_PAUSED; // Pause the sprite animations/movements until the game starts.
 
@@ -929,7 +975,7 @@ static void CreateMinigameSprites(u8 taskId)
     // Set width of fishing bar.
     if (FG_BAR_WIDTH_FROM_ROD_TYPE == TRUE)
     {
-        switch (taskData.tRodType & 0xF)
+        switch (taskData.tRodType)
         {
         case GOOD_ROD:
             spriteData.sBarWidth = GOOD_ROD_BAR_WIDTH;
@@ -992,12 +1038,12 @@ static void CreateMinigameSprites(u8 taskId)
     spriteData.subpriority = 1;
     spriteData.sFishPosition = FISH_ICON_START_X * POSITION_ADJUSTMENT;
     spriteData.sTimeToNextMove = (FISH_FIRST_MOVE_DELAY * 60);
-    spriteData.sFishSpecies += taskData.tRodType & 0xF;
+    spriteData.sFishSpecies += taskData.tRodType;
     SetFishingSpeciesBehavior(spriteId, species);
     taskData.tFishIconSpriteId = spriteId;
 
     // Create score meter sprite.
-    if (GetGameMode(taskData.tRodType) == GAME_MODE_SKY)
+    if (sGameMode == GAME_MODE_SKY)
         taskData.tScore = SCORE_MAX;
     else
         taskData.tScore = ApplyAbilityEffect(STARTING_SCORE, FG_EFFECT_SCORE_START, taskId); // Set the starting score.
@@ -1044,19 +1090,19 @@ static void CreateMinigameSprites(u8 taskId)
     }
 
     // Create treasure sprite.
-    if (taskData.tRodType >> 4 == WILD_AREA_FISHING || taskData.tRodType >> 4 == WILD_AREA_MAGNET)
+    treasureChance = DEFAULT_TREASURE_CHANCE;
+    if (taskData.tRodType == OLD_ROD)
+        treasureChance /= 2;
+    if (FG_VAR_TREASURE_CHANCE != 0)
     {
-        if (FG_VAR_TREASURE_CHANCE != 0)
-        {
-            if ((Random() % 100) < VarGet(FG_VAR_TREASURE_CHANCE))
-            {
-                CreateTreasureSprite(taskId);
-            }
-        }
-        else if ((Random() % 100) < DEFAULT_TREASURE_CHANCE)
+        if ((Random() % 100) < VarGet(FG_VAR_TREASURE_CHANCE))
         {
             CreateTreasureSprite(taskId);
         }
+    }
+    else if ((Random() % 100) < DEFAULT_TREASURE_CHANCE)
+    {
+        CreateTreasureSprite(taskId);
     }
 }
 
@@ -1069,7 +1115,10 @@ static void CreateTreasureSprite(u8 taskId)
     if (taskData.tGameStateBits & FG_SEPARATE_SCREEN)
         y += SEPARATE_SCREEN_MODIFIER;
         
-    spriteId = CreateSprite(&sSpriteTemplate_Treasure, TREASURE_ICON_START_X, y, 2);
+    if (sGameMode == GAME_MODE_SKY)
+        spriteId = CreateSprite(&sSpriteTemplate_Feather, TREASURE_ICON_START_X, y, 2);
+    else
+        spriteId = CreateSprite(&sSpriteTemplate_Treasure, TREASURE_ICON_START_X, y, 2);
     spriteData.invisible = TRUE;
     spriteData.sTaskId = taskId;
     spriteData.sTreasurePosition = TREASURE_ICON_MIN_POS;
@@ -1077,9 +1126,12 @@ static void CreateTreasureSprite(u8 taskId)
         spriteData.oam.priority = 1;
     spriteData.sTreasScoreFrame = 0;
     spriteData.sTreasureState = TREASURE_NOT_SPAWNED;
-    spriteData.sTreasureStartTime = (TREASURE_SPAWN_MIN + (Random() % ((TREASURE_SPAWN_MAX - TREASURE_SPAWN_MIN) + 1)));
+    if (sGameMode == GAME_MODE_SKY)
+        spriteData.sTreasureStartTime = 20;
+    else
+        spriteData.sTreasureStartTime = (TREASURE_SPAWN_MIN + (Random() % ((TREASURE_SPAWN_MAX - TREASURE_SPAWN_MIN) + 1)));
     taskData.tTreasureSpriteId = spriteId;
-    SetFishingTreasureItem((u8)(taskData.tRodType & 0xF));
+    SetFishingTreasureItem(taskData.tRodType);
 }
 
 static void SetAbilityEffectData(u16 ability, u8 spriteId)
@@ -1121,6 +1173,12 @@ static void SetFishingTreasureItem(u8 rod)
     u8 arrayCount = (u8)ARRAY_COUNT(sTreasureItems);
     u8 random = Random() % TREASURE_ITEM_POOL_SIZE;
     u8 item;
+
+    if (sGameMode == GAME_MODE_SKY)
+    {
+        gSpecialVar_ItemId = sSkyTreasureItems[Random() % ARRAY_COUNT(sSkyTreasureItems)];
+        return;
+    }
 
     if (FG_VAR_ITEM_RARITY != 0)
     {
@@ -1348,17 +1406,18 @@ static void Task_ReeledInFish(u8 taskId)
 
         FlagSet(FG_FLAG_FIRST_TIME_TUTORIAL);
         FillWindowPixelBuffer(0, PIXEL_FILL(1));
-        switch (taskData.tRodType >> 4)
+        switch (sGameMode)
         {
-            case WILD_AREA_SKY:
+            case GAME_MODE_SKY:
                 StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonSky);
                 break;
-            case WILD_AREA_MAGNET:
-                StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonMagnet);
-                break;
-            case WILD_AREA_PSYCHIC:
-                StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonPsychic);
-                break;
+            // case WILD_AREA_MAGNET:
+            //     StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonMagnet);
+            //     break;
+            // case WILD_AREA_PSYCHIC:
+            //     StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonPsychic);
+            //     break;
+            case GAME_MODE_FISHING:
             default:
                 StringExpandPlaceholders(gStringVar4, gText_CaughtPokemonFishing);
                 break;
@@ -1585,13 +1644,12 @@ static bool32 FishIsInsideBar(u8 taskId)
 static void HandleScore(u8 taskId)
 {
     bool8 won, lost;
-    enum GameMode gameMode = GetGameMode(taskData.tRodType);
 
-    if (gameMode == GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
+    if (sGameMode == GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
             taskData.tScore -= SCORE_DECREASE_SKY;
     if (FishIsInsideBar(taskId)) // If the fish hitbox is within the fishing bar.
     {
-        if (gameMode != GAME_MODE_SKY)
+        if (sGameMode != GAME_MODE_SKY)
             taskData.tScore += ApplyAbilityEffect(SCORE_INCREASE, FG_EFFECT_SCORE_INCREASE, taskId); // Increase the score.
 
         if (taskData.tScoreDirection == FISH_DIR_LEFT) // Only on the frame when the fish enters the fishing bar area.
@@ -1609,7 +1667,7 @@ static void HandleScore(u8 taskId)
     }
     else // If the fish hitbox is outside the fishing bar.
     {
-        if (gameMode != GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
+        if (sGameMode != GAME_MODE_SKY && gSprites[taskData.tScoreMeterSpriteId].sTreasurePause == FALSE)
             taskData.tScore -= ApplyAbilityEffect(SCORE_DECREASE, FG_EFFECT_SCORE_DECREASE, taskId); // Decrease the score.
 
         gSprites[taskData.tScoreMeterSpriteId].sPerfectCatch = FALSE; // Can no longer achieve a perfect catch.
@@ -1630,7 +1688,7 @@ static void HandleScore(u8 taskId)
 
     won = taskData.tScore >= SCORE_MAX;
     lost = taskData.tScore <= 0;
-    if (gameMode == GAME_MODE_SKY)
+    if (sGameMode == GAME_MODE_SKY)
     {
         won = taskData.tScore <= 0 && taskData.tScoreDirection == FISH_DIR_RIGHT;
         lost = taskData.tScore <= 0 && taskData.tScoreDirection == FISH_DIR_LEFT;
@@ -2049,7 +2107,7 @@ static void SpriteCB_ScoreMeter(struct Sprite *sprite)
             if (sprite->sTextCooldown == 0) // If the counter is at 0.
             {
                 // Show the relevant helpful text.
-                if (GetGameMode(gTasks[sprite->sTaskId].tRodType) == GAME_MODE_SKY)
+                if (sGameMode == GAME_MODE_SKY)
                     UpdateHelpfulTextSky(sprite->sTaskId); 
                 else
                     UpdateHelpfulTextLower(sprite->sTaskId); 
@@ -2100,14 +2158,17 @@ static void SpriteCB_Perfect(struct Sprite *sprite)
 static void SpriteCB_Treasure(struct Sprite *sprite)
 {
     u8 taskId = sprite->sTaskId;
+    u8 treasureTimeGoal = TREASURE_TIME_GOAL;
+    if (sGameMode == GAME_MODE_SKY)
+        treasureTimeGoal = TREASURE_INCREMENT * 5;
 
-    if (gTasks[sprite->sTaskId].tGameStateBits & FG_GAME_ENDED)
+    if (gTasks[taskId].tGameStateBits & FG_GAME_ENDED)
     {
         DestroySpriteAndFreeResources(sprite);
         return;
     }
 
-    if (gTasks[sprite->sTaskId].tGameStateBits & FG_PAUSED) // Don't do anything else if paused.
+    if (gTasks[taskId].tGameStateBits & FG_PAUSED) // Don't do anything else if paused.
         return;
 
     switch (sprite->sTreasureState)
@@ -2119,7 +2180,7 @@ static void SpriteCB_Treasure(struct Sprite *sprite)
             }
             else
             {
-                SetTreasureLocation(sprite, sprite->sTaskId);
+                SetTreasureLocation(sprite, taskId);
                 StartSpriteAffineAnim(sprite, ANIM_TREASURE_GROW);
                 sprite->invisible = FALSE;
                 sprite->sTreasureCounter = 0;
@@ -2131,11 +2192,11 @@ static void SpriteCB_Treasure(struct Sprite *sprite)
                 sprite->sTreasureState = TREASURE_SPAWNED;
             break;
         case TREASURE_SPAWNED:
-            if (sprite->sTreasureScore >= TREASURE_TIME_GOAL) // If the treasure score goal has been achieved.
+            if (sprite->sTreasureScore >= treasureTimeGoal) // If the treasure score goal has been achieved.
             {
                 if (sprite->sTreasureCounter == 0)
                     gFieldCallback2 = FieldCB_ReturnToFieldFishTreasure;
-                gSprites[gTasks[sprite->sTaskId].tScoreMeterSpriteId].sTreasurePause = FALSE;
+                gSprites[gTasks[taskId].tScoreMeterSpriteId].sTreasurePause = FALSE;
                 sprite->sTreasureCounter++;
 
                 if (sprite->sTreasureCounter >= 2)
@@ -2162,10 +2223,10 @@ static void SpriteCB_Treasure(struct Sprite *sprite)
             if (TreasureIsInsideBar(taskId)) // If the treasure hitbox is within the fishing bar.
             {
                 if (DEFAULT_TREASURE_SCORE_PAUSE || (FG_FLAG_TREASURE_SCORE_PAUSE && FlagGet(FG_FLAG_TREASURE_SCORE_PAUSE)))
-                    gSprites[gTasks[sprite->sTaskId].tScoreMeterSpriteId].sTreasurePause = TRUE;
+                    gSprites[gTasks[taskId].tScoreMeterSpriteId].sTreasurePause = TRUE;
 
                 sprite->sTreasureScore++; // Increase the treasure score.
-                if (sprite->sTreasureScore % (TREASURE_TIME_GOAL / TREASURE_INCREMENT) == 1)
+                if (sprite->sTreasureScore % (treasureTimeGoal / TREASURE_INCREMENT) == 1)
                 {
                     sprite->sTreasScoreFrame++;
                     StartSpriteAnim(sprite, sprite->sTreasScoreFrame);
@@ -2173,11 +2234,11 @@ static void SpriteCB_Treasure(struct Sprite *sprite)
             }
             else // If the treasure hitbox is outside the fishing bar.
             {
-                gSprites[gTasks[sprite->sTaskId].tScoreMeterSpriteId].sTreasurePause = FALSE;
+                gSprites[gTasks[taskId].tScoreMeterSpriteId].sTreasurePause = FALSE;
                 if (sprite->sTreasureScore > 0) // If the treasure score is greater than 0.
                 {
                     sprite->sTreasureScore--; // Decrease the treasure score.
-                    if (sprite->sTreasureScore == 0 || sprite->sTreasureScore % (TREASURE_TIME_GOAL / TREASURE_INCREMENT) == 0)
+                    if (sprite->sTreasureScore == 0 || sprite->sTreasureScore % (treasureTimeGoal / TREASURE_INCREMENT) == 0)
                     {
                         sprite->sTreasScoreFrame--;
                         StartSpriteAnim(sprite, sprite->sTreasScoreFrame);
@@ -2190,7 +2251,7 @@ static void SpriteCB_Treasure(struct Sprite *sprite)
             {
                 sprite->invisible = TRUE;
                 sprite->y = TREASURE_DEST_Y;
-                if (gTasks[sprite->sTaskId].tGameStateBits & FG_SEPARATE_SCREEN)
+                if (gTasks[taskId].tGameStateBits & FG_SEPARATE_SCREEN)
                     sprite->y += SEPARATE_SCREEN_MODIFIER;
                 sprite->x = TREASURE_DEST_X;
                 sprite->invisible = FALSE;
@@ -2285,10 +2346,18 @@ void Task_DoReturnToFieldFishTreasure(u8 taskId)
             LoadMessageBoxAndBorderGfx();
             DrawDialogueFrame(0, TRUE);
             CopyItemName(gSpecialVar_ItemId, gStringVar2);
-            if (taskData.tRodType >> 4 == WILD_AREA_MAGNET)
-                StringExpandPlaceholders(gStringVar4, gText_PulledInTreasure);
-            else
-                StringExpandPlaceholders(gStringVar4, gText_ReeledInTreasure);
+            switch (sGameMode)
+            {
+                case GAME_MODE_SKY:
+                    StringExpandPlaceholders(gStringVar4, gText_FeatherFell);
+                    break;
+                // case WILD_AREA_MAGNET:
+                //     StringExpandPlaceholders(gStringVar4, gText_PulledInTreasure);
+                //     break;
+                case GAME_MODE_FISHING:
+                default:
+                    StringExpandPlaceholders(gStringVar4, gText_ReeledInTreasure);
+            }
             AddTextPrinterParameterized(0, FONT_NORMAL, gStringVar4, 0, 1, 1, NULL);
             TaskState = FISHTASK_FIELD_MOVE_ANIM;
             break;
@@ -2298,9 +2367,16 @@ void Task_DoReturnToFieldFishTreasure(u8 taskId)
             if (!IsTextPrinterActiveOnWindow(0))
             {
                 taskData.tPlayerGFXId = gObjectEvents[gPlayerAvatar.objectEventId].graphicsId;
-                SetPlayerAvatarFieldMove();
-                StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], ANIM_FIELD_MOVE);
-                ObjectEventSetHeldMovement(&gObjectEvents[gPlayerAvatar.objectEventId], MOVEMENT_ACTION_START_ANIM_IN_DIRECTION);
+                if (sGameMode != GAME_MODE_SKY)
+                {
+                    SetPlayerAvatarFieldMove();
+                    StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], ANIM_FIELD_MOVE);
+                    ObjectEventSetHeldMovement(&gObjectEvents[gPlayerAvatar.objectEventId], MOVEMENT_ACTION_START_ANIM_IN_DIRECTION);
+                }
+                else
+                {
+                    StartSpriteAnim(&gSprites[gPlayerAvatar.spriteId], GetFaceDirectionAnimNum(DIR_SOUTH));
+                }
 
                 TaskState = FISHTASK_CREATE_TREASURE_SPRITE;
             }
@@ -2308,6 +2384,14 @@ void Task_DoReturnToFieldFishTreasure(u8 taskId)
         case FISHTASK_CREATE_TREASURE_SPRITE:
             if (taskData.tFrameCounter == 16)
             {
+                if (sGameMode == GAME_MODE_SKY)
+                {
+                    taskData.tFrameCounter = 1;
+                    TreasureSpriteId = MAX_SPRITES;
+                    TaskState = FISHTASK_OPEN_TREASURE_CHEST;
+                    break;
+                }
+
                 LoadSpritePalettes(sSpritePalettes_FishingGame);
                 if (IndexOfSpritePaletteTag(TAG_FISHING_BAR) == 0xFF)
                 {
@@ -2393,7 +2477,10 @@ void Task_DoReturnToFieldFishTreasure(u8 taskId)
             }
             if (taskData.tFrameCounter % 2 == 0 || taskData.tFrameCounter > 6)
             {
-                ItemSprite.y--;
+                if (sGameMode == GAME_MODE_SKY)
+                    ItemSprite.y++;
+                else
+                    ItemSprite.y--;
             }
             taskData.tFrameCounter++;
             break;
@@ -2458,7 +2545,8 @@ void Task_DoReturnToFieldFishTreasure(u8 taskId)
             {
                 ItemSprite.x++;
             }
-            ItemSprite.y += 2;
+            if (sGameMode != GAME_MODE_SKY)
+                ItemSprite.y += 2;
 
             taskData.tFrameCounter++;
             break;
