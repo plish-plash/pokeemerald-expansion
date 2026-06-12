@@ -6,6 +6,7 @@
 #include "fieldmap.h"
 #include "event_object_movement.h"
 #include "gpu_regs.h"
+#include "item_ball.h"
 #include "menu.h"
 #include "overworld.h"
 #include "rotating_gate.h"
@@ -482,6 +483,7 @@ void CameraUpdate(void)
         AddCameraTileOffset(&sFieldCameraOffset, deltaX * 2, deltaY * 2);
         RedrawMapSlicesForCameraUpdate(&sFieldCameraOffset, deltaX * 2, deltaY * 2);
         TryDespawnOWEsCrossingMapConnection();
+        TrySpawnRandomItemsForCurrentMap();
     }
 
     AddCameraPixelOffset(&sFieldCameraOffset, movementSpeedX, movementSpeedY);

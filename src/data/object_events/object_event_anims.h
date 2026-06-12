@@ -1651,3 +1651,19 @@ static const union AnimCmd *const sAnimTable_RedGreenVSSeeker[] = {
 static const union AnimCmd *const sAnimTable_RedGreenVSSeekerBike[] = {
     sAnim_VSSeekerBike,
 };
+
+static const union AnimCmd sAnim_SparkleLoop[] =
+{
+    ANIMCMD_FRAME(0, 8),
+    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_FRAME(2, 8),
+    ANIMCMD_FRAME(3, 8),
+    ANIMCMD_FRAME(4, 8),
+    ANIMCMD_FRAME(5, 32),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sAnimTable_SparkleLoop[] =
+{
+    sAnim_SparkleLoop,
+};

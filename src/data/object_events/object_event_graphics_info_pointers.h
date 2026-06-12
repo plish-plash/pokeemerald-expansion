@@ -391,6 +391,7 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_SSAnne;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PokeBall;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Follower;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_BallLight;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Sparkle;
 
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Bard;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Hipster;
@@ -791,6 +792,7 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_DEOXYS_N]                 = &gObjectEventGraphicsInfo_DeoxysN,
     [OBJ_EVENT_GFX_SS_ANNE]                  = &gObjectEventGraphicsInfo_SSAnne,
 #endif // IS_FRLG
+    [OBJ_EVENT_GFX_ITEM_SPARKLE] =             &gObjectEventGraphicsInfo_Sparkle,
 };
 
 const struct ObjectEventGraphicsInfo *const gMauvilleOldManGraphicsInfoPointers[] = {

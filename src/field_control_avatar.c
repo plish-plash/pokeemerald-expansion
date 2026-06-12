@@ -409,6 +409,8 @@ static const u8 *GetInteractedObjectEventScript(struct MapPosition *position, u8
         script = GetOverworlWildEncounterScript(objectEventId);
     else if (gObjectEvents[objectEventId].localId == OBJ_EVENT_ID_FOLLOWER)
         script = EventScript_Follower;
+    else if (IS_LOCALID_ITEM_SPAWN(gObjectEvents[objectEventId].localId))
+        script = Common_EventScript_FindItem;
     else if (InTrainerHill() == TRUE)
         script = GetTrainerHillTrainerScript();
     else

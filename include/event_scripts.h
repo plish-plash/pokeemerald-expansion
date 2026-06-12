@@ -683,6 +683,7 @@ extern const u8 Common_Movement_FaceLeft[];
 extern const u8 EventScript_CancelMessageBox[];
 extern const u8 Common_EventScript_ShowPokemonCenterSign[];
 extern const u8 Common_EventScript_ShowPokemartSign[];
+extern const u8 Common_EventScript_FindItem[];
 // DexNav
 extern const u8 EventScript_StartDexNavBattle[];
 extern const u8 EventScript_NotFoundNearby[];

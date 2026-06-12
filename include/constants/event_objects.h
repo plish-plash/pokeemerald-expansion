@@ -413,6 +413,7 @@ enum
     OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG,
     OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG,
     OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG,
+    OBJ_EVENT_GFX_ITEM_SPARKLE,
     NUM_OBJ_EVENT_GFX,
 };
 
@@ -499,6 +500,7 @@ enum
 // can be spawned for the camera to track instead of the player. Additionally, the value 0 is reserved as an "empty" indicator.
 #define LOCALID_NONE                              0
 #define LOCALID_CAMERA                          127
+#define LOCALID_ITEM_SPAWN_END                  230
 #define LOCALID_BERRY_BLENDER_PLAYER_END        240 // This will use 5 (MAX_RFU_PLAYERS) IDs ending at 240, i.e. 236-240
 #define LOCALID_OW_ENCOUNTER_END                252 // This will use 4 (OWE_SPAWNS_MAX) IDs ending at 252, i.e. 249-252
 #define LOCALID_FOLLOWING_POKEMON               254
@@ -508,6 +510,7 @@ enum
 
 #define IS_LOCALID_GENERATED_OWE(localId)       (localId <= LOCALID_OW_ENCOUNTER_END \
                                                  && localId > (LOCALID_OW_ENCOUNTER_END - OWE_SPAWNS_MAX))
+#define IS_LOCALID_ITEM_SPAWN(localId)          (localId <= LOCALID_ITEM_SPAWN_END && localId > (LOCALID_ITEM_SPAWN_END - 10))
 
 // Aliases for old names. "object event id" normally refers to an index into gObjectEvents, which these are not.
 // Used for link player OWs in CreateLinkPlayerSprite

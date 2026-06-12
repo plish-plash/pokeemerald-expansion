@@ -3819,21 +3819,21 @@ const struct ItemInfo gItemsInfo[] =
         .iconPalette = gItemIconPalette_BlackApricorn,
     },
 
-    [ITEM_WISHING_PIECE] =
+    [ITEM_TUMBLESTONE] =
     {
-        .name = ITEM_NAME("Wishing Piece"),
-        .price = 20,
+        .name = ITEM_NAME("Tumblestone"),
+        .price = 100,
         .description = COMPOUND_STRING(
-            "Throw into a\n"
-            "{PKMN} Den to attract\n"
-            "Dynamax Pokémon."),
+            "A mysterious stone.\n"
+            "Used in the creation\n"
+            "of Poké Balls."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_SELLABLE,
         .type = ITEM_USE_BAG_MENU,
         .fieldUseFunc = ItemUseOutOfBattle_CannotUse, // Todo
         .flingPower = 50,
-        .iconPic = gItemIcon_WishingPiece,
-        .iconPalette = gItemIconPalette_WishingPiece,
+        .iconPic = gItemIcon_FloatStone,
+        .iconPalette = gItemIconPalette_FloatStone,
     },
 
     [ITEM_GALARICA_TWIG] =

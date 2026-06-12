@@ -2947,6 +2947,8 @@ void RemoveObjectEventsOutsideView(void)
                 continue;
             if (objectEvent->localId == OBJ_EVENT_ID_NPC_FOLLOWER || objectEvent->localId == OBJ_EVENT_ID_FOLLOWER)
                 continue;
+            if (IS_LOCALID_ITEM_SPAWN(objectEvent->localId))
+                continue;
             if (IsOWEDespawnExempt(objectEvent))
                 continue;
 
@@ -6628,7 +6630,7 @@ u32 GetObjectObjectCollidesWith(struct ObjectEvent *objectEvent, s16 x, s16 y, b
     {
         curObject = &gObjectEvents[i];
         if (curObject->active && (curObject->movementType != MOVEMENT_TYPE_FOLLOW_PLAYER || objectEvent != &gObjectEvents[gPlayerAvatar.objectEventId]) && curObject != objectEvent
-         && !FollowerNPC_IsCollisionExempt(curObject, objectEvent)
+         && !FollowerNPC_IsCollisionExempt(curObject, objectEvent) && !IS_LOCALID_ITEM_SPAWN(curObject->localId)
          )
         {
             // check for collision if curObject is active, not the object in question, and not exempt from collisions

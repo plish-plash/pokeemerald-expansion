@@ -953,7 +953,7 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_ReflectionDistortion = {
     .affineAnims = sAffineAnims_ReflectionDistortion,
 };
 
-static const struct SpriteFrameImage sPicTable_Sparkle[] = {
+/*static*/ const struct SpriteFrameImage sPicTable_Sparkle[] = {
     overworld_frame(gFieldEffectObjectPic_Sparkle, 2, 2, 0),
     overworld_frame(gFieldEffectObjectPic_Sparkle, 2, 2, 1),
     overworld_frame(gFieldEffectObjectPic_Sparkle, 2, 2, 2),

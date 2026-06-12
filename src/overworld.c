@@ -31,6 +31,7 @@
 #include "heal_location.h"
 #include "io_reg.h"
 #include "item.h"
+#include "item_ball.h"
 #include "item_icon.h"
 #include "link.h"
 #include "link_rfu.h"
@@ -928,6 +929,7 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
             ShowMapNamePopup();
     }
     SetMinimumOWESpawnTimer();
+    RandomItemsMapTransition();
 }
 
 static void LoadMapFromWarp(bool32 a1)
@@ -2586,6 +2588,7 @@ static void InitObjectEventsLink(void)
     gTotalCameraPixelOffsetY = 0;
     ResetObjectEvents();
     TrySpawnObjectEvents(0, 0);
+    SpawnRandomItemsForCurrentMap();
     TryRunOnWarpIntoMapScript();
 }
 
@@ -2603,6 +2606,7 @@ static void InitObjectEventsLocal(void)
     SetPlayerAvatarTransitionFlags(player->transitionFlags);
     ResetInitialPlayerAvatarState();
     TrySpawnObjectEvents(0, 0);
+    SpawnRandomItemsForCurrentMap();
     FollowerNPC_HandleSprite();
     UpdateFollowingPokemon();
     TryRunOnWarpIntoMapScript();
