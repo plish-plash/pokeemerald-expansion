@@ -1638,8 +1638,8 @@ const struct ItemInfo gItemsInfo[] =
         .price = (I_PRICE >= GEN_9) ? 250000 : 20,
         .holdEffectParam = 0,
         .description = COMPOUND_STRING(
-            "Turns the ability\n"
-            "of a Pokémon into\n"
+            "Turns a Pokémon's\n"
+            "ability into\n"
             "a rare ability."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_FIELD_USE,
@@ -3817,8 +3817,8 @@ const struct ItemInfo gItemsInfo[] =
         .price = 100,
         .description = COMPOUND_STRING(
             "A mysterious stone.\n"
-            "Used in the creation\n"
-            "of Poké Balls."),
+            "Used to create\n"
+            "Poké Balls."),
         .pocket = POCKET_ITEMS,
         .sortType = ITEM_TYPE_SELLABLE,
         .type = ITEM_USE_BAG_MENU,

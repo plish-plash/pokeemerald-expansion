@@ -49,11 +49,12 @@ void CraftRecipe(enum Recipe recipeNum, u16 quantity)
 
 bool32 IsRecipeUnlocked(enum Recipe recipe)
 {
-    u32 index = recipe >> 5;
-    u32 subIndex = 1u << (recipe & 0x1f);
-    if (gSaveBlock1Ptr->unlockedRecipes[index] & subIndex)
-        return TRUE;
-    return FALSE;
+    // u32 index = recipe >> 5;
+    // u32 subIndex = 1u << (recipe & 0x1f);
+    // if (gSaveBlock1Ptr->unlockedRecipes[index] & subIndex)
+    //     return TRUE;
+    // return FALSE;
+    return TRUE;
 }
 
 void UnlockRecipe(enum Recipe recipe)

@@ -3725,7 +3725,10 @@ u8 ReformatItemDescription(enum Item item, u8 *dest, u8 maxChars)
         *dest = *desc;
         if (*desc == CHAR_NEWLINE)
         {
-            *dest = CHAR_SPACE;
+            if (count > 0 && *(desc - 1) == CHAR_HYPHEN)
+                dest -= 2;
+            else
+                *dest = CHAR_SPACE;
         }
 
         dest++;
