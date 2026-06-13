@@ -29,5 +29,5 @@ static const struct CraftingMenuTemplate sCraftingMenuTemplate =
 static const u8 sRecipeCategoryTexts[NUM_RECIPE_CATEGORIES][16] =
 {
     [RECIPE_CATEGORY_POKEBALLS] = _("POKé BALLS"),
-    [RECIPE_CATEGORY_MEDICINE] = _("MEDICINE"),
+    [RECIPE_CATEGORY_SPECIAL] = _("SPECIAL"),
 };
