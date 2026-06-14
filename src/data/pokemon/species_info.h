@@ -95,6 +95,8 @@
 #define FLIP    0
 #define NO_FLIP 1
 
+#define STARTER_CATCH_RATE 120
+
 const struct SpeciesInfo gSpeciesInfo[] =
 {
     [SPECIES_NONE] =
