@@ -3,7 +3,6 @@
   "name": "Route112",
   "layout": "LAYOUT_ROUTE112",
   "music": "MUS_ROUTE110",
-  "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_ROUTE_112",
   "requires_flash": false,
   "weather": "WEATHER_SUNNY",
@@ -214,6 +213,19 @@
       "trainer_sight_or_berry_tree_id": "3",
       "script": "Route112_EventScript_Shayla",
       "flag": "0"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_APRICORN_TREE",
+      "x": 9,
+      "y": 37,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "APRICORN_TREE_ROUTE112",
+      "script": "ApricornTreeScript",
+      "flag": "0"
     }
   ],
   "warp_events": [
@@ -286,5 +298,6 @@
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Route112_EventScript_RouteSignLavaridge"
     }
-  ]
+  ],
+  "region": "REGION_HOENN"
 }

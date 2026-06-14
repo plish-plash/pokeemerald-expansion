@@ -67,24 +67,20 @@ ApricornTree_Text_Empty:
 	.string "There are no Apricorns…$"
 
 ApricornTree_Text_WantToPick:
-	.string "…It's {STR_VAR_2} {STR_VAR_1}!\n"
-	.string "Do you want to pick the\l"
+	.string "…It has {STR_VAR_2} {STR_VAR_1}!\p"
+	.string "Do you want to pick the\n"
 	.string "{STR_VAR_1}?$"
 
 ApricornTree_Text_PickedTheApricorn:
-	.string "{PLAYER} obtained\n"
-	.string "{STR_VAR_2} {STR_VAR_1}.$"
+	.string "{PLAYER} picked the {STR_VAR_2} {STR_VAR_1}.$"
 
 ApricornTree_Text_PutAwayApricorn:
-	.string "{PLAYER} put away the\n"
-	.string "{STR_VAR_1} in\l"
-	.string "the BAG's {STR_VAR_3} POCKET.$"
+	.string "{PLAYER} put away the {STR_VAR_1}\n"
+	.string "in the BAG's ITEMS POCKET.$"
 
 ApricornTree_Text_PocketFull:
-	.string "The BAG's {STR_VAR_3} POCKET is full.\p"
-	.string "{PLAYER} gave up on the\n"
-	.string "{STR_VAR_1}…$"
+	.string "The BAG's ITEMS POCKET is full.\p"
+	.string "{PLAYER} gave up on the {STR_VAR_1}…$"
 
 ApricornTree_Text_ApricornLeftUnpicked:
-	.string "{PLAYER} gave up on the\n"
-	.string "{STR_VAR_1}…$"
+	.string "{PLAYER} gave up on the {STR_VAR_1}…$"

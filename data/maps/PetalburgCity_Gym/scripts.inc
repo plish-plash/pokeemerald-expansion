@@ -1180,9 +1180,9 @@ PetalburgCity_Gym_Text_WallyThisIsLame:
 	.string "Bye!$"
 
 PetalburgCity_Gym_Text_DadGoCollectBadges:
-	.string "DAD: Uh…\n"
-	.string "Well anyway, {PLAYER},\p"
-	.string "if you want to become a strong\n"
+	.string "DAD: Uh…\p"
+	.string "Well anyway, {PLAYER},\n"
+	.string "if you want to become a strong\l"
 	.string "TRAINER, here's my advice.\p"
 	.string "Head for RUSTBORO CITY beyond this\n"
 	.string "town.\p"

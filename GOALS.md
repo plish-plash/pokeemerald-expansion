@@ -1,6 +1,6 @@
 - Catching is harder
   - Trainer battles no longer give money; berries are more common and selling them is the main source of income (DONE)
-  - Craft balls from apricorns and other useful recipes
+  - Craft balls from apricorns and other useful recipes (DONE)
 - Training is more rewarding
   - Base stats are lower, EVs count for more (DONE)
   - EVs are gained from using stat modifying moves instead of winning battles (DONE)
